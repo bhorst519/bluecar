@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "EIM_devboard-rescue")(type "KiCad")(uri "${KIPRJMOD}/EIM_devboard-rescue.kicad_sym")(options "")(descr ""))
+)
