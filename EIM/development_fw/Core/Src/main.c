@@ -27,7 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "eim.h"
+#include "bluecan.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,9 +49,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-CAN_TxHeaderTypeDef   TxHeader;
-uint8_t               TxData[8];
-uint32_t              TxMailbox;
+
+
+uint8_t gear;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,16 +101,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-  TxHeader.IDE = CAN_ID_STD;
-  TxHeader.StdId = 0x123;
-  TxHeader.RTR = CAN_RTR_DATA;
-  TxHeader.DLC = 1;
-  TxData[0] = 55;  
-  if (HAL_CAN_Start(&hcan) != HAL_OK)
-  {
-    /* Start Error */
-    Error_Handler();
-  }
+  startCAN();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,12 +109,10 @@ int main(void)
   while (1)
   {
     HAL_GPIO_TogglePin (LD2_GPIO_Port, LD2_Pin);
+    gear = checkGear();
+    sendCAN_engine_gear(gear);
+  
     HAL_Delay (1000);
-
-    if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
-    {
-      Error_Handler ();
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
