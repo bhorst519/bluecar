@@ -111,7 +111,7 @@ int main(void)
     HAL_GPIO_TogglePin (LD2_GPIO_Port, LD2_Pin);
     gear = checkGear();
     sendCAN_engine_gear(gear);
-  
+    printf("hello\n");
     HAL_Delay (1000);
     /* USER CODE END WHILE */
 

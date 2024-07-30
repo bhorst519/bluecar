@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdbool.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -100,10 +101,13 @@ void Error_Handler(void);
 #define RELAY_D_GPIO_Port GPIOB
 #define TA_SIG_Pin GPIO_PIN_6
 #define TA_SIG_GPIO_Port GPIOC
+#define TA_SIG_EXTI_IRQn EXTI9_5_IRQn
 #define SP_SIG_Pin GPIO_PIN_7
 #define SP_SIG_GPIO_Port GPIOC
+#define SP_SIG_EXTI_IRQn EXTI9_5_IRQn
 #define FUEL_PULSE_Pin GPIO_PIN_8
 #define FUEL_PULSE_GPIO_Port GPIOC
+#define FUEL_PULSE_EXTI_IRQn EXTI9_5_IRQn
 #define FIRST_Pin GPIO_PIN_9
 #define FIRST_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
