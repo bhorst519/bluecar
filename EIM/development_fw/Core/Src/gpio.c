@@ -128,4 +128,5 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   uint16_t pin = GPIO_Pin;
   printf("interrupt!\n");
 }
+
 /* USER CODE END 2 */

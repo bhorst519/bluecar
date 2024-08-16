@@ -4,5 +4,6 @@
         "main.h": "c",
         "bluecan.h": "c",
         "stm32f1xx_hal.h": "c"
-    }
+    },
+    "cortex-debug.variableUseNaturalFormat": false
 }
