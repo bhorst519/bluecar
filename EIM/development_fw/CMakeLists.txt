@@ -50,6 +50,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${PROJECT_SOURCE_DIR}/Libraries/Src/eim.c
     ${PROJECT_SOURCE_DIR}/Libraries/Src/bluecan.c
+    ${PROJECT_SOURCE_DIR}/Libraries/Src/kline.c
 )
 
 # Add include paths

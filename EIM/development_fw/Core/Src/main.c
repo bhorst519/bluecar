@@ -29,6 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "eim.h"
 #include "bluecan.h"
+#include "kline.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,42 +63,10 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void setTXOutput() {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-}
-
-void sendWakeup() {
-  HAL_UART_DeInit(&huart1);
-  setTXOutput();
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-  HAL_Delay(1000);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
-  HAL_Delay(70);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-  HAL_Delay(130);
-  HAL_UART_Init(&huart1);
-  uint8_t ECU_WAKEUP_MESSAGE[] = {0xFE, 0x04, 0x72, 0x8C}; 
-  HAL_UART_Transmit(&huart1, ECU_WAKEUP_MESSAGE, sizeof(ECU_WAKEUP_MESSAGE), HAL_MAX_DELAY);
-  HAL_Delay(500);
-  uint8_t rx_buff[5];
-  HAL_UART_Receive(&huart1, rx_buff, 10, 1000);
-  uint8_t wakeup_response[20];
-  for (uint8_t i=0; i<sizeof(wakeup_response); i++) {
-    wakeup_response[i] = rx_buff[i];
-  }
-  uint8_t ECU_INIT_MESSAGE[] = {0x72, 0x05, 0x71, 0x00, 0x18};
-  HAL_UART_Transmit(&huart1, ECU_INIT_MESSAGE, sizeof(ECU_INIT_MESSAGE), HAL_MAX_DELAY);
-  HAL_Delay(200);
-  HAL_UART_Receive(&huart1, rx_buff, 10, 1000);
-  uint8_t state_response[20];
-  for (uint8_t i=0; i<sizeof(state_response); i++) {
-    state_response[i] = rx_buff[i];
-  }
+void ECUWakeup() {
+  sendECUWakeupPulse();
+  pingECU();
+  requestECUState();
 }
 /* USER CODE END 0 */
 
@@ -138,7 +107,7 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   startCAN();
-  sendWakeup();
+  ECUWakeup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -148,7 +117,7 @@ int main(void)
     HAL_GPIO_TogglePin (LD2_GPIO_Port, LD2_Pin);
     gear = checkGear();
     sendCAN_engine_gear(gear);
-    //printf("hello\n");
+    printf("loop\n");
     HAL_Delay (1000);
 
     /* USER CODE END WHILE */

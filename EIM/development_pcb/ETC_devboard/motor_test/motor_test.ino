@@ -1,45 +1,38 @@
 #include <PID_v1.h>
 
-int directionPin = 12;
-int pwmPin = 3;
-int brakePin = 9;
-int currentSensePin = A0;
+int directionPin = 5;
+int pwmPin = 6;
 int angleSensePin = A3;
 
 
-bool directionState;
-int current;
 double setpoint;
 double speed;
 double angle;
-const int deadband = 50;
+const int deadband = 10;
 const int maxpower = 200;
 
-double Kp=5, Ki=2, Kd=0.35;
+double Kp=3, Ki=0.5, Kd=0;
 PID myPID(&angle, &speed, &setpoint, Kp, Ki, Kd, DIRECT);
 
 void setup() {
-  TCCR3B = TCCR3B & B11111000 | B00000001;    // set timer 3 divisor to     1 for PWM frequency of 31372.55 Hz
   Serial.begin(9600);
+  analogReadResolution(12);
   pinMode(directionPin, OUTPUT);
   pinMode(pwmPin, OUTPUT);
-  pinMode(brakePin, OUTPUT);
-  pinMode(currentSensePin, INPUT);
   pinMode(angleSensePin, INPUT);
-  directionState = false;
   spinAtSpeed(0);
-  setpoint = 50;
   myPID.SetMode(AUTOMATIC);
   myPID.SetOutputLimits(-1*maxpower, maxpower);
+  setpoint = 60.0;
 }
 
 void loop() {
-  current = measureCurrent();
   angle = measureAngle();
   myPID.Compute();
-  //plot();
+  spinAtSpeed(speed);
+  plot();
   sweep();
-  //take_input();
+  // //take_input();
 }
 
 void spinAtSpeed(int spd) {
@@ -49,33 +42,24 @@ void spinAtSpeed(int spd) {
   else{
     digitalWrite(directionPin, LOW);
   }
-  if (spd == 0) {
-    digitalWrite(brakePin, HIGH);
+  if(spd < 2) {
+    digitalWrite(pwmPin, LOW);
   }
   else {
-    digitalWrite(brakePin, LOW);
     analogWrite(pwmPin, abs(spd) + deadband);
   }
 }
 
-int measureCurrent() {
-  int adc = analogRead(currentSensePin);
-  return map(adc, 0, 1023, 0, 2000);
-}
-
-int measureAngle() {
+double measureAngle() {
   int adc = analogRead(angleSensePin);
-  return map(adc, 0, 1023, 0, 100);
+  return (double)(adc - 0.0f) * 100.0f / (4095.0f);
 }
 
 void plot() {
   static long last_plot = millis();
   if ((millis() - last_plot) > 1000) {
-    spinAtSpeed(speed);
     Serial.print("angle:");
     Serial.println(angle);
-    Serial.print("current:");
-    Serial.println(current);
     Serial.print("speed:");
     Serial.println(speed);
     Serial.print("setpoint:");
@@ -86,16 +70,14 @@ void plot() {
 void sweep() {
   static long last_step = millis();
   static int dir = 1;
-  if ((millis() - last_step) > 1000) {
+  if ((millis() - last_step) > 3000) {
     setpoint = setpoint + 15 * dir;
-    Serial.print("setpoint:");
-    Serial.println(setpoint);
     last_step = millis();
   }
-  if (setpoint > 90) {
+  if (setpoint > 80) {
     dir = -1;
   }
-  else if (setpoint < 10) {
+  else if (setpoint < 20) {
     dir = 1;
   }
 }
