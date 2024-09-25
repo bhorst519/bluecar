@@ -29,7 +29,7 @@
 5315	6979	7427066523256850	CMakeFiles/EIM_devboard.dir/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c.obj	47b800fbd6287c69
 6915	7496	7427066530426552	CMakeFiles/EIM_devboard.dir/Core/Src/syscalls.c.obj	bc297a2107db7a0
 648	1170	7455239236537695	EIM_devboard.elf	502a55f1287bd65
-6	978	7487510326563344	build.ninja	86f166887df52341
+6	978	7489322559629499	build.ninja	86f166887df52341
 88	2550	7440174813131847	CMakeFiles/EIM_devboard.dir/Core/Src/i2c.c.obj	9cac13f083c55503
 76	1793	7440174804991260	CMakeFiles/EIM_devboard.dir/Core/Src/can.c.obj	4107f94b2aed64d4
 66	2427	7440174810231406	CMakeFiles/EIM_devboard.dir/Core/Src/adc.c.obj	a6b800695e997c9e
