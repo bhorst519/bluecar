@@ -57,12 +57,16 @@ osStaticThreadDef_t task10HzControlBlock;
 osThreadId task_1HzHandle;
 uint32_t task1HzBuffer[ 256 ];
 osStaticThreadDef_t task1HzControlBlock;
+osThreadId task_1kHzHandle;
+uint32_t task1kHzBuffer[ 256 ];
+osStaticThreadDef_t task1kHzControlBlock;
 /* USER CODE BEGIN PV */
 
-Rtos_Init_S rtosInitData =
+HalWrappers_Init_S halWrappersInitData =
 {
   .pSerial = &huart3,
   .pPwmTim = &htim3,
+  .pCan = &hcan1,
 };
 
 /* USER CODE END PV */
@@ -76,6 +80,7 @@ static void MX_TIM3_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask10Hz(void const * argument);
 void StartTask1Hz(void const * argument);
+void StartTask1kHz(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -119,7 +124,7 @@ int main(void)
   MX_CAN1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  RtosInit(&rtosInitData);
+  RtosInit(&halWrappersInitData);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -150,6 +155,10 @@ int main(void)
   /* definition and creation of task_1Hz */
   osThreadStaticDef(task_1Hz, StartTask1Hz, osPriorityLow, 0, 256, task1HzBuffer, &task1HzControlBlock);
   task_1HzHandle = osThreadCreate(osThread(task_1Hz), NULL);
+
+  /* definition and creation of task_1kHz */
+  osThreadStaticDef(task_1kHz, StartTask1kHz, osPriorityRealtime, 0, 256, task1kHzBuffer, &task1kHzControlBlock);
+  task_1kHzHandle = osThreadCreate(osThread(task_1kHz), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -232,15 +241,15 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 28;
+  hcan1.Init.Prescaler = 6;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_11TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = DISABLE;
+  hcan1.Init.AutoBusOff = ENABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
-  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.AutoRetransmission = ENABLE;
   hcan1.Init.ReceiveFifoLocked = DISABLE;
   hcan1.Init.TransmitFifoPriority = DISABLE;
   if (HAL_CAN_Init(&hcan1) != HAL_OK)
@@ -361,6 +370,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
 
@@ -368,7 +378,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DEBUG_3_GPIO_Port, DEBUG_3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOG, USB_PowerSwitchOn_Pin|DEBUG_1_Pin|DEBUG_2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
@@ -383,12 +396,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
-  GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
+  /*Configure GPIO pin : DEBUG_3_Pin */
+  GPIO_InitStruct.Pin = DEBUG_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(USB_PowerSwitchOn_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(DEBUG_3_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : USB_PowerSwitchOn_Pin DEBUG_1_Pin DEBUG_2_Pin */
+  GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin|DEBUG_1_Pin|DEBUG_2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -445,6 +465,21 @@ void StartTask1Hz(void const * argument)
   (void)argument;
   RtosRunTask1Hz();
   /* USER CODE END StartTask1Hz */
+}
+
+/* USER CODE BEGIN Header_StartTask1kHz */
+/**
+* @brief Function implementing the task_1kHz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask1kHz */
+void StartTask1kHz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask1kHz */
+  (void)argument;
+  RtosRunTask1kHz();
+  /* USER CODE END StartTask1kHz */
 }
 
 /**

@@ -65,6 +65,8 @@ void Error_Handler(void);
 #define MCO_GPIO_Port GPIOH
 #define LD1_Pin GPIO_PIN_0
 #define LD1_GPIO_Port GPIOB
+#define DEBUG_3_Pin GPIO_PIN_15
+#define DEBUG_3_GPIO_Port GPIOF
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
@@ -77,6 +79,10 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define DEBUG_1_Pin GPIO_PIN_9
+#define DEBUG_1_GPIO_Port GPIOG
+#define DEBUG_2_Pin GPIO_PIN_14
+#define DEBUG_2_GPIO_Port GPIOG
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
 
