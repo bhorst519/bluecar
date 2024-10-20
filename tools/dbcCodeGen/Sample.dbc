@@ -1,0 +1,196 @@
+VERSION "$Format:%h$"
+
+NS_ :
+	BA_
+	BA_DEF_
+	BA_DEF_DEF_
+
+BS_:
+
+BU_: LOGGER SAMPLE
+
+BO_ 256 SAMPLE_A_alertLog: 8 SAMPLE_A
+ SG_ SAMPLE_A_alertID M : 0|7@1+ (1,0) [0|76] "" LOGGER
+ SG_ SAMPLE_A_alertState : 15|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a005_data1 m5 : 16|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a005_data2 m5 : 17|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a006_data1 m6 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_A_a006_data2 m6 : 32|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_A_a008_data1 m8 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_A_a008_data2 m8 : 32|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_A_a008_data3 m8 : 40|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_A_a008_data4 m8 : 48|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a008_data5 m8 : 49|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a009_data1 m9 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_A_a009_data2 m9 : 32|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_A_a009_data3 m9 : 40|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_A_a009_data4 m9 : 48|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a009_data5 m9 : 49|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a020_data1 m20 : 16|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_A_a020_data2 m20 : 24|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a020_data3 m20 : 32|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_A_a020_data4 m20 : 40|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a020_data5 m20 : 48|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a021_data1 m21 : 16|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_A_a021_data2 m21 : 24|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a021_data3 m21 : 32|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_A_a021_data4 m21 : 40|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a021_data5 m21 : 48|7@1+ (1,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a021_data6 m21 : 56|7@1+ (1,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_A_a047_data1 m47 : 16|10@1+ (0.005,0) [0|5.115] "V" LOGGER
+ SG_ SAMPLE_A_a047_data2 m47 : 26|10@1+ (0.005,0) [0|5.115] "V" LOGGER
+ SG_ SAMPLE_A_a047_data3 m47 : 36|10@1- (5,0) [-2560|2555] "A" LOGGER
+ SG_ SAMPLE_A_a047_data4 m47 : 46|8@1+ (0.5,0) [0|127.5] "%" LOGGER
+ SG_ SAMPLE_A_a047_data5 m47 : 54|8@1+ (1,1) [1|256] "" LOGGER
+
+BO_ 257 SAMPLE_A_alertMatrix: 8 SAMPLE_A
+ SG_ SAMPLE_A_matrixIndex : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ SAMPLE_A_a005_alert5 : 4|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a006_alert6 : 5|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a007_alert7 : 6|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a008_alert8 : 7|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a009_alert9 : 8|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a020_alert20 : 9|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_A_a021_alert21 : 10|1@1+ (1,0) [0|1] "" LOGGER
+
+BO_ 258 SAMPLE_B_alertLog: 8 SAMPLE_B
+ SG_ SAMPLE_B_alertID M : 0|7@1+ (1,0) [0|76] "" LOGGER
+ SG_ SAMPLE_B_alertState : 15|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a005_data1 m5 : 16|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a005_data2 m5 : 17|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a006_data1 m6 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_B_a006_data2 m6 : 32|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_B_a008_data1 m8 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_B_a008_data2 m8 : 32|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_B_a008_data3 m8 : 40|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_B_a008_data4 m8 : 48|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a008_data5 m8 : 49|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a009_data1 m9 : 16|16@1+ (1,0) [0|65535] "" LOGGER
+ SG_ SAMPLE_B_a009_data2 m9 : 32|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_B_a009_data3 m9 : 40|8@1+ (1,0) [0|255] "" LOGGER
+ SG_ SAMPLE_B_a009_data4 m9 : 48|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a009_data5 m9 : 49|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a020_data1 m20 : 16|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_B_a020_data2 m20 : 24|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a020_data3 m20 : 32|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_B_a020_data4 m20 : 40|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a020_data5 m20 : 48|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a021_data1 m21 : 16|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_B_a021_data2 m21 : 24|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a021_data3 m21 : 32|7@1+ (1,1) [1|128] "" LOGGER
+ SG_ SAMPLE_B_a021_data4 m21 : 40|8@1+ (0.5,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a021_data5 m21 : 48|7@1+ (1,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a021_data6 m21 : 56|7@1+ (1,0) [0|100] "PCT" LOGGER
+ SG_ SAMPLE_B_a047_data1 m47 : 16|10@1+ (0.005,0) [0|5.115] "V" LOGGER
+ SG_ SAMPLE_B_a047_data2 m47 : 26|10@1+ (0.005,0) [0|5.115] "V" LOGGER
+ SG_ SAMPLE_B_a047_data3 m47 : 36|10@1- (5,0) [-2560|2555] "A" LOGGER
+ SG_ SAMPLE_B_a047_data4 m47 : 46|8@1+ (0.5,0) [0|127.5] "%" LOGGER
+ SG_ SAMPLE_B_a047_data5 m47 : 54|8@1+ (1,1) [1|256] "" LOGGER
+
+BO_ 259 SAMPLE_B_alertMatrix: 8 SAMPLE_B
+ SG_ SAMPLE_B_matrixIndex : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ SAMPLE_B_a005_alert5 : 4|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a006_alert6 : 5|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a007_alert7 : 6|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a008_alert8 : 7|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a009_alert9 : 8|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a020_alert20 : 9|1@1+ (1,0) [0|1] "" LOGGER
+ SG_ SAMPLE_B_a021_alert21 : 10|1@1+ (1,0) [0|1] "" LOGGER
+
+
+
+
+BA_DEF_ "Baudrate" INT 0 1000000;
+BA_DEF_ "BusID" INT 0 255;
+BA_DEF_ "BusType" STRING ;
+BA_DEF_ "DBName" STRING ;
+BA_DEF_ "Manufacturer" STRING ;
+BA_DEF_ "NetworkName" STRING ;
+BA_DEF_ "NmBaseAddress" HEX 1024 1087;
+BA_DEF_ "NmMessageCount" INT 0 64;
+BA_DEF_ "NmType" STRING ;
+BA_DEF_ BO_ "DiagResponse" INT 0 1;
+BA_DEF_ BO_ "GatewayMessageAtomic" ENUM "No","Yes";
+BA_DEF_ BO_ "GatewayMessagePersistent" ENUM "No","Yes";
+BA_DEF_ BO_ "GatewayMessageQueueOnly" ENUM "No","Yes";
+BA_DEF_ BO_ "GatewayMessageSendType" ENUM "UseGenMsgSendType","onWrite","noAutoCode";
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
+BA_DEF_ BO_ "GenMsgCycleTimeFast" INT 0 50000;
+BA_DEF_ BO_ "GenMsgDelayTime" INT 0 0;
+BA_DEF_ BO_ "GenMsgForceMiaCheck" ENUM "No","Yes";
+BA_DEF_ BO_ "GenMsgGatewayBuffer" STRING ;
+BA_DEF_ BO_ "GenMsgILSupport" ENUM "No","Yes";
+BA_DEF_ BO_ "GenMsgNrOfRepetition" INT 0 999999;
+BA_DEF_ BO_ "GenMsgSaltingFunction" ENUM "No","Yes";
+BA_DEF_ BO_ "GenMsgSendType" ENUM "Cyclic","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","NoMsgSendType","Sporadic";
+BA_DEF_ BO_ "GenMsgStartDelayTime" INT 0 65535;
+BA_DEF_ BO_ "GenMsgStartValue" STRING ;
+BA_DEF_ BO_ "MessageIdType" ENUM "normal","udsRequest","udsResponse","udsReserved","udsFunctionalRequest","networkManagement","bootloader","xcp","dtc","diagnostic","vendorExempt";
+BA_DEF_ BO_ "NmMessage" ENUM "no","yes";
+BA_DEF_ BO_ "UsesChecksum" ENUM "No","Yes";
+BA_DEF_ BU_ "BOOT_NODE_ID" INT 0 15;
+BA_DEF_ BU_ "NmNode" ENUM "no","yes";
+BA_DEF_ BU_ "NmStationAddress" HEX 0 0;
+BA_DEF_ BU_ "NodeLayerModules" STRING ;
+BA_DEF_ SG_ "EquivalentSignal" STRING ;
+BA_DEF_ SG_ "FieldType" STRING ;
+BA_DEF_ SG_ "GenSigCycleTimeActive" INT 0 0;
+BA_DEF_ SG_ "GenSigInactiveValue" INT 0 0;
+BA_DEF_ SG_ "GenSigPersistent" ENUM "No","Yes";
+BA_DEF_ SG_ "GenSigSNA" STRING ;
+BA_DEF_ SG_ "GenSigSendType" ENUM "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ SG_ "GenSigStartValue" INT 0 0;
+BA_DEF_ SG_ "LogSignal" STRING ;
+BA_DEF_ SG_ "NWM_WakeupAllowed" ENUM "No","Yes";
+
+BA_DEF_DEF_ "BOOT_NODE_ID" 0;
+BA_DEF_DEF_ "Baudrate" 500000;
+BA_DEF_DEF_ "BusID" 0;
+BA_DEF_DEF_ "BusType" "CAN";
+BA_DEF_DEF_ "DBName" "";
+BA_DEF_DEF_ "DiagResponse" 0;
+BA_DEF_DEF_ "EquivalentSignal" "";
+BA_DEF_DEF_ "FieldType" "";
+BA_DEF_DEF_ "GatewayMessageAtomic" "No";
+BA_DEF_DEF_ "GatewayMessagePersistent" "No";
+BA_DEF_DEF_ "GatewayMessageQueueOnly" "No";
+BA_DEF_DEF_ "GatewayMessageSendType" "UseGenMsgSendType";
+BA_DEF_DEF_ "GenMsgCycleTime" 0;
+BA_DEF_DEF_ "GenMsgCycleTimeFast" 0;
+BA_DEF_DEF_ "GenMsgDelayTime" 0;
+BA_DEF_DEF_ "GenMsgForceMiaCheck" "No";
+BA_DEF_DEF_ "GenMsgGatewayBuffer" "";
+BA_DEF_DEF_ "GenMsgILSupport" "Yes";
+BA_DEF_DEF_ "GenMsgNrOfRepetition" 0;
+BA_DEF_DEF_ "GenMsgSaltingFunction" "No";
+BA_DEF_DEF_ "GenMsgSendType" "NoMsgSendType";
+BA_DEF_DEF_ "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_ "GenMsgStartValue" "";
+BA_DEF_DEF_ "GenSigCycleTimeActive" 0;
+BA_DEF_DEF_ "GenSigInactiveValue" 0;
+BA_DEF_DEF_ "GenSigPersistent" "No";
+BA_DEF_DEF_ "GenSigSNA" "";
+BA_DEF_DEF_ "GenSigSendType" "Cyclic";
+BA_DEF_DEF_ "GenSigStartValue" 0;
+BA_DEF_DEF_ "LogSignal" "";
+BA_DEF_DEF_ "Manufacturer" "";
+BA_DEF_DEF_ "MessageIdType" "normal";
+BA_DEF_DEF_ "NWM_WakeupAllowed" "No";
+BA_DEF_DEF_ "NetworkName" "";
+BA_DEF_DEF_ "NmBaseAddress" 1024;
+BA_DEF_DEF_ "NmMessage" "no";
+BA_DEF_DEF_ "NmMessageCount" 0;
+BA_DEF_DEF_ "NmNode" "no";
+BA_DEF_DEF_ "NmStationAddress" 0;
+BA_DEF_DEF_ "NmType" "";
+BA_DEF_DEF_ "NodeLayerModules" "CANoeILNLVector.dll";
+BA_DEF_DEF_ "UsesChecksum" "No";
+
+BA_ "BusID" 2;
+BA_ "DBName" "SAMPLE_Bus";
+BA_ "NetworkName" "SAMPLE";
+BA_ "GenMsgCycleTime" BO_ 257 1000;
+BA_ "GenMsgSendType" BO_ 257 0;
+BA_ "GenMsgCycleTime" BO_ 1792 100;
+BA_ "GenMsgSendType" BO_ 1792 0;
+BA_ "GenSigStartValue" SG_ 1792 SAMPLE_m6_data1 4000;
