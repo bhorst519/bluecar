@@ -64,9 +64,9 @@ osStaticThreadDef_t task1kHzControlBlock;
 
 HalWrappers_Init_S halWrappersInitData =
 {
-  .pSerial = &huart3,
+  .pSerial = {&huart3},
   .pPwmTim = &htim3,
-  .pCan = &hcan1,
+  .pCan = {&hcan1},
 };
 
 /* USER CODE END PV */
@@ -149,11 +149,11 @@ int main(void)
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of task_10Hz */
-  osThreadStaticDef(task_10Hz, StartTask10Hz, osPriorityNormal, 0, 256, task10HzBuffer, &task10HzControlBlock);
+  osThreadStaticDef(task_10Hz, StartTask10Hz, osPriorityAboveNormal, 0, 256, task10HzBuffer, &task10HzControlBlock);
   task_10HzHandle = osThreadCreate(osThread(task_10Hz), NULL);
 
   /* definition and creation of task_1Hz */
-  osThreadStaticDef(task_1Hz, StartTask1Hz, osPriorityLow, 0, 256, task1HzBuffer, &task1HzControlBlock);
+  osThreadStaticDef(task_1Hz, StartTask1Hz, osPriorityNormal, 0, 256, task1HzBuffer, &task1HzControlBlock);
   task_1HzHandle = osThreadCreate(osThread(task_1Hz), NULL);
 
   /* definition and creation of task_1kHz */
@@ -337,7 +337,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 10400;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
