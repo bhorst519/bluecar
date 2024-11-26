@@ -52,6 +52,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     app/generated/SAMPLE_canReceiver.c
     app/generated/SAMPLE_canTransmitter.c
     app/hal/halWrappers.c
+    app/kline/klineModule.c
     app/rtos/rtos.c
 )
 
@@ -61,7 +62,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/can
     app/generated
     app/hal
+    app/kline
     app/rtos
+    ../shared/utils
 )
 
 # Add project symbols (macros)

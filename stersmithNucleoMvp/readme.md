@@ -1,7 +1,7 @@
-# Sterling's Nucle Minimal Viable Product Project
+# Sterling's Nucleo Minimal Viable Product Project
 ## Directory structure
 - 'app' - developer-written code. Directories created for each module/function. Group sources and includes in the same directory.
-    - 'hal' - abstraction between develop-written code and CubeMX constants (e.g. IO mappings)
+    - 'hal' - abstraction between developer-written code and CubeMX generated code (e.g. IO mappings and functions)
     - 'rtos' - entry point into developer-written code from CubeMX project.
 - 'cmake' - CubeMX generated files for building the project-generated code.
 - 'Core' - CubeMX generated files for top-level project code.
