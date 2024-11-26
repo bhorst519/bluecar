@@ -11,6 +11,18 @@ extern "C" {
 void KlineModuleInit(void);
 void KlineModuleRun(void);
 
+uint16_t KlineGetRpm(void);
+float KlineGetTpsVoltage(void);
+float KlineGetTpsAngle(void);
+float KlineGetEctVoltage(void);
+float KlineGetEctTemp(void);
+float KlineGetIatVoltage(void);
+float KlineGetIatTemp(void);
+float KlineGetMapVoltage(void);
+float KlineGetMapPressure(void);
+float KlineGetBatteryVoltage(void);
+float KlineGetVehicleSpeed(void);
+
 #ifdef __cplusplus
 }
 #endif
