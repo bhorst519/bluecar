@@ -39,6 +39,18 @@ typedef enum
 typedef struct
 {
     Kline_State_E state;
+
+    uint16_t rpm;
+    float tpsVoltage;
+    float tpsAngle;
+    float ectVoltage;
+    float ectTemp;
+    float iatVoltage;
+    float iatTemp;
+    float mapVoltage;
+    float mapPressure;
+    float batteryVoltage;
+    float vehicleSpeed;
 } Kline_Data_S;
 
 /***************************************************************************************************
@@ -59,6 +71,26 @@ static const uint8_t gRequestResponseLength[MAX_NUM_REQUEST] = {
 /***************************************************************************************************
 *                                P R I V A T E   F U N C T I O N S                                 *
 ***************************************************************************************************/
+//--------------------------------------------------------------------------------------------------
+// Process data
+//--------------------------------------------------------------------------------------------------
+static void KlineProcessData(const Kline_Comm_TableResponse_S * const pTableResponse)
+{
+    taskENTER_CRITICAL();
+    gKlineData.rpm = pTableResponse->rpm;
+    gKlineData.tpsVoltage = (float)pTableResponse->tpsVoltage * (5.0F / 256.0F);
+    gKlineData.tpsAngle = (float)pTableResponse->tpsAngle / 2.0F;
+    gKlineData.ectVoltage = (float)pTableResponse->ectVoltage * (5.0F / 256.0F);
+    gKlineData.ectTemp = (float)pTableResponse->ectTemp - 40.0F;
+    gKlineData.iatVoltage = (float)pTableResponse->iatVoltage * (5.0F / 256.0F);
+    gKlineData.iatTemp = (float)pTableResponse->iatTemp - 40.0F;
+    gKlineData.mapVoltage = (float)pTableResponse->mapVoltage * (5.0F / 256.0F);
+    gKlineData.mapPressure = (float)pTableResponse->mapPressure;
+    gKlineData.batteryVoltage = (float)pTableResponse->batteryVoltage / 10.0F;
+    gKlineData.vehicleSpeed = (float)pTableResponse->vehicleSpeed;
+    taskEXIT_CRITICAL();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Communication
 //--------------------------------------------------------------------------------------------------
@@ -106,7 +138,7 @@ static bool KlineVerifyResponse(const Kline_Comm_Request_U * const pRequest, con
     return success;
 }
 
-static bool KlineSendRequest(const Kline_Request_E request)
+static bool KlineTransceive(const Kline_Request_E request, Kline_Comm_Response_U * pResponse)
 {
     bool success = true;
     Kline_Comm_Request_U * pRequest = (Kline_Comm_Request_U *)(&gSerialBytesTx[0U]);
@@ -168,8 +200,32 @@ static bool KlineSendRequest(const Kline_Request_E request)
 
     if (success)
     {
-        Kline_Comm_Response_U * pResponse = (Kline_Comm_Response_U *)(&gSerialBytesRx[numTxBytes]);
+        pResponse = (Kline_Comm_Response_U *)(&gSerialBytesRx[numTxBytes]);
         success = KlineVerifyResponse(pRequest, pResponse);
+    }
+
+    return success;
+}
+
+static bool KlineSendRequest(const Kline_Request_E request)
+{
+    Kline_Comm_Response_U * pResponse = NULL;
+    const bool success = KlineTransceive(request, pResponse);
+
+    if (success)
+    {
+        switch (request)
+        {
+            case REQUEST_DATA:
+                KlineProcessData(&pResponse->table);
+                break;
+            case REQUEST_WAKE_UP:
+            case REQUEST_INIT:
+            case REQUEST_ECM_ID:
+            default:
+                // Nothing to do
+                break;
+        }
     }
 
     return success;
@@ -271,5 +327,59 @@ void KlineModuleRun(void)
         KlineExecuteStateTransition(nextState);
         gKlineData.state = nextState;
     }
+}
 
+uint16_t KlineGetRpm(void)
+{
+    return gKlineData.rpm;
+}
+
+float KlineGetTpsVoltage(void)
+{
+    return gKlineData.tpsVoltage;
+}
+
+float KlineGetTpsAngle(void)
+{
+    return gKlineData.tpsAngle;
+}
+
+float KlineGetEctVoltage(void)
+{
+    return gKlineData.ectVoltage;
+}
+
+float KlineGetEctTemp(void)
+{
+    return gKlineData.ectTemp;
+}
+
+float KlineGetIatVoltage(void)
+{
+    return gKlineData.iatVoltage;
+}
+
+float KlineGetIatTemp(void)
+{
+    return gKlineData.iatTemp;
+}
+
+float KlineGetMapVoltage(void)
+{
+    return gKlineData.mapVoltage;
+}
+
+float KlineGetMapPressure(void)
+{
+    return gKlineData.mapPressure;
+}
+
+float KlineGetBatteryVoltage(void)
+{
+    return gKlineData.batteryVoltage;
+}
+
+float KlineGetVehicleSpeed(void)
+{
+    return gKlineData.vehicleSpeed;
 }

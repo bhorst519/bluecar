@@ -18,7 +18,7 @@ typedef struct
 {
     uint8_t headerCode;
     uint8_t numBytes;
-} Kline_Comm_Header_S;
+} __attribute__((packed)) Kline_Comm_Header_S;
 #define KLINE_HEADER_LENGTH (sizeof(Kline_Comm_Header_S))
 _Static_assert(KLINE_HEADER_LENGTH == 2U,
     "Incorrect Kline data size");
@@ -32,7 +32,7 @@ typedef struct
     uint8_t numBytes;
     uint8_t data;
     uint8_t crc;
-} Kline_Comm_WakeRequest_S;
+} __attribute__((packed)) Kline_Comm_WakeRequest_S;
 #define KLINE_WAKE_REQUEST_LENGTH (sizeof(Kline_Comm_WakeRequest_S))
 _Static_assert(KLINE_WAKE_REQUEST_LENGTH == 4U,
     "Incorrect Kline data size");
@@ -44,7 +44,7 @@ typedef struct
     uint8_t table;
     uint8_t address;
     uint8_t crc;
-} Kline_Comm_TableRequest_S;
+} __attribute__((packed)) Kline_Comm_TableRequest_S;
 #define KLINE_TABLE_REQUEST_LENGTH (sizeof(Kline_Comm_TableRequest_S))
 _Static_assert(KLINE_TABLE_REQUEST_LENGTH == 5U,
     "Incorrect Kline data size");
@@ -55,7 +55,7 @@ typedef union
     Kline_Comm_Header_S header;
     Kline_Comm_WakeRequest_S wake;
     Kline_Comm_TableRequest_S table;
-} Kline_Comm_Request_U;
+} __attribute__((packed)) Kline_Comm_Request_U;
 #define KLINE_MAX_REQUEST_LENGTH (sizeof(Kline_Comm_Request_U))
 
 //--------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ typedef struct
     uint8_t numBytes;
     uint8_t data;
     uint8_t crc;
-} Kline_Comm_WakeResponse_S;
+} __attribute__((packed)) Kline_Comm_WakeResponse_S;
 #define KLINE_WAKE_RESPONSE_LENGTH (sizeof(Kline_Comm_WakeResponse_S))
 _Static_assert(KLINE_WAKE_RESPONSE_LENGTH == 4U,
     "Incorrect Kline data size");
@@ -97,9 +97,21 @@ typedef struct
     uint8_t numBytes;
     uint8_t table;
     uint8_t address;
-    uint8_t data[20U];
+    uint16_t rpm;
+    uint8_t tpsVoltage;
+    uint8_t tpsAngle;
+    uint8_t ectVoltage;
+    uint8_t ectTemp;
+    uint8_t iatVoltage;
+    uint8_t iatTemp;
+    uint8_t mapVoltage;
+    uint8_t mapPressure;
+    uint8_t unused[2U];
+    uint8_t batteryVoltage;
+    uint8_t vehicleSpeed;
+    uint8_t unused2[6U];
     uint8_t crc;
-} Kline_Comm_TableResponse_S;
+} __attribute__((packed)) Kline_Comm_TableResponse_S;
 #define KLINE_TABLE_RESPONSE_LENGTH (sizeof(Kline_Comm_TableResponse_S))
 _Static_assert(KLINE_TABLE_RESPONSE_LENGTH == 25U,
     "Incorrect Kline data size");
@@ -110,7 +122,7 @@ typedef union
     Kline_Comm_Header_S header;
     Kline_Comm_WakeResponse_S wake;
     Kline_Comm_TableResponse_S table;
-} Kline_Comm_Response_U;
+} __attribute__((packed)) Kline_Comm_Response_U;
 #define KLINE_MAX_RESPONSE_LENGTH (sizeof(Kline_Comm_Response_U))
 
 #ifdef __cplusplus
