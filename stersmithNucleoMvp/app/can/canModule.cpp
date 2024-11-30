@@ -1,74 +1,28 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "assert.h"
-#include "canModule.h"
+#include "canModule.hpp"
 #include "halWrappers.h"
 #include "SAMPLE_canReceiver.h"
 #include "SAMPLE_canTransmitter.h"
 #include "SAMPLE_messageInfo.h"
+#include "util.h"
 
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
-_Static_assert(CANRX_SAMPLE_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
+UTIL_ASSERT(CANRX_SAMPLE_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
     "CAN bus with too many messages for filter config");
 
 /***************************************************************************************************
-*                                         T Y P E D E F S                                          *
+*                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
-typedef struct
+namespace Eim
 {
-    uint32_t periodMs;
-    uint32_t numMuxes;
-    uint32_t counter;
-} CanModule_Mux_Transmitter_S;
 
-/***************************************************************************************************
-*                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
-***************************************************************************************************/
-static CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertLog = {
-    .periodMs = 10U,
-    .numMuxes = (CAN_SAMPLE_SAMPLE_A_alertLog_MAX_MUX_IDX + 1U),
-    .counter = 0U
-};
-
-static CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertMatrix = {
-    .periodMs = 1000U,
-    .numMuxes = (CAN_SAMPLE_SAMPLE_A_alertMatrix_MAX_MUX_IDX + 1U),
-    .counter = 0U
-};
-
-/***************************************************************************************************
-*                                P R I V A T E   F U N C T I O N S                                 *
-***************************************************************************************************/
-static bool CanModuleShouldTransmitMuxNow(CanModule_Mux_Transmitter_S * pMux, uint32_t * pMuxIdx)
+void CanModule::Init(void)
 {
-    bool transmitNow = false;
-    const uint32_t muxPeriod = pMux->periodMs / pMux->numMuxes;
-    const uint32_t maxCountFromTx = muxPeriod * pMux->numMuxes;
-    const uint32_t muxIdxCandidate = pMux->counter / muxPeriod;
-
-    if (   ((pMux->counter % muxPeriod) == 0U)
-        && (pMux->counter < maxCountFromTx) )
-    {
-        *pMuxIdx = muxIdxCandidate;
-        transmitNow = true;
-    }
-
-    if (++pMux->counter >= pMux->periodMs)
-    {
-        pMux->counter = 0U;
-    }
-
-    return transmitNow;
-}
-
-/***************************************************************************************************
-*                                 P U B L I C   F U N C T I O N S                                  *
-***************************************************************************************************/
-void CanModuleInit(void)
-{
+    // Driver and HAL initialization
     CANTX_SAMPLE_Init();
 
     for (uint32_t i = 0U; i < CANRX_SAMPLE_NUM_MESSAGES; ++i)
@@ -78,13 +32,22 @@ void CanModuleInit(void)
     }
     HalWrappersCanSetRxFilters(CAN_1);
     HalWrappersCanStart(CAN_1);
+
+    // Transmit manager initialization
+    m_muxTransmit_SAMPLE_A_alertLog.periodMs = 10U;
+    m_muxTransmit_SAMPLE_A_alertLog.numMuxes = (CAN_SAMPLE_SAMPLE_A_alertLog_MAX_MUX_IDX + 1U);
+    m_muxTransmit_SAMPLE_A_alertLog.counter = 0U;
+
+    m_muxTransmit_SAMPLE_A_alertMatrix.periodMs = 1000U;
+    m_muxTransmit_SAMPLE_A_alertMatrix.numMuxes = (CAN_SAMPLE_SAMPLE_A_alertMatrix_MAX_MUX_IDX + 1U);
+    m_muxTransmit_SAMPLE_A_alertMatrix.counter = 0U;
 }
 
-void CanModuleRun(void)
+void CanModule::Run(void)
 {
     uint32_t muxIdx = 0U;
 
-    if (CanModuleShouldTransmitMuxNow(&gMuxTransmit_SAMPLE_A_alertLog, &muxIdx))
+    if (ShouldTransmitMuxNow(m_muxTransmit_SAMPLE_A_alertLog, muxIdx))
     {
         uint8_t * const pCanData = CANTX_SAMPLE_GetTxStorage_SAMPLE_A_alertLog(muxIdx);
 
@@ -132,7 +95,7 @@ void CanModuleRun(void)
         HalWrappersCanTransmit(CAN_1, CAN_SAMPLE_SAMPLE_A_alertLog_MID, CAN_SAMPLE_SAMPLE_A_alertLog_DLC, pCanData);
     }
 
-    if (CanModuleShouldTransmitMuxNow(&gMuxTransmit_SAMPLE_A_alertMatrix, &muxIdx))
+    if (ShouldTransmitMuxNow(m_muxTransmit_SAMPLE_A_alertMatrix, muxIdx))
     {
         const uint8_t * const pCanData = CANTX_SAMPLE_GetTxStorage_SAMPLE_A_alertMatrix(muxIdx);
         HalWrappersCanTransmit(CAN_1, CAN_SAMPLE_SAMPLE_A_alertMatrix_MID, CAN_SAMPLE_SAMPLE_A_alertMatrix_DLC, pCanData);
@@ -154,3 +117,27 @@ void CanModuleRun(void)
     intVal = CANRX_SAMPLE_GetS_SAMPLE_B_a021_data6();
     CANTX_SAMPLE_SetS_SAMPLE_A_a021_data6(intVal);
 }
+
+bool CanModule::ShouldTransmitMuxNow(CanModule_Mux_Transmitter_S& mux, uint32_t& muxIdx) const
+{
+    bool transmitNow = false;
+    const uint32_t muxPeriod = mux.periodMs / mux.numMuxes;
+    const uint32_t maxCountFromTx = muxPeriod * mux.numMuxes;
+    const uint32_t muxIdxCandidate = mux.counter / muxPeriod;
+
+    if (   ((mux.counter % muxPeriod) == 0U)
+        && (mux.counter < maxCountFromTx) )
+    {
+        muxIdx = muxIdxCandidate;
+        transmitNow = true;
+    }
+
+    if (++mux.counter >= mux.periodMs)
+    {
+        mux.counter = 0U;
+    }
+
+    return transmitNow;
+}
+
+} // namespace Eim

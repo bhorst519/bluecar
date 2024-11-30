@@ -1,11 +1,17 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "canModule.h"
+#include "canModule.hpp"
 #include "cmsis_os.h"
 #include "halWrappers.h"
-#include "klineModule.h"
+#include "klineModule.hpp"
 #include "rtos.h"
+
+/***************************************************************************************************
+*                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
+***************************************************************************************************/
+static Eim::CanModule m_canModule {};
+static Eim::KlineModule m_klineModule {};
 
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
@@ -13,8 +19,8 @@
 void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
 {
     HalWrappersInit(pHalWrappersInitArg);
-    CanModuleInit();
-    KlineModuleInit();
+    m_canModule.Init();
+    m_klineModule.Init();
 }
 
 void RtosRunTask1kHz(void)
@@ -23,7 +29,7 @@ void RtosRunTask1kHz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
-        CanModuleRun();
+        m_canModule.Run();
         HalWrappersGpioToggle(GPIO_DEBUG_2);
     }
 }
@@ -56,7 +62,7 @@ void RtosRunTask1Hz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
-        KlineModuleRun();
+        m_klineModule.Run();
         HalWrappersGpioToggle(GPIO_LED_2);
     }
 }
