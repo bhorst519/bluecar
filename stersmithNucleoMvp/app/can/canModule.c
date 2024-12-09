@@ -27,13 +27,13 @@ typedef struct
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertLog = {
+static CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertLog = {
     .periodMs = 10U,
     .numMuxes = (CAN_SAMPLE_SAMPLE_A_alertLog_MAX_MUX_IDX + 1U),
     .counter = 0U
 };
 
-CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertMatrix = {
+static CanModule_Mux_Transmitter_S gMuxTransmit_SAMPLE_A_alertMatrix = {
     .periodMs = 1000U,
     .numMuxes = (CAN_SAMPLE_SAMPLE_A_alertMatrix_MAX_MUX_IDX + 1U),
     .counter = 0U
@@ -74,10 +74,10 @@ void CanModuleInit(void)
     for (uint32_t i = 0U; i < CANRX_SAMPLE_NUM_MESSAGES; ++i)
     {
         const uint32_t mid = CANRX_SAMPLE_GetMidFromIdx(i);
-        HalWrapperCanRegisterRxFilter(mid);
+        HalWrappersCanRegisterRxFilter(CAN_1, mid);
     }
-    HalWrapperCanSetRxFilters();
-    HalWrappersCanStart();
+    HalWrappersCanSetRxFilters(CAN_1);
+    HalWrappersCanStart(CAN_1);
 }
 
 void CanModuleRun(void)
@@ -129,13 +129,13 @@ void CanModuleRun(void)
             // Do nothing
         }
 
-        HalWrappersCanTransmit(CAN_SAMPLE_SAMPLE_A_alertLog_MID, CAN_SAMPLE_SAMPLE_A_alertLog_DLC, pCanData);
+        HalWrappersCanTransmit(CAN_1, CAN_SAMPLE_SAMPLE_A_alertLog_MID, CAN_SAMPLE_SAMPLE_A_alertLog_DLC, pCanData);
     }
 
     if (CanModuleShouldTransmitMuxNow(&gMuxTransmit_SAMPLE_A_alertMatrix, &muxIdx))
     {
         const uint8_t * const pCanData = CANTX_SAMPLE_GetTxStorage_SAMPLE_A_alertMatrix(muxIdx);
-        HalWrappersCanTransmit(CAN_SAMPLE_SAMPLE_A_alertMatrix_MID, CAN_SAMPLE_SAMPLE_A_alertMatrix_DLC, pCanData);
+        HalWrappersCanTransmit(CAN_1, CAN_SAMPLE_SAMPLE_A_alertMatrix_MID, CAN_SAMPLE_SAMPLE_A_alertMatrix_DLC, pCanData);
     }
 
     // Echo demo

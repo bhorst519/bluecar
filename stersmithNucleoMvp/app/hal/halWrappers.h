@@ -8,6 +8,7 @@ extern "C" {
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "stdbool.h"
 #include "stm32f4xx_hal.h"
 
 /***************************************************************************************************
@@ -32,34 +33,59 @@ extern "C" {
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-typedef struct
+typedef enum
 {
-    UART_HandleTypeDef * pSerial;
-    TIM_HandleTypeDef * pPwmTim;
-    CAN_HandleTypeDef * pCan;
-} HalWrappers_Init_S;
+    GPIO_LED_1,
+    GPIO_LED_2,
+    GPIO_KLINE_TX,
+    GPIO_KLINE_RX,
+    GPIO_DEBUG_1,
+    GPIO_DEBUG_2,
+    GPIO_DEBUG_3,
+    MAX_NUM_GPIO
+} HalWrappers_Gpio_E;
 
 typedef enum
 {
-    LED_1,
-    LED_2,
-    DEBUG_1,
-    DEBUG_2,
-    DEBUG_3,
-    MAX_NUM_LEDS
-} HalWrappers_Gpio_E;
+    CAN_1,
+    MAX_NUM_CAN
+} HalWrappers_Can_E;
+
+typedef enum
+{
+    SERIAL_KLINE,
+    MAX_NUM_SERIAL
+} HalWrappers_Serial_E;
+
+typedef struct
+{
+    UART_HandleTypeDef * pSerial[MAX_NUM_SERIAL];
+    TIM_HandleTypeDef * pPwmTim;
+    CAN_HandleTypeDef * pCan[MAX_NUM_CAN];
+} HalWrappers_Init_S;
 
 /**************************************************************************************************
 *                     P U B L I C   F U N C T I O N   D E C L A R A T I O N S                     *
 **************************************************************************************************/
 void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg);
 
-void HalWrappersGpioToggle(const HalWrappers_Gpio_E led);
+// GPIO
+void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool level);
+void HalWrappersGpioToggle(const HalWrappers_Gpio_E gpio);
 void HalWrappersSetPwm(const float dutyCycle);
-void HalWrapperCanRegisterRxFilter(const uint32_t mid);
-void HalWrapperCanSetRxFilters(void);
-void HalWrappersCanStart(void);
-void HalWrappersCanTransmit(const uint32_t mid, const uint32_t dlc, const uint8_t * const pData);
+
+// CAN
+void HalWrappersCanRegisterRxFilter(const HalWrappers_Can_E can, const uint32_t mid);
+void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can);
+void HalWrappersCanStart(const HalWrappers_Can_E can);
+void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, const uint32_t dlc, const uint8_t * const pData);
+
+// Serial
+void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToGpio);
+bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes);
+bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes);
+bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitMs);
+void HalWrappersUartAbort(const HalWrappers_Serial_E serial);
 
 #ifdef __cplusplus
 }

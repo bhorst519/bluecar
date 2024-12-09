@@ -4,6 +4,7 @@
 #include "canModule.h"
 #include "cmsis_os.h"
 #include "halWrappers.h"
+#include "klineModule.h"
 #include "rtos.h"
 
 /***************************************************************************************************
@@ -13,6 +14,7 @@ void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
 {
     HalWrappersInit(pHalWrappersInitArg);
     CanModuleInit();
+    KlineModuleInit();
 }
 
 void RtosRunTask1kHz(void)
@@ -20,9 +22,9 @@ void RtosRunTask1kHz(void)
     uint32_t currentTick = osKernelSysTick();
     for(;;)
     {
-        osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
+        (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
         CanModuleRun();
-        HalWrappersGpioToggle(DEBUG_2);
+        HalWrappersGpioToggle(GPIO_DEBUG_2);
     }
 }
 
@@ -35,8 +37,8 @@ void RtosRunTask10Hz(void)
 
     for(;;)
     {
-        osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
-        HalWrappersGpioToggle(LED_1);
+        (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
+        HalWrappersGpioToggle(GPIO_LED_1);
 
         HalWrappersSetPwm(pulse);
         pulse += pulseInc;
@@ -53,7 +55,8 @@ void RtosRunTask1Hz(void)
 
     for(;;)
     {
-        osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
-        HalWrappersGpioToggle(LED_2);
+        (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
+        KlineModuleRun();
+        HalWrappersGpioToggle(GPIO_LED_2);
     }
 }
