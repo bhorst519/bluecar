@@ -63,6 +63,8 @@ extern "C" {
 #define U32_MSW(w)  ((uint16_t)((w) >> 16U))                                                    // MSW of uint32_t
 #define U32_LSW(w)  ((uint16_t)(w))                                                             // LSW of uint32_t
 
+#define ENDIANSWAP_U16(data) (uint16_t)(((uint16_t)data << 8U) | ((uint16_t)data >> 8U))
+
 #ifdef __cplusplus
 }
 #endif

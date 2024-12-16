@@ -67,12 +67,10 @@ void Error_Handler(void);
 #define LD1_GPIO_Port GPIOB
 #define DEBUG_3_Pin GPIO_PIN_15
 #define DEBUG_3_GPIO_Port GPIOF
+#define SERVO_TX_EN_Pin GPIO_PIN_13
+#define SERVO_TX_EN_GPIO_Port GPIOE
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
-#define STLK_RX_Pin GPIO_PIN_8
-#define STLK_RX_GPIO_Port GPIOD
-#define STLK_TX_Pin GPIO_PIN_9
-#define STLK_TX_GPIO_Port GPIOD
 #define USB_PowerSwitchOn_Pin GPIO_PIN_6
 #define USB_PowerSwitchOn_GPIO_Port GPIOG
 #define TMS_Pin GPIO_PIN_13

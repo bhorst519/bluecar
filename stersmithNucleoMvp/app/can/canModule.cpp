@@ -6,7 +6,6 @@
 #include "SAMPLE_canReceiver.h"
 #include "SAMPLE_canTransmitter.h"
 #include "SAMPLE_messageInfo.h"
-#include "util.h"
 
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
