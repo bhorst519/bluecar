@@ -48,12 +48,12 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
-    app/can/canModule.c
+    app/can/canModule.cpp
     app/generated/SAMPLE_canReceiver.c
     app/generated/SAMPLE_canTransmitter.c
     app/hal/halWrappers.c
-    app/kline/klineModule.c
-    app/rtos/rtos.c
+    app/kline/klineModule.cpp
+    app/rtos/rtos.cpp
 )
 
 # Add include paths
@@ -64,6 +64,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/hal
     app/kline
     app/rtos
+    ../shared/moduleBase
     ../shared/utils
 )
 
