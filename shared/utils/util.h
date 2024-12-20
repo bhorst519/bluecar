@@ -15,6 +15,12 @@ extern "C" {
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
+#ifdef __cplusplus
+#define UTIL_ASSERT(condition, str) static_assert(condition, str)
+#else
+#define UTIL_ASSERT(condition, str) _Static_assert(condition, str)
+#endif
+
 #define BIT_X(position, size)               ((uint##size##_t)((uint##size##_t)1U << ((uint_least8_t)(position))))
 #define GET_BIT_X(data, position, size)     ((bool)(((uint##size##_t)(data) & BIT_X((position), size)) != 0U))
 #define SET_BIT_X(data, position, size)     ((uint##size##_t)(data) | BIT_X((position), size))
@@ -56,5 +62,9 @@ extern "C" {
 #define U32(h,l)    (((uint32_t)(h) << 16U) | ((uint16_t)(l)))                                  // pack words into uint32_t
 #define U32_MSW(w)  ((uint16_t)((w) >> 16U))                                                    // MSW of uint32_t
 #define U32_LSW(w)  ((uint16_t)(w))                                                             // LSW of uint32_t
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // UTIL_H

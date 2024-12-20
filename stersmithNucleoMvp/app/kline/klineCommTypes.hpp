@@ -1,61 +1,72 @@
-#ifndef KLINE_COMM_TYPES_H
-#define KLINE_COMM_TYPES_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef KLINE_COMM_TYPES_HPP
+#define KLINE_COMM_TYPES_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "assert.h"
-#include "stdint.h"
+#include "util.h"
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-typedef struct
+namespace Eim
+{
+
+enum class Kline_Request_E
+{
+    WAKE_UP,
+    INIT,
+    ECM_ID,
+    DATA,
+    MAX_NUM_REQUEST
+};
+static constexpr size_t KLINE_MAX_NUM_REQUEST {static_cast<size_t>(Kline_Request_E::MAX_NUM_REQUEST)};
+
+//--------------------------------------------------------------------------------------------------
+// Data packing
+//--------------------------------------------------------------------------------------------------
+struct Kline_Comm_Header_S
 {
     uint8_t headerCode;
     uint8_t numBytes;
-} __attribute__((packed)) Kline_Comm_Header_S;
+} __attribute__((packed));
 #define KLINE_HEADER_LENGTH (sizeof(Kline_Comm_Header_S))
-_Static_assert(KLINE_HEADER_LENGTH == 2U,
+UTIL_ASSERT(KLINE_HEADER_LENGTH == 2U,
     "Incorrect Kline data size");
 
 //--------------------------------------------------------------------------------------------------
 // Request types
 //--------------------------------------------------------------------------------------------------
-typedef struct
+struct Kline_Comm_WakeRequest_S
 {
     uint8_t headerCode;
     uint8_t numBytes;
     uint8_t data;
     uint8_t crc;
-} __attribute__((packed)) Kline_Comm_WakeRequest_S;
+} __attribute__((packed));
 #define KLINE_WAKE_REQUEST_LENGTH (sizeof(Kline_Comm_WakeRequest_S))
-_Static_assert(KLINE_WAKE_REQUEST_LENGTH == 4U,
+UTIL_ASSERT(KLINE_WAKE_REQUEST_LENGTH == 4U,
     "Incorrect Kline data size");
 
-typedef struct
+struct Kline_Comm_TableRequest_S
 {
     uint8_t headerCode;
     uint8_t numBytes;
     uint8_t table;
     uint8_t address;
     uint8_t crc;
-} __attribute__((packed)) Kline_Comm_TableRequest_S;
+} __attribute__((packed));
 #define KLINE_TABLE_REQUEST_LENGTH (sizeof(Kline_Comm_TableRequest_S))
-_Static_assert(KLINE_TABLE_REQUEST_LENGTH == 5U,
+UTIL_ASSERT(KLINE_TABLE_REQUEST_LENGTH == 5U,
     "Incorrect Kline data size");
 
-typedef union
+union Kline_Comm_Request_U
 {
     uint8_t startData;
     Kline_Comm_Header_S header;
     Kline_Comm_WakeRequest_S wake;
     Kline_Comm_TableRequest_S table;
-} __attribute__((packed)) Kline_Comm_Request_U;
+} __attribute__((packed));
 #define KLINE_MAX_REQUEST_LENGTH (sizeof(Kline_Comm_Request_U))
 
 //--------------------------------------------------------------------------------------------------
@@ -80,18 +91,18 @@ typedef union
 //--------------------------------------------------------------------------------------------------
 // Response types
 //--------------------------------------------------------------------------------------------------
-typedef struct
+struct Kline_Comm_WakeResponse_S
 {
     uint8_t headerCode;
     uint8_t numBytes;
     uint8_t data;
     uint8_t crc;
-} __attribute__((packed)) Kline_Comm_WakeResponse_S;
+} __attribute__((packed));
 #define KLINE_WAKE_RESPONSE_LENGTH (sizeof(Kline_Comm_WakeResponse_S))
-_Static_assert(KLINE_WAKE_RESPONSE_LENGTH == 4U,
+UTIL_ASSERT(KLINE_WAKE_RESPONSE_LENGTH == 4U,
     "Incorrect Kline data size");
 
-typedef struct
+struct Kline_Comm_TableResponse_S
 {
     uint8_t headerCode;
     uint8_t numBytes;
@@ -111,22 +122,20 @@ typedef struct
     uint8_t vehicleSpeed;
     uint8_t unused2[6U];
     uint8_t crc;
-} __attribute__((packed)) Kline_Comm_TableResponse_S;
+} __attribute__((packed));
 #define KLINE_TABLE_RESPONSE_LENGTH (sizeof(Kline_Comm_TableResponse_S))
-_Static_assert(KLINE_TABLE_RESPONSE_LENGTH == 25U,
+UTIL_ASSERT(KLINE_TABLE_RESPONSE_LENGTH == 25U,
     "Incorrect Kline data size");
 
-typedef union
+union Kline_Comm_Response_U
 {
     uint8_t startData;
     Kline_Comm_Header_S header;
     Kline_Comm_WakeResponse_S wake;
     Kline_Comm_TableResponse_S table;
-} __attribute__((packed)) Kline_Comm_Response_U;
+} __attribute__((packed));
 #define KLINE_MAX_RESPONSE_LENGTH (sizeof(Kline_Comm_Response_U))
 
-#ifdef __cplusplus
-}
-#endif
+} // namespace Eim
 
-#endif // KLINE_COMM_TYPES_H
+#endif // KLINE_COMM_TYPES_HPP
