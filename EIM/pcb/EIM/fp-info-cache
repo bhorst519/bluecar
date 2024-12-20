@@ -1,4 +1,4 @@
-23702206134723485
+23705673501950924
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -88865,12 +88865,26 @@ rotary encoder illuminated switch vertical
 9
 8
 SamacSys_Parts
+348300801
+34830-0801-4
+Connector
+0
+8
+8
+SamacSys_Parts
 348302001
 34830-2001-4
 Connector
 0
 20
 20
+SamacSys_Parts
+367831201
+36783-1201
+Connector
+0
+14
+14
 SamacSys_Parts
 BTS3800SLHTSA1
 5-Pin-SCT595

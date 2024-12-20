@@ -304,151 +304,6 @@
 				)
 			)
 		)
-		(symbol "Device:D_TVS"
-			(pin_numbers hide)
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "D_TVS"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Bidirectional transient-voltage-suppression diode"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "diode TVS thyrector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "D_TVS_0_1"
-				(polyline
-					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 1.27) (xy -2.54 -1.27) (xy 2.54 1.27) (xy 2.54 -1.27) (xy -2.54 1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "D_TVS_1_1"
-				(pin passive line
-					(at -3.81 0 0)
-					(length 2.54)
-					(name "A1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 2.54)
-					(name "A2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Device:R"
 			(pin_numbers hide)
 			(pin_names
@@ -554,6 +409,139 @@
 					(at 0 -3.81 90)
 					(length 1.27)
 					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Diode:SM6T10A"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SM6T10A"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_SMD:D_SMB"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.st.com/resource/en/datasheet/sm6t.pdf"
+				(at -1.27 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "600W unidirectional Transil Transient Voltage Suppressor, 10Vrwm, DO-214AA"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode TVS voltage suppressor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "D*SMB*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SM6T10A_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy -1.27 1.27) (xy -1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SM6T10A_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1395,7 +1383,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0aa0522b-66c4-4255-9daf-a52b2174e707")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR084"
 			(at 186.69 113.03 0)
 			(effects
 				(font
@@ -1445,7 +1433,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR046")
+					(reference "#PWR084")
 					(unit 1)
 				)
 			)
@@ -1461,7 +1449,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "12c177c3-1ed7-4649-a700-b5fd6058c7aa")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR082"
 			(at 162.56 113.03 0)
 			(effects
 				(font
@@ -1511,7 +1499,7 @@
 		(instances
 			(project ""
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR043")
+					(reference "#PWR082")
 					(unit 1)
 				)
 			)
@@ -1526,7 +1514,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1c13c6bf-40ea-49b7-8ceb-47066389d571")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR080"
 			(at 118.11 87.63 0)
 			(effects
 				(font
@@ -1576,7 +1564,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR045")
+					(reference "#PWR080")
 					(unit 1)
 				)
 			)
@@ -1592,7 +1580,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3923a9b9-475b-4263-a06e-19fce310dabc")
-		(property "Reference" "C29"
+		(property "Reference" "C34"
 			(at 174.752 85.344 0)
 			(effects
 				(font
@@ -1646,7 +1634,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "C29")
+					(reference "C34")
 					(unit 1)
 				)
 			)
@@ -1662,7 +1650,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4ae47a71-0d48-4440-8c50-2bc5cf02179e")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR081"
 			(at 118.11 111.76 0)
 			(effects
 				(font
@@ -1712,77 +1700,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR044")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_TVS")
-		(at 193.04 102.87 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4ead877e-3991-401e-ae24-18dcea877b1b")
-		(property "Reference" "D5"
-			(at 195.58 101.5999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "SMBJ43CA"
-			(at 195.58 104.1399 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMB"
-			(at 193.04 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 193.04 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode"
-			(at 193.04 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "6b2cb843-7839-4123-83a4-11098cc2a8ad")
-		)
-		(pin "1"
-			(uuid "016cda5a-ce86-4aa1-a8de-1986114765b0")
-		)
-		(instances
-			(project ""
-				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "D5")
+					(reference "#PWR081")
 					(unit 1)
 				)
 			)
@@ -1798,7 +1716,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7d41d808-adb3-43a6-8a2c-6472dcc1632f")
-		(property "Reference" "C28"
+		(property "Reference" "C35"
 			(at 186.182 105.664 0)
 			(effects
 				(font
@@ -1852,7 +1770,76 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "C28")
+					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SM6T10A")
+		(at 193.04 102.87 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8f11768d-9f2c-4253-8649-33ca43e9ca68")
+		(property "Reference" "D11"
+			(at 195.58 101.5999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SMBJ12A"
+			(at 195.58 104.1399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMB"
+			(at 187.96 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.st.com/resource/en/datasheet/sm6t.pdf"
+			(at 193.04 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "600W unidirectional Transil Transient Voltage Suppressor, 10Vrwm, DO-214AA"
+			(at 193.04 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "65b8fae5-14d9-4123-9dfa-9f749a664956")
+		)
+		(pin "2"
+			(uuid "f1bd8b60-d608-49c6-9454-ed7e9a7195dc")
+		)
+		(instances
+			(project "EIM"
+				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
+					(reference "D11")
 					(unit 1)
 				)
 			)
@@ -1867,7 +1854,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "97a287e7-9d4e-460d-9aad-a999eff77622")
-		(property "Reference" "R9"
+		(property "Reference" "R17"
 			(at 189.484 88.646 0)
 			(effects
 				(font
@@ -1919,7 +1906,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "R9")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -2083,7 +2070,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ab3fe368-1e09-4f7a-b3c7-49dd2666a649")
-		(property "Reference" "D1"
+		(property "Reference" "D10"
 			(at 189.23 81.2799 90)
 			(effects
 				(font
@@ -2155,7 +2142,7 @@
 		(instances
 			(project ""
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "D1")
+					(reference "D10")
 					(unit 1)
 				)
 			)
@@ -2170,7 +2157,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c186f9dc-a489-4c1c-9a6f-000bb9b1aff7")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR085"
 			(at 193.04 113.03 0)
 			(effects
 				(font
@@ -2220,7 +2207,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR056")
+					(reference "#PWR085")
 					(unit 1)
 				)
 			)
@@ -2236,7 +2223,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cef2c343-ffda-4987-85ea-fd90c9ff0ddf")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR083"
 			(at 175.26 92.71 0)
 			(effects
 				(font
@@ -2286,7 +2273,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "#PWR047")
+					(reference "#PWR083")
 					(unit 1)
 				)
 			)
@@ -2302,7 +2289,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d3cf7e82-c6ee-480b-af08-d3ce33aece30")
-		(property "Reference" "C27"
+		(property "Reference" "C33"
 			(at 117.602 101.854 0)
 			(effects
 				(font
@@ -2356,7 +2343,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "C27")
+					(reference "C33")
 					(unit 1)
 				)
 			)
@@ -2371,7 +2358,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e8ef01a4-6f21-4abf-9330-fc9f280552c9")
-		(property "Reference" "R8"
+		(property "Reference" "R16"
 			(at 120.904 86.106 0)
 			(effects
 				(font
@@ -2423,7 +2410,7 @@
 		(instances
 			(project "EIM"
 				(path "/2e0b3b3d-5537-41dc-9fad-4fb33afdbfad/08df7d8f-6781-4b98-a316-f1c5c896db59"
-					(reference "R8")
+					(reference "R16")
 					(unit 1)
 				)
 			)
