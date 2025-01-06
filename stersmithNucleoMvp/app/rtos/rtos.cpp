@@ -6,12 +6,14 @@
 #include "halWrappers.h"
 #include "klineModule.hpp"
 #include "rtos.h"
+#include "servoModule.hpp"
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
 static Eim::CanModule m_canModule {};
 static Eim::KlineModule m_klineModule {};
+static Eim::ServoModule m_servoModule {};
 
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
@@ -21,6 +23,7 @@ void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
     HalWrappersInit(pHalWrappersInitArg);
     m_canModule.Init();
     m_klineModule.Init();
+    m_servoModule.Init();
 }
 
 void RtosRunTask1kHz(void)
@@ -45,6 +48,7 @@ void RtosRunTask10Hz(void)
     {
         (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
         HalWrappersGpioToggle(GPIO_LED_1);
+        m_servoModule.Run();
 
         HalWrappersSetPwm(pulse);
         pulse += pulseInc;

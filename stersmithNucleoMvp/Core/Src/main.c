@@ -47,6 +47,7 @@ CAN_HandleTypeDef hcan1;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart3;
+UART_HandleTypeDef huart6;
 
 osThreadId defaultTaskHandle;
 uint32_t defaultTaskBuffer[ 256 ];
@@ -64,7 +65,7 @@ osStaticThreadDef_t task1kHzControlBlock;
 
 HalWrappers_Init_S halWrappersInitData =
 {
-  .pSerial = {&huart3},
+  .pSerial = {&huart3, &huart6},
   .pPwmTim = &htim3,
   .pCan = {&hcan1},
 };
@@ -77,6 +78,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_USART6_UART_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask10Hz(void const * argument);
 void StartTask1Hz(void const * argument);
@@ -123,6 +125,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_CAN1_Init();
   MX_TIM3_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   RtosInit(&halWrappersInitData);
   /* USER CODE END 2 */
@@ -355,6 +358,39 @@ static void MX_USART3_UART_Init(void)
 }
 
 /**
+  * @brief USART6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART6_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART6_Init 0 */
+
+  /* USER CODE END USART6_Init 0 */
+
+  /* USER CODE BEGIN USART6_Init 1 */
+
+  /* USER CODE END USART6_Init 1 */
+  huart6.Instance = USART6;
+  huart6.Init.BaudRate = 115200;
+  huart6.Init.WordLength = UART_WORDLENGTH_8B;
+  huart6.Init.StopBits = UART_STOPBITS_1;
+  huart6.Init.Parity = UART_PARITY_NONE;
+  huart6.Init.Mode = UART_MODE_TX_RX;
+  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART6_Init 2 */
+
+  /* USER CODE END USART6_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -371,6 +407,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
 
@@ -379,6 +416,9 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DEBUG_3_GPIO_Port, DEBUG_3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(SERVO_TX_EN_GPIO_Port, SERVO_TX_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, USB_PowerSwitchOn_Pin|DEBUG_1_Pin|DEBUG_2_Pin, GPIO_PIN_RESET);
@@ -402,6 +442,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(DEBUG_3_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SERVO_TX_EN_Pin */
+  GPIO_InitStruct.Pin = SERVO_TX_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(SERVO_TX_EN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : USB_PowerSwitchOn_Pin DEBUG_1_Pin DEBUG_2_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin|DEBUG_1_Pin|DEBUG_2_Pin;

@@ -37,8 +37,11 @@ typedef enum
 {
     GPIO_LED_1,
     GPIO_LED_2,
+    GPIO_SERVO_TX_EN,
     GPIO_KLINE_TX,
     GPIO_KLINE_RX,
+    GPIO_SERVO_TX,
+    GPIO_SERVO_RX,
     GPIO_DEBUG_1,
     GPIO_DEBUG_2,
     GPIO_DEBUG_3,
@@ -54,6 +57,7 @@ typedef enum
 typedef enum
 {
     SERIAL_KLINE,
+    SERIAL_SERVO,
     MAX_NUM_SERIAL
 } HalWrappers_Serial_E;
 
@@ -82,7 +86,7 @@ void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, con
 
 // Serial
 void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToGpio);
-bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes);
+bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes, const bool notify);
 bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes);
 bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitMs);
 void HalWrappersUartAbort(const HalWrappers_Serial_E serial);

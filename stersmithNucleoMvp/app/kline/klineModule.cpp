@@ -237,7 +237,7 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
     // Initiate transmit
     if (success)
     {
-        success = HalWrappersUartTransmit(SERIAL_KLINE, &gSerialBytesTx[0U], numTxBytes);
+        success = HalWrappersUartTransmit(SERIAL_KLINE, &gSerialBytesTx[0U], numTxBytes, false);
     }
 
     // Wait for receive data

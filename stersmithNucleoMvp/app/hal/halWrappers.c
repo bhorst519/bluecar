@@ -25,7 +25,7 @@ typedef struct
 {
     HalWrappers_Gpio_E rxPin;
     HalWrappers_Gpio_E txPin;
-    void (* rxCompleteCallback)(UART_HandleTypeDef * huart);
+    void (* rxTxCompleteCallback)(UART_HandleTypeDef * huart);
 } HalWrappers_Serial_Info_S;
 
 typedef struct
@@ -38,6 +38,7 @@ typedef struct
 *                    P R I V A T E   F U N C T I O N   D E C L A R A T I O N S                     *
 ***************************************************************************************************/
 void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
+void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
@@ -52,17 +53,21 @@ static TIM_OC_InitTypeDef sConfigOC = {0};
 
 // Peripheral info wrappers for HAL interfaces
 static const HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
-    /* GPIO_LED_1 */        {.id = GPIO_PIN_0, .periph = GPIOB},
-    /* GPIO_LED_2 */        {.id = GPIO_PIN_7, .periph = GPIOB},
-    /* GPIO_KLINE_TX */     {.id = GPIO_PIN_8, .periph = GPIOD},
-    /* GPIO_KLINE_RX */     {.id = GPIO_PIN_9, .periph = GPIOD},
-    /* GPIO_DEBUG_1 */      {.id = GPIO_PIN_9, .periph = GPIOG},
+    /* GPIO_LED_1 */        {.id = GPIO_PIN_0,  .periph = GPIOB},
+    /* GPIO_LED_2 */        {.id = GPIO_PIN_7,  .periph = GPIOB},
+    /* GPIO_SERVO_TX_EN */  {.id = GPIO_PIN_13, .periph = GPIOE},
+    /* GPIO_KLINE_TX */     {.id = GPIO_PIN_8,  .periph = GPIOD},
+    /* GPIO_KLINE_RX */     {.id = GPIO_PIN_9,  .periph = GPIOD},
+    /* GPIO_SERVO_TX */     {.id = GPIO_PIN_6,  .periph = GPIOC},
+    /* GPIO_SERVO_RX */     {.id = GPIO_PIN_7,  .periph = GPIOC},
+    /* GPIO_DEBUG_1 */      {.id = GPIO_PIN_9,  .periph = GPIOG},
     /* GPIO_DEBUG_2 */      {.id = GPIO_PIN_14, .periph = GPIOG},
     /* GPIO_DEBUG_3 */      {.id = GPIO_PIN_15, .periph = GPIOF},
 };
 
 static const HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
-    /* SERIAL_KLINE */      {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxCompleteCallback = HalWrappersKlineUartCallback},
+    /* SERIAL_KLINE */      {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
+    /* SERIAL_SERVO */      {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
 };
 static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL] = {0};
 
@@ -72,12 +77,30 @@ static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL] = {0};
 void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
 {
     (void)huart;
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_KLINE], HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_KLINE], HAL_UART_RX_COMPLETE_CB_ID);
 
     // Task notify
     if (NULL != gSerialTaskToNotify[SERIAL_KLINE])
     {
         (void)osSignalSet(gSerialTaskToNotify[SERIAL_KLINE], 0);
+    }
+
+    // Yield if no task assigned
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
+{
+    (void)huart;
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_SERVO], HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_SERVO], HAL_UART_RX_COMPLETE_CB_ID);
+
+    // Task notify
+    if (NULL != gSerialTaskToNotify[SERIAL_SERVO])
+    {
+        (void)osSignalSet(gSerialTaskToNotify[SERIAL_SERVO], 0);
     }
 
     // Yield if no task assigned
@@ -208,10 +231,29 @@ void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToG
     }
 }
 
-bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes)
+bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes, const bool notify)
 {
-    const HAL_StatusTypeDef status = HAL_UART_Transmit_IT(pHalWrappersInit->pSerial[serial], pTx, numBytes);
-    return (status == HAL_OK);
+    HAL_StatusTypeDef status = HAL_OK;
+
+    // Start receive
+    if ((status == HAL_OK) && notify)
+    {
+        status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
+                                           HAL_UART_TX_COMPLETE_CB_ID,
+                                           gSerialInfo[serial].rxTxCompleteCallback);
+    }
+
+    if (status == HAL_OK)
+    {
+        status = HAL_UART_Transmit_IT(pHalWrappersInit->pSerial[serial], pTx, numBytes);
+    }
+
+    const bool success = (status == HAL_OK);
+    if (!success)
+    {
+        HalWrappersUartAbort(serial);
+    }
+    return success;
 }
 
 bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes)
@@ -223,7 +265,7 @@ bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const p
     {
         status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
                                            HAL_UART_RX_COMPLETE_CB_ID,
-                                           gSerialInfo[serial].rxCompleteCallback);
+                                           gSerialInfo[serial].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
@@ -257,6 +299,7 @@ bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitM
 void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
 {
     (void)HAL_UART_Abort_IT(pHalWrappersInit->pSerial[serial]);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
 }
 
