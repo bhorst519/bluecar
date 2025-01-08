@@ -16,7 +16,9 @@ namespace Eim
 class ServoModule final : public Shared::ModuleBase
 {
     public:
-        constexpr ServoModule()
+        constexpr ServoModule(
+            ) :
+                ModuleBase()
         {}
 
         NOCOPY_NOMOVE(ServoModule);

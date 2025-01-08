@@ -72,7 +72,7 @@ void ServoModule::Run(void)
     {
         // TODO remove demo
         static float gPosition = 0.0F;
-        static float gInc = 10.0F;
+        static float gInc = 30.0F;
         SetPositionToSet(gPosition);
         gPosition = gPosition + gInc;
         if      (gPosition >= SERVO_POSITION_MAX) { gPosition = SERVO_POSITION_MAX; gInc *= -1.0F; }
@@ -89,10 +89,10 @@ void ServoModule::Run(void)
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT);
         }
 
+        (void)SendRequest(Servo_Request_E::READ_VOLTAGE);
         (void)SendRequest(Servo_Request_E::SET_POSITION);
         (void)SendRequest(Servo_Request_E::READ_CURRENT);
         (void)SendRequest(Servo_Request_E::READ_TEMPERATURE);
-        (void)SendRequest(Servo_Request_E::READ_VOLTAGE);
     }
 }
 
