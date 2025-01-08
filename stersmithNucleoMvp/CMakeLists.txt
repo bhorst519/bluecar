@@ -55,6 +55,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp
     app/servo/servoModule.cpp
+    ../shared/taskBase/taskBase.cpp
 )
 
 # Add include paths
@@ -66,7 +67,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/kline
     app/rtos
     app/servo
+    ../shared/dataChannel
     ../shared/moduleBase
+    ../shared/taskBase
     ../shared/utils
 )
 
