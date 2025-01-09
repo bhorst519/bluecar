@@ -284,7 +284,6 @@ bool KlineModule::SendRequest(const Kline_Request_E request)
 //--------------------------------------------------------------------------------------------------
 void KlineModule::ProcessData(const Kline_Comm_TableResponse_S * const pTableResponse)
 {
-    taskENTER_CRITICAL();
     m_outputData.rpm = pTableResponse->rpm;
     m_outputData.tpsVoltage = (float)pTableResponse->tpsVoltage * (5.0F / 256.0F);
     m_outputData.tpsAngle = (float)pTableResponse->tpsAngle / 2.0F;
@@ -296,7 +295,6 @@ void KlineModule::ProcessData(const Kline_Comm_TableResponse_S * const pTableRes
     m_outputData.mapPressure = (float)pTableResponse->mapPressure;
     m_outputData.batteryVoltage = (float)pTableResponse->batteryVoltage / 10.0F;
     m_outputData.vehicleSpeed = (float)pTableResponse->vehicleSpeed;
-    taskEXIT_CRITICAL();
 }
 
 } // namespace Eim

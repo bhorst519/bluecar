@@ -47,6 +47,8 @@ class DataChannelBase
 
         virtual void Publish(const TaskId task) = 0;
         virtual void Update(const TaskId task) = 0;
+        void Lock(void) const;
+        void Unlock(void) const;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -103,14 +105,14 @@ class DataChannel : public DataChannelBase
         {
             if (task == SourceTask{})
             {
-                // Enter critical section
+                Lock();
                 m_dataSnapshot = m_sourceData;
                 for (int32_t i = 0; i < NUM_DEST_TASKS; ++i)
                 {
                     // new data is available for all destination tasks
                     m_newData[i] = true;
                 }
-                // Exit critical section
+                Unlock();
             }
         }
 
@@ -123,10 +125,10 @@ class DataChannel : public DataChannelBase
             {
                 if (m_newData[i])
                 {
-                    // Enter critical section
+                    Lock();
                     m_destinationData[i] = m_dataSnapshot;
                     m_newData[i] = false;
-                    // Exit critical section
+                    Unlock();
                 }
             }
         }
