@@ -8,9 +8,17 @@
 #include "nocopy.hpp"
 #include "taskBase.hpp"
 
+// Modules
 #include "canModule.hpp"
 #include "klineModule.hpp"
 #include "servoModule.hpp"
+
+// Message modules
+#include "klineMessageModule.hpp"
+#include "servoMessageModule.hpp"
+
+// Input message modules
+#include "servoInputMessageModule.hpp"
 
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
@@ -73,7 +81,11 @@ class App final
         //------------------------------------------------------------------------------------------
         // 10Hz objects
         //------------------------------------------------------------------------------------------
-        ServoModule m_servoModule {};
+        ServoInputMessageModule m_servoInput {};
+
+        ServoModule m_servoModule {
+            m_servoInput
+        };
 
         static constexpr size_t m_numberOfModules10Hz = 1U;
         ModuleBase * const m_moduleList10Hz[m_numberOfModules10Hz] =
@@ -95,9 +107,27 @@ class App final
         //------------------------------------------------------------------------------------------
         // Data channels
         //------------------------------------------------------------------------------------------
-        static constexpr size_t m_numberOfDataChannels = 0U;
+        // 10Hz source
+        DataChannel< ServoData_S
+                   , Task10Hz   // source task
+                   , Task1kHz   // destination task
+                          >m_servoDataChannel{ m_servoModule.GetOutputDataReference() };
+        ServoMessageModule m_servoMessageModule1kHz { m_servoDataChannel.GetBuffer(Task1kHz_t) };
+
+        // 1Hz source
+        DataChannel< KlineData_S
+                   , Task1Hz    // source task
+                   , Task1kHz   // destination task
+                          >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
+        KlineMessageModule m_klineMessageModule1kHz { m_klineDataChannel.GetBuffer(Task1kHz_t) };
+
+        static constexpr size_t m_numberOfDataChannels = 2U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
+            // 10Hz source
+            &m_servoDataChannel,
+            // 1Hz source
+            &m_klineDataChannel,
         };
 
         //------------------------------------------------------------------------------------------

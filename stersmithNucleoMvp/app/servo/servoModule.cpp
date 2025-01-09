@@ -54,11 +54,13 @@ static Servo_Comm_Frame_U gResponseFrame __attribute__((aligned(4))) {};
 ***************************************************************************************************/
 void ServoModule::Init(void)
 {
-    // Nothing to do
+    m_outputData.id = SERVO_BROADCAST_ID;
 }
 
 void ServoModule::Run(void)
 {
+    SanitizeInputs();
+
     if (!m_initialRead)
     {
         bool success = true;
@@ -73,18 +75,17 @@ void ServoModule::Run(void)
         // TODO remove demo
         static float gPosition = 0.0F;
         static float gInc = 30.0F;
-        SetPositionToSet(gPosition);
+        m_positionDegreesToSet = gPosition;
         gPosition = gPosition + gInc;
         if      (gPosition >= SERVO_POSITION_MAX) { gPosition = SERVO_POSITION_MAX; gInc *= -1.0F; }
         else if (gPosition <= SERVO_POSITION_MIN) { gPosition = SERVO_POSITION_MIN; gInc *= -1.0F; }
-        SetLossOfCommTimeoutToSet(1.0F);
 
-        if (m_lossOfCommPositionToSetDegrees != m_lossOfCommPositionDegrees)
+        if (m_lossOfCommPositionDegreesToSet != m_outputData.lossOfCommPositionDegrees)
         {
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_POSITION);
         }
 
-        if (m_lossOfCommTimeoutToSet != m_lossOfCommTimeout)
+        if (m_lossOfCommTimeoutToSet != m_outputData.lossOfCommTimeout)
         {
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT);
         }
@@ -94,6 +95,18 @@ void ServoModule::Run(void)
         (void)SendRequest(Servo_Request_E::READ_CURRENT);
         (void)SendRequest(Servo_Request_E::READ_TEMPERATURE);
     }
+}
+
+void ServoModule::SanitizeInputs(void)
+{
+    const float positionDegreesToSet = m_inputData.GetPositionDegreesToSet();
+    m_positionDegreesToSet = MathUtil::Saturate(positionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+
+    const float lossOfCommPositionDegreesToSet = m_inputData.GetLossOfCommPositionDegreesToSet();
+    m_lossOfCommPositionDegreesToSet = MathUtil::Saturate(lossOfCommPositionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+
+    const float lossOfCommTimeoutToSet = m_inputData.GetLossOfCommTimeoutToSet();
+    m_lossOfCommTimeoutToSet = MathUtil::Saturate(lossOfCommTimeoutToSet, 0.0F, SERVO_LOSS_OF_COMM_TIMEOUT_MAX);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,7 +163,7 @@ bool ServoModule::VerifyResponse(const Servo_Request_E request, const Servo_Comm
     }
     else
     {
-        expectedId = m_id;
+        expectedId = m_outputData.id;
     }
 
     success = success && (response != Servo_Response_E::INVALID);
@@ -180,7 +193,7 @@ bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequ
     bool success = true;
 
     gRequestFrame.frame.code = static_cast<uint8_t>(request);
-    gRequestFrame.frame.id = m_id;
+    gRequestFrame.frame.id = m_outputData.id;
     gRequestFrame.frame.crc = ENDIANSWAP_U16(CalculateCrc(gRequestFrame.raw.data));
 
     // Set up for receive, if needed
@@ -232,14 +245,14 @@ bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
         case Servo_Request_E::SET_POSITION:
         {
             data = static_cast<int16_t>(
-                  (m_positionToSetDegrees + SERVO_POSITION_ROUND)
+                  (m_positionDegreesToSet + SERVO_POSITION_ROUND)
                 / SERVO_POSITION_SCALE );
             data = ENDIANSWAP_U16(static_cast<uint16_t>(data));
             break;
         }
         case Servo_Request_E::SET_LOSS_OF_COMM_POSITION:
             data = static_cast<int16_t>(
-                  (m_lossOfCommPositionToSetDegrees + SERVO_POSITION_ROUND)
+                  (m_lossOfCommPositionDegreesToSet + SERVO_POSITION_ROUND)
                 / SERVO_POSITION_SCALE );
             data = ENDIANSWAP_U16(static_cast<uint16_t>(data));
             break;
@@ -311,7 +324,7 @@ bool ServoModule::ProcessResponse(const Servo_Request_E request, const uint16_t 
     {
         case Servo_Request_E::SET_ACTUATOR_ID:
         case Servo_Request_E::READ_ACTUATOR_ID:
-            m_id = U16_LSB(data);
+            m_outputData.id = U16_LSB(data);
             break;
         case Servo_Request_E::SET_POSITION:
         case Servo_Request_E::READ_POSITION:
@@ -319,26 +332,26 @@ bool ServoModule::ProcessResponse(const Servo_Request_E request, const uint16_t 
         case Servo_Request_E::SET_POSITION_AS_LOSS_OF_COMM:
         {
             const int16_t readData = static_cast<int16_t>(data);
-            m_positionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
+            m_outputData.positionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
             break;
         }
         case Servo_Request_E::READ_LOSS_OF_COMM_POSITION:
         {
             const int16_t readData = static_cast<int16_t>(data);
-            m_lossOfCommPositionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
+            m_outputData.lossOfCommPositionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
             break;
         }
         case Servo_Request_E::READ_LOSS_OF_COMM_TIMEOUT:
-            m_lossOfCommTimeout = static_cast<float>(U16_LSB(data)) * SERVO_LOSS_OF_COMM_TIMEOUT_SCALE;
+            m_outputData.lossOfCommTimeout = static_cast<float>(U16_LSB(data)) * SERVO_LOSS_OF_COMM_TIMEOUT_SCALE;
             break;
         case Servo_Request_E::READ_CURRENT:
-            m_current = static_cast<float>(U16_LSB(data)) * SERVO_CURRENT_SCALE;
+            m_outputData.current = static_cast<float>(U16_LSB(data)) * SERVO_CURRENT_SCALE;
             break;
         case Servo_Request_E::READ_TEMPERATURE:
-            m_temperature = static_cast<float>(U16_LSB(data)) + SERVO_TEMPERATURE_OFFSET;
+            m_outputData.temperature = static_cast<float>(U16_LSB(data)) + SERVO_TEMPERATURE_OFFSET;
             break;
         case Servo_Request_E::READ_VOLTAGE:
-            m_voltage = static_cast<float>(U16_LSB(data)) * SERVO_VOLTAGE_SCALE;
+            m_outputData.voltage = static_cast<float>(U16_LSB(data)) * SERVO_VOLTAGE_SCALE;
             break;
         case Servo_Request_E::SILENT_SET_POSITION:
         case Servo_Request_E::SET_LOSS_OF_COMM_POSITION:
@@ -415,28 +428,5 @@ bool ServoModule::SendSpecialRequest(const Servo_Special_Request_E request)
 
     return success;
 }
-
-//--------------------------------------------------------------------------------------------------
-// Setter interfaces
-//--------------------------------------------------------------------------------------------------
-void ServoModule::SetPositionToSet(const float degrees)
-{
-    m_positionToSetDegrees = MathUtil::Saturate(degrees, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
-}
-
-void ServoModule::SetLossOfCommPositionToSet(const float degrees)
-{
-    m_lossOfCommPositionToSetDegrees = MathUtil::Saturate(degrees, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
-}
-
-void ServoModule::SetLossOfCommTimeoutToSet(const float seconds)
-{
-    m_lossOfCommTimeoutToSet = MathUtil::Saturate(seconds, 0.0F, SERVO_LOSS_OF_COMM_TIMEOUT_MAX);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Getter interfaces
-//--------------------------------------------------------------------------------------------------
-// TODO
 
 } // namespace Eim

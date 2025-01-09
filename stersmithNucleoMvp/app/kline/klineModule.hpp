@@ -5,6 +5,8 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "klineCommTypes.hpp"
+#include "klineData.hpp"
+#include "klineInterface.hpp"
 #include "moduleBase.hpp"
 
 /***************************************************************************************************
@@ -35,32 +37,11 @@ class KlineModule final : public Shared::ModuleBase
 
         virtual void Init(void) override;
         virtual void Run(void) override;
-
-        uint16_t GetRpm(void) const;
-        float GetTpsVoltage(void) const;
-        float GetTpsAngle(void) const;
-        float GetEctVoltage(void) const;
-        float GetEctTemp(void) const;
-        float GetIatVoltage(void) const;
-        float GetIatTemp(void) const;
-        float GetMapVoltage(void) const;
-        float GetMapPressure(void) const;
-        float GetBatteryVoltage(void) const;
-        float GetVehicleSpeed(void) const;
+        constexpr const KlineData_S& GetOutputDataReference(void) const { return m_outputData; };
 
     private:
+        KlineData_S m_outputData {};
         Kline_State_E m_state {Kline_State_E::INIT_PEND};
-        uint16_t m_rpm {0U};
-        float m_tpsVoltage {0.0F};
-        float m_tpsAngle {0.0F};
-        float m_ectVoltage {0.0F};
-        float m_ectTemp {0.0F};
-        float m_iatVoltage {0.0F};
-        float m_iatTemp {0.0F};
-        float m_mapVoltage {0.0F};
-        float m_mapPressure {0.0F};
-        float m_batteryVoltage {0.0F};
-        float m_vehicleSpeed {0.0F};
 
         // State management
         Kline_State_E RunStateMachine(void);
