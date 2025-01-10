@@ -80,6 +80,7 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
     min = GetNumberFromString(signalMin)
     max = GetNumberFromString(signalMax)
     anyFloat = any([type(v) is float for v in [scale, offset, min, max]])
+    signedConvertedValue = signed or offset < 0
     return {
         "name": signalName,
         "message": messageName,
@@ -96,5 +97,5 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         "max": float(max) if anyFloat else max,
         "rawType": GetRawTypeFromBitLength(bitLength),
         "convIntType": GetIntTypeFromBitLength(bitLength, signed),
-        "convType": GetTypeFromSignAndConv(bitLength, signed, scale, offset)
+        "convType": GetTypeFromSignAndConv(bitLength, signedConvertedValue, scale, offset)
     }

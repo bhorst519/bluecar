@@ -50,8 +50,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
-    app/generated/SAMPLE_canReceiver.c
-    app/generated/SAMPLE_canTransmitter.c
+    app/generated/EIM_canReceiver.c
+    app/generated/EIM_canTransmitter.c
     app/hal/halWrappers.c
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp

@@ -3,7 +3,7 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "halWrappers.h"
-#include "SAMPLE_canReceiver.h"
+#include "EIM_canReceiver.h"
 
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
@@ -312,7 +312,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
     CAN_RxHeaderTypeDef rxHeader;
     uint8_t data[8U];
     (void)HAL_CAN_GetRxMessage(hcan, 0U, &rxHeader, &data[0U]);
-    (void)CANRX_SAMPLE_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+    (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     HalWrappersGpioToggle(GPIO_DEBUG_1);
 }
 
@@ -322,6 +322,6 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
     CAN_RxHeaderTypeDef rxHeader;
     uint8_t data[8U];
     (void)HAL_CAN_GetRxMessage(hcan, 1U, &rxHeader, &data[0U]);
-    (void)CANRX_SAMPLE_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+    (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     HalWrappersGpioToggle(GPIO_DEBUG_1);
 }
