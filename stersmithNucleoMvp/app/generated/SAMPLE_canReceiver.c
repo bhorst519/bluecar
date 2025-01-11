@@ -14,7 +14,7 @@ static uint8_t * gSAMPLE_B_alertMatrix_LatestRxPtr = &gSAMPLE_B_alertMatrix_RX_A
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration
 //--------------------------------------------------------------------------------------------------
-uint32_t gMidFromIdx[] = {
+uint32_t gMidFromIdx[CANRX_SAMPLE_NUM_MESSAGES] = {
     CAN_SAMPLE_SAMPLE_B_alertLog_MID,
     CAN_SAMPLE_SAMPLE_B_alertMatrix_MID,
 };
@@ -22,6 +22,7 @@ uint32_t CANRX_SAMPLE_GetMidFromIdx(const uint32_t msgIdx)
 {
     return gMidFromIdx[msgIdx];
 }
+
 //--------------------------------------------------------------------------------------------------
 // Signal receive unpack functions
 //--------------------------------------------------------------------------------------------------
@@ -981,11 +982,6 @@ static bool CANRX_ProcessM_SAMPLE_B_alertLog(const uint8_t * const pData)
             gSAMPLE_B_alertLog_LatestRxPtr = &gSAMPLE_B_alertLog_RX_ARR[CANRX_SAMPLE_SAMPLE_B_alertLog_M9_ARR_IDX][0U];
             break;
         }
-        case 47U:
-        {
-            gSAMPLE_B_alertLog_LatestRxPtr = &gSAMPLE_B_alertLog_RX_ARR[CANRX_SAMPLE_SAMPLE_B_alertLog_M47_ARR_IDX][0U];
-            break;
-        }
         case 20U:
         {
             gSAMPLE_B_alertLog_LatestRxPtr = &gSAMPLE_B_alertLog_RX_ARR[CANRX_SAMPLE_SAMPLE_B_alertLog_M20_ARR_IDX][0U];
@@ -994,6 +990,11 @@ static bool CANRX_ProcessM_SAMPLE_B_alertLog(const uint8_t * const pData)
         case 21U:
         {
             gSAMPLE_B_alertLog_LatestRxPtr = &gSAMPLE_B_alertLog_RX_ARR[CANRX_SAMPLE_SAMPLE_B_alertLog_M21_ARR_IDX][0U];
+            break;
+        }
+        case 47U:
+        {
+            gSAMPLE_B_alertLog_LatestRxPtr = &gSAMPLE_B_alertLog_RX_ARR[CANRX_SAMPLE_SAMPLE_B_alertLog_M47_ARR_IDX][0U];
             break;
         }
         default:

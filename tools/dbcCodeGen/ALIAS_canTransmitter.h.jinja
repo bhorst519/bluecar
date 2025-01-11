@@ -1,0 +1,56 @@
+#ifndef CAN_TRANSMITTER_H
+#define CAN_TRANSMITTER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stdbool.h"
+#include "stdint.h"
+
+//--------------------------------------------------------------------------------------------------
+// Transmit message storage getters
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToTransmit %}
+uint8_t * CANTX_{{ alias }}_GetTxStorage_{{ message["name"] }}(const uint32_t muxIdx);
+{% endfor %}
+
+//--------------------------------------------------------------------------------------------------
+// Mux index getters for iteration
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToTransmit %}
+{% set messageIsMuxed = (message["muxer"] != None) %}
+{% if messageIsMuxed %}
+uint32_t CANTX_{{ alias }}_GetMuxFromIdx_{{ message["name"] }}(const uint32_t muxIdx);
+{% endif %}
+{% endfor %}
+
+//--------------------------------------------------------------------------------------------------
+// Signal transmit setter functions
+//--------------------------------------------------------------------------------------------------
+{% for signal in signalsToTransmit %}
+{% set thisSignalMessageInfo = "[m for m in ${a} if m['name'] == '${b}']"|evalKeys({"a":messagesToTransmit, "b":signal["message"]}) %}
+{% set thisSignalMessageInfo = thisSignalMessageInfo[0] %}
+{% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
+{% set generateFramePointerFuncs = not (signal["muxIdx"] == None and messageIsMuxed) %}
+// {{ signal["name"] }}
+void CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(const {{ signal["rawType"] }} rawVal, uint8_t * const pData);
+{% if generateFramePointerFuncs %}
+void CANTX_{{ alias }}_SetSRaw_{{ signal["name"] }}(const {{ signal["rawType"] }} rawVal);
+{% endif %}
+void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convType"] }} converted, uint8_t * const pData);
+{% if generateFramePointerFuncs %}
+void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} converted);
+{% endif %}
+
+{% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message transmit init
+//--------------------------------------------------------------------------------------------------
+bool CANTX_{{ alias }}_Init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CAN_TRANSMITTER_H

@@ -1,0 +1,152 @@
+#include "{{ alias }}_canTransmitter.h"
+#include "{{ alias }}_messageInfo.h"
+#include "stdbool.h"
+#include "stdint.h"
+
+//--------------------------------------------------------------------------------------------------
+// Transmit message storage
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToTransmit %}
+static uint8_t g{{ message["name"] }}_TX_ARR[CANTX_{{ alias }}_{{ message["name"] }}_ARR_LEN][CAN_{{ alias }}_{{ message["name"] }}_DLC];
+{% endfor %}
+
+//--------------------------------------------------------------------------------------------------
+// Transmit message storage getters
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToTransmit %}
+{% set messageIsMuxed = (message["muxer"] != None) %}
+uint8_t * CANTX_{{ alias }}_GetTxStorage_{{ message["name"] }}(const uint32_t muxIdx)
+{
+{% if messageIsMuxed %}
+    return &g{{ message["name"] }}_TX_ARR[muxIdx][0U];
+{% else %}
+    (void)muxIdx;
+    return &g{{ message["name"] }}_TX_ARR[0U][0U];
+{% endif %}
+}
+
+{% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Mux index getters for iteration
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToTransmit %}
+{% set messageIsMuxed = (message["muxer"] != None) %}
+{% if messageIsMuxed %}
+uint32_t g{{ message["name"] }}_MuxFromIdx[] = {
+{% for muxIdx in message["transmitMuxIdxs"] %}
+    {{ muxIdx }}U,
+{% endfor %}
+};
+uint32_t CANTX_{{ alias }}_GetMuxFromIdx_{{ message["name"] }}(const uint32_t muxIdx)
+{
+    return g{{ message["name"] }}_MuxFromIdx[muxIdx];
+}
+{% endif %}
+{% endfor %}
+
+//--------------------------------------------------------------------------------------------------
+// Signal transmit setter functions
+//--------------------------------------------------------------------------------------------------
+{% macro FramePointer(messageName, muxIdx) -%}
+{% set rxArrIdx = "0U" if muxIdx == None else "CANTX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) %}
+uint8_t * const pData = &g{{ messageName }}_TX_ARR[{{ rxArrIdx }}][0U];
+{%- endmacro %}
+{#
+#}
+{% macro GetShiftAndByteMask(byte, shift, mask, shiftLeft) -%}
+{% set shiftOp = "(" + byte + ")" %}
+{% if shift > 0 %}
+    {% set shiftDir = " << " if shiftLeft else " >> " %}
+    {% set shiftOp = "(" + shiftOp + shiftDir + shift|string + ")" %}
+{% endif %}
+({{ shiftOp }} & {{ "0x{:02X}".format(mask) }})
+{%- endmacro %}
+{#
+#}
+{% macro SignalRawSetterHelper(byte, shift, mask, shiftLeft) -%}
+{% if mask == 0xFF %}
+pData[{{ byte }}] = (uint8_t)({{ GetShiftAndByteMask("rawVal", shift, mask, shiftLeft) }});
+{% else %}
+pData[{{ byte }}] &= (uint8_t)(~{{ "0x{:02X}".format(mask) }});
+pData[{{ byte }}] |= (uint8_t)({{ GetShiftAndByteMask("rawVal", shift, mask, shiftLeft) }});
+{% endif %}
+{%- endmacro %}
+{#
+#}
+{% for signal in signalsToTransmit %}
+{% set thisSignalMessageInfo = "[m for m in ${a} if m['name'] == '${b}']"|evalKeys({"a":messagesToTransmit, "b":signal["message"]}) %}
+{% set thisSignalMessageInfo = thisSignalMessageInfo[0] %}
+{% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
+{% set generateFramePointerFuncs = not (signal["muxIdx"] == None and messageIsMuxed) %}
+// {{ signal["name"] }}
+void CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(const {{ signal["rawType"] }} rawVal, uint8_t * const pData)
+{
+{% set startBit = signal["startBit"] %}
+{% set bitLength = signal["bitLength"] %}
+{% set endBit = startBit + bitLength - 1 %}
+{% set startByte = (startBit / 8)|int %}
+{% set endByte = (endBit / 8)|int %}
+{% set startLShift = startBit % 8 %}
+{% set startRShift = 8 - startLShift %}
+{% set startByteMask = "(0xFF << ${a}) & 0xFF"|evalKeys({"a":startLShift}) %}
+{% set endByteMask = "0xFF >> ${a}"|evalKeys({"a":(7 - (endBit % 8))}) %}
+{% if startByte == endByte %}
+    {% set overallByteMask = "${a} & ${b}"|evalKeys({"a":startByteMask, "b":endByteMask}) %}
+    {{ SignalRawSetterHelper(startByte, startLShift, overallByteMask, True)|indent -}}
+{% else %}
+    {{ SignalRawSetterHelper(startByte, startLShift, startByteMask, True)|indent -}}
+    {% set rShift = startRShift %}
+    {% for byte in range(startByte+1, endByte) %}
+    {{ SignalRawSetterHelper(byte, rShift, 0xFF, False)|indent -}}
+    {% set rShift = rShift + 8 %}
+    {% endfor %}
+    {{ SignalRawSetterHelper(endByte, rShift, endByteMask, False)|indent -}}
+{% endif %}
+}
+{% if generateFramePointerFuncs %}
+void CANTX_{{ alias }}_SetSRaw_{{ signal["name"] }}(const {{ signal["rawType"] }} rawVal)
+{
+    {{ FramePointer(signal["message"], signal["muxIdx"])|indent }}
+    CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(rawVal, pData);
+}
+{% endif %}
+void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convType"] }} converted, uint8_t * const pData)
+{
+{% set convAppend = "F" if signal["convType"] == "float" else "U" if signal["convType"].startswith("u") else "" %}
+{% set min = signal["min"]|string + convAppend %}
+{% set max = signal["max"]|string + convAppend %}
+    const {{ signal["convType"] }} convertedSat = (converted > {{ max }} ? {{ max }} : (converted < {{ min }} ? {{ min }} : converted));
+{% set scale = signal["scale"]|string + convAppend %}
+{% set offset = signal["offset"]|string + convAppend %}
+    const {{ signal["rawType"] }} rawVal = ({{ signal["rawType"] }})((convertedSat - {{ offset }}) / {{ scale }});
+    CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(rawVal, pData);
+}
+{% if generateFramePointerFuncs %}
+void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} converted)
+{
+    {{ FramePointer(signal["message"], signal["muxIdx"])|indent }}
+    CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(converted, pData);
+}
+{% endif %}
+
+{% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message transmit init
+//--------------------------------------------------------------------------------------------------
+bool CANTX_{{ alias }}_Init(void)
+{
+{% for message in messagesToTransmit %}
+{% set messageIsMuxed = (message["muxer"] != None) %}
+{% if messageIsMuxed %}
+    // {{ message["name"] }}
+{% for muxIdx in message["transmitMuxIdxs"] %}
+    CANTX_{{ alias }}_SetSFromFrame_{{ message["muxer"] }}(
+        {{ muxIdx }}U,
+        &g{{ message["name"] }}_TX_ARR[CANTX_{{ alias }}_{{ message["name"] }}_M{{ muxIdx }}_ARR_IDX][0U]
+    );
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+    return true;
+}

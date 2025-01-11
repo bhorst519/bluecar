@@ -1,0 +1,198 @@
+{% set BIT_LENGTH_FROM_TYPE = {"int8_t": 8, "int16_t": 16, "int32_t": 32, "int64_t": 64} %}
+#include "{{ alias }}_canReceiver.h"
+#include "{{ alias }}_messageInfo.h"
+#include "stdbool.h"
+#include "stdint.h"
+
+//--------------------------------------------------------------------------------------------------
+// Receive message storage
+//--------------------------------------------------------------------------------------------------
+{% for message in messagesToReceive %}
+static uint8_t g{{ message["name"] }}_RX_ARR[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN][CAN_{{ alias }}_{{ message["name"] }}_DLC];
+static uint8_t * g{{ message["name"] }}_LatestRxPtr = &g{{ message["name"] }}_RX_ARR[0U][0U];
+{% endfor %}
+
+//--------------------------------------------------------------------------------------------------
+// Receive message ID getters for iteration
+//--------------------------------------------------------------------------------------------------
+uint32_t gMidFromIdx[CANRX_{{ alias }}_NUM_MESSAGES] = {
+{% for message in messagesToReceive %}
+    CAN_{{ alias }}_{{ message["name"] }}_MID,
+{% endfor %}
+};
+uint32_t CANRX_{{ alias }}_GetMidFromIdx(const uint32_t msgIdx)
+{
+    return gMidFromIdx[msgIdx];
+}
+
+//--------------------------------------------------------------------------------------------------
+// Signal receive unpack functions
+//--------------------------------------------------------------------------------------------------
+{% macro FramePointer(messageName, muxIdx, messageIsMuxed) -%}
+{% if muxIdx == None and messageIsMuxed %}
+// This signal belongs to a muxed message but is static. Get contents from latest-received frame
+const uint8_t * const pData = g{{ messageName }}_LatestRxPtr;
+{%- else %}
+{% set rxArrIdx = "0U" if muxIdx == None else "CANRX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) %}
+const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
+{%- endif %}
+{%- endmacro %}
+{#
+#}
+{% macro GetByteMaskAndShift(byte, mask, shift, shiftLeft) -%}
+{% set maskOp = "(" + byte + ")" %}
+{% if mask != 0xFF %}
+    {% set maskOp = "(" + maskOp + " & 0x{:02X}".format(mask) + ")" %}
+{% endif %}
+{% if shift > 0 %}
+    {% set shiftDir = " << " if shiftLeft else " >> " %}
+    {% set maskOp = "(" + maskOp + shiftDir + shift|string + ")" %}
+{% endif %}
+{{ maskOp }}
+{%- endmacro %}
+{#
+#}
+{% macro SignalRawGetterHelper(byte, mask, shift, shiftLeft) -%}
+{{ GetByteMaskAndShift("pData[" + byte|string + "]", mask, shift, shiftLeft) }}
+{%- endmacro %}
+{#
+#}
+{% for signal in signalsToReceive %}
+{% set thisSignalMessageInfo = "[m for m in ${a} if m['name'] == '${b}']"|evalKeys({"a":messagesToReceive, "b":signal["message"]}) %}
+{% set thisSignalMessageInfo = thisSignalMessageInfo[0] %}
+{% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
+// {{ signal["name"] }}
+{{ signal["rawType"] }} CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
+{
+    const {{ signal["rawType"] }} rawVal =
+{%- set startBit = signal["startBit"] %}
+{% set bitLength = signal["bitLength"] %}
+{% set endBit = startBit + bitLength - 1 %}
+{% set startByte = (startBit / 8)|int %}
+{% set endByte = (endBit / 8)|int %}
+{% set startRShift = startBit % 8 %}
+{% set startLShift = 8 - startRShift %}
+{% set startByteMask = "(0xFF << ${a}) & 0xFF"|evalKeys({"a":startRShift}) %}
+{% set endByteMask = "0xFF >> ${a}"|evalKeys({"a":(7 - (endBit % 8))}) %}
+{% if startByte == endByte %}
+ {% set overallByteMask = "${a} & ${b}"|evalKeys({"a":startByteMask, "b":endByteMask}) %}
+ {{ SignalRawGetterHelper(startByte, overallByteMask, startRShift, False)|indent }};
+{% else %}
+ {{ SignalRawGetterHelper(startByte, startByteMask, startRShift, False)|indent }} +
+ {%- set lshift = startLShift %}
+ {% for byte in range(startByte+1, endByte) %}
+ {{ SignalRawGetterHelper(byte, 0xFF, lshift, True)|indent }} +
+ {%- set lshift = lshift + 8 %}
+ {% endfor %}
+ {{ SignalRawGetterHelper(endByte, endByteMask, lshift, True)|indent }};
+{% endif %}
+    return rawVal;
+}
+{{ signal["rawType"] }} CANRX_{{ alias }}_GetSRaw_{{ signal["name"] }}(void)
+{
+    {{ FramePointer(signal["message"], signal["muxIdx"], messageIsMuxed)|indent }}
+    return CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(pData);
+}
+{{ signal["convType"] }} CANRX_{{ alias }}_GetSFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
+{
+    {{ signal["convIntType"] }} raw = ({{ signal["convIntType"] }})CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(pData);
+{% if signal["signed"] %}
+    {% set bitsToShift = BIT_LENGTH_FROM_TYPE[signal["convIntType"]] - signal["bitLength"] %}
+    {% if bitsToShift > 0 %}
+    // Sign extend
+    raw = (raw << {{ bitsToShift }}) >> {{ bitsToShift }};
+    {% endif %}
+{% endif %}
+{% set convAppend = "F" if signal["convType"] == "float" else "U" if signal["convType"].startswith("u") else "" %}
+{% set scale = signal["scale"]|string + convAppend %}
+{% set offset = signal["offset"]|string + convAppend %}
+    {{ signal["convType"] }} converted = ((({{ signal["convType"] }})raw) * {{ scale }}) + {{ offset }};
+    return converted;
+}
+{{ signal["convType"] }} CANRX_{{ alias }}_GetS_{{ signal["name"] }}(void)
+{
+    {{ FramePointer(signal["message"], signal["muxIdx"], messageIsMuxed)|indent }}
+    return CANRX_{{ alias }}_GetSFromFrame_{{ signal["name"] }}(pData);
+}
+
+{% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message receive storage functions
+//--------------------------------------------------------------------------------------------------
+{% macro MessageMuxReceiver(messageName, muxIdx) -%}
+{% set rxArrIdx = "0U" if muxIdx == None else "CANRX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) %}
+g{{ messageName }}_LatestRxPtr = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
+{%- endmacro %}
+{#
+#}
+{% for message in messagesToReceive %}
+static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
+{
+    bool success = true;
+{% if message["muxer"] != None %}
+    const uint32_t muxIdx = CANRX_{{ alias }}_GetSRawFromFrame_{{ message["muxer"] }}(pData);
+
+    switch (muxIdx)
+    {
+{% for muxIdx in message["receiveMuxIdxs"] %}
+        case {{ muxIdx }}U:
+        {
+            {{ MessageMuxReceiver(message["name"], muxIdx)|indent }}
+            break;
+        }
+{% endfor %}
+        default:
+        {
+            success = false;
+            break;
+        }
+    }
+{% else %}
+
+    {{ MessageMuxReceiver(message["name"], None)|indent }}
+{% endif %}
+
+    if (success)
+    {
+        for (uint32_t d = 0U; d < CAN_{{ alias }}_{{ message["name"] }}_DLC; ++d)
+        {
+            g{{ message["name"] }}_LatestRxPtr[d] = pData[d];
+        }
+    }
+
+    return success;
+}
+
+{% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message receive hook
+//--------------------------------------------------------------------------------------------------
+bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
+{
+    bool success = true;
+
+    switch (mid)
+    {
+{% for message in messagesToReceive %}
+        case CAN_{{ alias }}_{{ message["name"] }}_MID:
+        {
+            if (dlc != CAN_{{ alias }}_{{ message["name"] }}_DLC)
+            {
+                success = false;
+            }
+            else
+            {
+                success = CANRX_ProcessM_{{ message["name"] }}(pData);
+            }
+            break;
+        }
+{% endfor %}
+        default:
+        {
+            success = false;
+            break;
+        }
+    }
+
+    return success;
+}

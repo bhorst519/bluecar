@@ -44,7 +44,7 @@ uint32_t CANTX_SAMPLE_GetMuxFromIdx_SAMPLE_A_alertLog(const uint32_t muxIdx)
 // Signal transmit setter functions
 //--------------------------------------------------------------------------------------------------
 // SAMPLE_A_alertID
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_alertID(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_alertID(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x7F);
     pData[0] |= (uint8_t)(((rawVal) & 0x7F));
@@ -57,7 +57,7 @@ void CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(const uint32_t converted, uint8
 }
 
 // SAMPLE_A_alertState
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_alertState(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_alertState(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[1] &= (uint8_t)(~0x80);
     pData[1] |= (uint8_t)((((rawVal) << 7) & 0x80));
@@ -70,7 +70,7 @@ void CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertState(const uint32_t converted, ui
 }
 
 // SAMPLE_A_a005_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_data1(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_data1(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[2] &= (uint8_t)(~0x01);
     pData[2] |= (uint8_t)(((rawVal) & 0x01));
@@ -93,7 +93,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a005_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a005_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_data2(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_data2(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[2] &= (uint8_t)(~0x02);
     pData[2] |= (uint8_t)((((rawVal) << 1) & 0x02));
@@ -116,7 +116,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a005_data2(const uint32_t converted)
 }
 
 // SAMPLE_A_a006_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_data1(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_data1(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[2] = (uint8_t)(((rawVal) & 0xFF));
     pData[3] = (uint8_t)((((rawVal) >> 8) & 0xFF));
@@ -139,7 +139,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a006_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a006_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_data2(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_data2(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[4] = (uint8_t)(((rawVal) & 0xFF));
     pData[5] = (uint8_t)((((rawVal) >> 8) & 0xFF));
@@ -162,7 +162,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a006_data2(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data1(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data1(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[2] = (uint8_t)(((rawVal) & 0xFF));
     pData[3] = (uint8_t)((((rawVal) >> 8) & 0xFF));
@@ -185,7 +185,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data2(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data2(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[4] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -207,7 +207,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_data2(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_data3
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data3(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data3(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[5] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -229,7 +229,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_data3(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_data4
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data4(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data4(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0x01);
     pData[6] |= (uint8_t)(((rawVal) & 0x01));
@@ -252,7 +252,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_data4(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_data5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_data5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0x02);
     pData[6] |= (uint8_t)((((rawVal) << 1) & 0x02));
@@ -275,7 +275,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_data5(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data1(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data1(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[2] = (uint8_t)(((rawVal) & 0xFF));
     pData[3] = (uint8_t)((((rawVal) >> 8) & 0xFF));
@@ -298,7 +298,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data2(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data2(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[4] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -320,7 +320,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_data2(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_data3
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data3(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data3(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[5] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -342,7 +342,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_data3(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_data4
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data4(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data4(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0x01);
     pData[6] |= (uint8_t)(((rawVal) & 0x01));
@@ -365,7 +365,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_data4(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_data5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_data5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0x02);
     pData[6] |= (uint8_t)((((rawVal) << 1) & 0x02));
@@ -388,7 +388,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_data5(const uint32_t converted)
 }
 
 // SAMPLE_A_a020_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data1(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data1(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[2] &= (uint8_t)(~0x7F);
     pData[2] |= (uint8_t)(((rawVal) & 0x7F));
@@ -411,7 +411,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a020_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data2(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data2(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[3] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -433,7 +433,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_data2(const float converted)
 }
 
 // SAMPLE_A_a020_data3
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data3(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data3(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[4] &= (uint8_t)(~0x7F);
     pData[4] |= (uint8_t)(((rawVal) & 0x7F));
@@ -456,7 +456,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_data3(const uint32_t converted)
 }
 
 // SAMPLE_A_a020_data4
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data4(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data4(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[5] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -478,7 +478,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_data4(const float converted)
 }
 
 // SAMPLE_A_a020_data5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_data5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -500,7 +500,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_data5(const float converted)
 }
 
 // SAMPLE_A_a021_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data1(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data1(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[2] &= (uint8_t)(~0x7F);
     pData[2] |= (uint8_t)(((rawVal) & 0x7F));
@@ -523,7 +523,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data1(const uint32_t converted)
 }
 
 // SAMPLE_A_a021_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data2(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data2(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[3] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -545,7 +545,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data2(const float converted)
 }
 
 // SAMPLE_A_a021_data3
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data3(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data3(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[4] &= (uint8_t)(~0x7F);
     pData[4] |= (uint8_t)(((rawVal) & 0x7F));
@@ -568,7 +568,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data3(const uint32_t converted)
 }
 
 // SAMPLE_A_a021_data4
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data4(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data4(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[5] = (uint8_t)(((rawVal) & 0xFF));
 }
@@ -590,7 +590,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data4(const float converted)
 }
 
 // SAMPLE_A_a021_data5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0x7F);
     pData[6] |= (uint8_t)(((rawVal) & 0x7F));
@@ -613,7 +613,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data5(const uint32_t converted)
 }
 
 // SAMPLE_A_a021_data6
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data6(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_data6(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[7] &= (uint8_t)(~0x7F);
     pData[7] |= (uint8_t)(((rawVal) & 0x7F));
@@ -636,7 +636,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_data6(const uint32_t converted)
 }
 
 // SAMPLE_A_a047_data1
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data1(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data1(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[2] = (uint8_t)(((rawVal) & 0xFF));
     pData[3] &= (uint8_t)(~0x03);
@@ -660,7 +660,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a047_data1(const float converted)
 }
 
 // SAMPLE_A_a047_data2
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data2(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data2(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[3] &= (uint8_t)(~0xFC);
     pData[3] |= (uint8_t)((((rawVal) << 2) & 0xFC));
@@ -685,7 +685,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a047_data2(const float converted)
 }
 
 // SAMPLE_A_a047_data3
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data3(const uint16_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data3(const uint16_t rawVal, uint8_t * const pData)
 {
     pData[4] &= (uint8_t)(~0xF0);
     pData[4] |= (uint8_t)((((rawVal) << 4) & 0xF0));
@@ -710,7 +710,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a047_data3(const int32_t converted)
 }
 
 // SAMPLE_A_a047_data4
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data4(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data4(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[5] &= (uint8_t)(~0xC0);
     pData[5] |= (uint8_t)((((rawVal) << 6) & 0xC0));
@@ -735,7 +735,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a047_data4(const float converted)
 }
 
 // SAMPLE_A_a047_data5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a047_data5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[6] &= (uint8_t)(~0xC0);
     pData[6] |= (uint8_t)((((rawVal) << 6) & 0xC0));
@@ -760,7 +760,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a047_data5(const uint32_t converted)
 }
 
 // SAMPLE_A_matrixIndex
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_matrixIndex(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_matrixIndex(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x0F);
     pData[0] |= (uint8_t)(((rawVal) & 0x0F));
@@ -783,7 +783,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_matrixIndex(const uint32_t converted)
 }
 
 // SAMPLE_A_a005_alert5
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_alert5(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a005_alert5(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x10);
     pData[0] |= (uint8_t)((((rawVal) << 4) & 0x10));
@@ -806,7 +806,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a005_alert5(const uint32_t converted)
 }
 
 // SAMPLE_A_a006_alert6
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_alert6(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a006_alert6(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x20);
     pData[0] |= (uint8_t)((((rawVal) << 5) & 0x20));
@@ -829,7 +829,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a006_alert6(const uint32_t converted)
 }
 
 // SAMPLE_A_a007_alert7
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a007_alert7(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a007_alert7(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x40);
     pData[0] |= (uint8_t)((((rawVal) << 6) & 0x40));
@@ -852,7 +852,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a007_alert7(const uint32_t converted)
 }
 
 // SAMPLE_A_a008_alert8
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_alert8(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a008_alert8(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[0] &= (uint8_t)(~0x80);
     pData[0] |= (uint8_t)((((rawVal) << 7) & 0x80));
@@ -875,7 +875,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a008_alert8(const uint32_t converted)
 }
 
 // SAMPLE_A_a009_alert9
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_alert9(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a009_alert9(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[1] &= (uint8_t)(~0x01);
     pData[1] |= (uint8_t)(((rawVal) & 0x01));
@@ -898,7 +898,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a009_alert9(const uint32_t converted)
 }
 
 // SAMPLE_A_a020_alert20
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_alert20(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a020_alert20(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[1] &= (uint8_t)(~0x02);
     pData[1] |= (uint8_t)((((rawVal) << 1) & 0x02));
@@ -921,7 +921,7 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a020_alert20(const uint32_t converted)
 }
 
 // SAMPLE_A_a021_alert21
-void  CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_alert21(const uint8_t rawVal, uint8_t * const pData)
+void CANTX_SAMPLE_SetSRawFromFrame_SAMPLE_A_a021_alert21(const uint8_t rawVal, uint8_t * const pData)
 {
     pData[1] &= (uint8_t)(~0x04);
     pData[1] |= (uint8_t)((((rawVal) << 2) & 0x04));
@@ -949,13 +949,35 @@ void CANTX_SAMPLE_SetS_SAMPLE_A_a021_alert21(const uint32_t converted)
 bool CANTX_SAMPLE_Init(void)
 {
     // SAMPLE_A_alertLog
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(5U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M5_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(6U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M6_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(8U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M8_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(9U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M9_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(20U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M20_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(21U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M21_ARR_IDX][0U]);
-    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(47U, &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M47_ARR_IDX][0U]);
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        5U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M5_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        6U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M6_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        8U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M8_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        9U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M9_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        20U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M20_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        21U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M21_ARR_IDX][0U]
+    );
+    CANTX_SAMPLE_SetSFromFrame_SAMPLE_A_alertID(
+        47U,
+        &gSAMPLE_A_alertLog_TX_ARR[CANTX_SAMPLE_SAMPLE_A_alertLog_M47_ARR_IDX][0U]
+    );
+
 
     return true;
 }
