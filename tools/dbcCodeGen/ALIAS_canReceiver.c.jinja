@@ -58,14 +58,13 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
 {#
 #}
 {% for signal in signalsToReceive %}
-{% set thisSignalMessageInfo = "[m for m in ${a} if m['name'] == '${b}']"|evalKeys({"a":messagesToReceive, "b":signal["message"]}) %}
-{% set thisSignalMessageInfo = thisSignalMessageInfo[0] %}
+{% set thisSignalMessageInfo = messagesToReceive|selectattr("name", "equalto", signal["message"])|list|first %}
 {% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
 // {{ signal["name"] }}
 {{ signal["rawType"] }} CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
 {
     const {{ signal["rawType"] }} rawVal =
-{%- set startBit = signal["startBit"] %}
+{% set startBit = signal["startBit"] %}
 {% set bitLength = signal["bitLength"] %}
 {% set endBit = startBit + bitLength - 1 %}
 {% set startByte = (startBit / 8)|int %}
@@ -75,16 +74,16 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
 {% set startByteMask = "(0xFF << ${a}) & 0xFF"|evalKeys({"a":startRShift}) %}
 {% set endByteMask = "0xFF >> ${a}"|evalKeys({"a":(7 - (endBit % 8))}) %}
 {% if startByte == endByte %}
- {% set overallByteMask = "${a} & ${b}"|evalKeys({"a":startByteMask, "b":endByteMask}) %}
- {{ SignalRawGetterHelper(startByte, overallByteMask, startRShift, False)|indent }};
+        {% set overallByteMask = "${a} & ${b}"|evalKeys({"a":startByteMask, "b":endByteMask}) %}
+        {{ SignalRawGetterHelper(startByte, overallByteMask, startRShift, False)|indent }};
 {% else %}
- {{ SignalRawGetterHelper(startByte, startByteMask, startRShift, False)|indent }} +
- {%- set lshift = startLShift %}
- {% for byte in range(startByte+1, endByte) %}
- {{ SignalRawGetterHelper(byte, 0xFF, lshift, True)|indent }} +
- {%- set lshift = lshift + 8 %}
- {% endfor %}
- {{ SignalRawGetterHelper(endByte, endByteMask, lshift, True)|indent }};
+        {{ SignalRawGetterHelper(startByte, startByteMask, startRShift, False)|indent }} +
+        {% set lshift = startLShift %}
+        {% for byte in range(startByte+1, endByte) %}
+        {{ SignalRawGetterHelper(byte, 0xFF, lshift, True)|indent }} +
+        {% set lshift = lshift + 8 %}
+        {% endfor %}
+        {{ SignalRawGetterHelper(endByte, endByteMask, lshift, True)|indent }};
 {% endif %}
     return rawVal;
 }
@@ -169,6 +168,10 @@ static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
 //--------------------------------------------------------------------------------------------------
 bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
 {
+{% if messagesToReceive|length == 0 %}
+    (void)dlc;
+    (void)pData;
+{% endif %}
     bool success = true;
 
     switch (mid)

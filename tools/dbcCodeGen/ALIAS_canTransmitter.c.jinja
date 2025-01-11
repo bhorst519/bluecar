@@ -74,8 +74,7 @@ pData[{{ byte }}] |= (uint8_t)({{ GetShiftAndByteMask("rawVal", shift, mask, shi
 {#
 #}
 {% for signal in signalsToTransmit %}
-{% set thisSignalMessageInfo = "[m for m in ${a} if m['name'] == '${b}']"|evalKeys({"a":messagesToTransmit, "b":signal["message"]}) %}
-{% set thisSignalMessageInfo = thisSignalMessageInfo[0] %}
+{% set thisSignalMessageInfo = messagesToTransmit|selectattr("name", "equalto", signal["message"])|list|first %}
 {% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
 {% set generateFramePointerFuncs = not (signal["muxIdx"] == None and messageIsMuxed) %}
 // {{ signal["name"] }}

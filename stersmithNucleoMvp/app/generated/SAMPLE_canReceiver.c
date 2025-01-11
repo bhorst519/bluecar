@@ -29,7 +29,8 @@ uint32_t CANRX_SAMPLE_GetMidFromIdx(const uint32_t msgIdx)
 // SAMPLE_B_alertID
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_alertID(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[0]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[0]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_alertID(void)
@@ -54,7 +55,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_alertID(void)
 // SAMPLE_B_alertState
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_alertState(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[1]) & 0x80) >> 7);
+    const uint8_t rawVal =
+        (((pData[1]) & 0x80) >> 7);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_alertState(void)
@@ -79,7 +81,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_alertState(void)
 // SAMPLE_B_a005_data1
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a005_data1(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[2]) & 0x01);
+    const uint8_t rawVal =
+        ((pData[2]) & 0x01);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a005_data1(void)
@@ -102,7 +105,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a005_data1(void)
 // SAMPLE_B_a005_data2
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a005_data2(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[2]) & 0x02) >> 1);
+    const uint8_t rawVal =
+        (((pData[2]) & 0x02) >> 1);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a005_data2(void)
@@ -125,7 +129,9 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a005_data2(void)
 // SAMPLE_B_a006_data1
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a006_data1(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (pData[2]) + ((pData[3]) << 8);
+    const uint16_t rawVal =
+        (pData[2]) +
+        ((pData[3]) << 8);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a006_data1(void)
@@ -148,7 +154,9 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a006_data1(void)
 // SAMPLE_B_a006_data2
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a006_data2(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (pData[4]) + ((pData[5]) << 8);
+    const uint16_t rawVal =
+        (pData[4]) +
+        ((pData[5]) << 8);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a006_data2(void)
@@ -171,7 +179,9 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a006_data2(void)
 // SAMPLE_B_a008_data1
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_data1(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (pData[2]) + ((pData[3]) << 8);
+    const uint16_t rawVal =
+        (pData[2]) +
+        ((pData[3]) << 8);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_data1(void)
@@ -194,7 +204,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_data1(void)
 // SAMPLE_B_a008_data2
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_data2(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[4]);
+    const uint8_t rawVal =
+        (pData[4]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_data2(void)
@@ -217,7 +228,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_data2(void)
 // SAMPLE_B_a008_data3
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_data3(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[5]);
+    const uint8_t rawVal =
+        (pData[5]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_data3(void)
@@ -240,7 +252,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_data3(void)
 // SAMPLE_B_a008_data4
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_data4(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[6]) & 0x01);
+    const uint8_t rawVal =
+        ((pData[6]) & 0x01);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_data4(void)
@@ -263,7 +276,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_data4(void)
 // SAMPLE_B_a008_data5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_data5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[6]) & 0x02) >> 1);
+    const uint8_t rawVal =
+        (((pData[6]) & 0x02) >> 1);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_data5(void)
@@ -286,7 +300,9 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_data5(void)
 // SAMPLE_B_a009_data1
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_data1(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (pData[2]) + ((pData[3]) << 8);
+    const uint16_t rawVal =
+        (pData[2]) +
+        ((pData[3]) << 8);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_data1(void)
@@ -309,7 +325,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_data1(void)
 // SAMPLE_B_a009_data2
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_data2(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[4]);
+    const uint8_t rawVal =
+        (pData[4]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_data2(void)
@@ -332,7 +349,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_data2(void)
 // SAMPLE_B_a009_data3
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_data3(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[5]);
+    const uint8_t rawVal =
+        (pData[5]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_data3(void)
@@ -355,7 +373,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_data3(void)
 // SAMPLE_B_a009_data4
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_data4(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[6]) & 0x01);
+    const uint8_t rawVal =
+        ((pData[6]) & 0x01);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_data4(void)
@@ -378,7 +397,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_data4(void)
 // SAMPLE_B_a009_data5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_data5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[6]) & 0x02) >> 1);
+    const uint8_t rawVal =
+        (((pData[6]) & 0x02) >> 1);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_data5(void)
@@ -401,7 +421,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_data5(void)
 // SAMPLE_B_a020_data1
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_data1(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[2]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[2]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_data1(void)
@@ -424,7 +445,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a020_data1(void)
 // SAMPLE_B_a020_data2
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_data2(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[3]);
+    const uint8_t rawVal =
+        (pData[3]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_data2(void)
@@ -447,7 +469,8 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a020_data2(void)
 // SAMPLE_B_a020_data3
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_data3(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[4]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[4]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_data3(void)
@@ -470,7 +493,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a020_data3(void)
 // SAMPLE_B_a020_data4
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_data4(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[5]);
+    const uint8_t rawVal =
+        (pData[5]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_data4(void)
@@ -493,7 +517,8 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a020_data4(void)
 // SAMPLE_B_a020_data5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_data5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[6]);
+    const uint8_t rawVal =
+        (pData[6]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_data5(void)
@@ -516,7 +541,8 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a020_data5(void)
 // SAMPLE_B_a021_data1
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data1(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[2]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[2]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data1(void)
@@ -539,7 +565,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a021_data1(void)
 // SAMPLE_B_a021_data2
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data2(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[3]);
+    const uint8_t rawVal =
+        (pData[3]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data2(void)
@@ -562,7 +589,8 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a021_data2(void)
 // SAMPLE_B_a021_data3
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data3(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[4]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[4]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data3(void)
@@ -585,7 +613,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a021_data3(void)
 // SAMPLE_B_a021_data4
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data4(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (pData[5]);
+    const uint8_t rawVal =
+        (pData[5]);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data4(void)
@@ -608,7 +637,8 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a021_data4(void)
 // SAMPLE_B_a021_data5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[6]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[6]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data5(void)
@@ -631,7 +661,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a021_data5(void)
 // SAMPLE_B_a021_data6
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_data6(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[7]) & 0x7F);
+    const uint8_t rawVal =
+        ((pData[7]) & 0x7F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_data6(void)
@@ -654,7 +685,9 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a021_data6(void)
 // SAMPLE_B_a047_data1
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a047_data1(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (pData[2]) + (((pData[3]) & 0x03) << 8);
+    const uint16_t rawVal =
+        (pData[2]) +
+        (((pData[3]) & 0x03) << 8);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a047_data1(void)
@@ -677,7 +710,9 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a047_data1(void)
 // SAMPLE_B_a047_data2
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a047_data2(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (((pData[3]) & 0xFC) >> 2) + (((pData[4]) & 0x0F) << 6);
+    const uint16_t rawVal =
+        (((pData[3]) & 0xFC) >> 2) +
+        (((pData[4]) & 0x0F) << 6);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a047_data2(void)
@@ -700,7 +735,9 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a047_data2(void)
 // SAMPLE_B_a047_data3
 uint16_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a047_data3(const uint8_t * const pData)
 {
-    const uint16_t rawVal = (((pData[4]) & 0xF0) >> 4) + (((pData[5]) & 0x3F) << 4);
+    const uint16_t rawVal =
+        (((pData[4]) & 0xF0) >> 4) +
+        (((pData[5]) & 0x3F) << 4);
     return rawVal;
 }
 uint16_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a047_data3(void)
@@ -725,7 +762,9 @@ int32_t CANRX_SAMPLE_GetS_SAMPLE_B_a047_data3(void)
 // SAMPLE_B_a047_data4
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a047_data4(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[5]) & 0xC0) >> 6) + (((pData[6]) & 0x3F) << 2);
+    const uint8_t rawVal =
+        (((pData[5]) & 0xC0) >> 6) +
+        (((pData[6]) & 0x3F) << 2);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a047_data4(void)
@@ -748,7 +787,9 @@ float CANRX_SAMPLE_GetS_SAMPLE_B_a047_data4(void)
 // SAMPLE_B_a047_data5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a047_data5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[6]) & 0xC0) >> 6) + (((pData[7]) & 0x3F) << 2);
+    const uint8_t rawVal =
+        (((pData[6]) & 0xC0) >> 6) +
+        (((pData[7]) & 0x3F) << 2);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a047_data5(void)
@@ -771,7 +812,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a047_data5(void)
 // SAMPLE_B_matrixIndex
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_matrixIndex(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[0]) & 0x0F);
+    const uint8_t rawVal =
+        ((pData[0]) & 0x0F);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_matrixIndex(void)
@@ -794,7 +836,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_matrixIndex(void)
 // SAMPLE_B_a005_alert5
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a005_alert5(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[0]) & 0x10) >> 4);
+    const uint8_t rawVal =
+        (((pData[0]) & 0x10) >> 4);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a005_alert5(void)
@@ -817,7 +860,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a005_alert5(void)
 // SAMPLE_B_a006_alert6
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a006_alert6(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[0]) & 0x20) >> 5);
+    const uint8_t rawVal =
+        (((pData[0]) & 0x20) >> 5);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a006_alert6(void)
@@ -840,7 +884,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a006_alert6(void)
 // SAMPLE_B_a007_alert7
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a007_alert7(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[0]) & 0x40) >> 6);
+    const uint8_t rawVal =
+        (((pData[0]) & 0x40) >> 6);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a007_alert7(void)
@@ -863,7 +908,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a007_alert7(void)
 // SAMPLE_B_a008_alert8
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a008_alert8(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[0]) & 0x80) >> 7);
+    const uint8_t rawVal =
+        (((pData[0]) & 0x80) >> 7);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a008_alert8(void)
@@ -886,7 +932,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a008_alert8(void)
 // SAMPLE_B_a009_alert9
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a009_alert9(const uint8_t * const pData)
 {
-    const uint8_t rawVal = ((pData[1]) & 0x01);
+    const uint8_t rawVal =
+        ((pData[1]) & 0x01);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a009_alert9(void)
@@ -909,7 +956,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a009_alert9(void)
 // SAMPLE_B_a020_alert20
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a020_alert20(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[1]) & 0x02) >> 1);
+    const uint8_t rawVal =
+        (((pData[1]) & 0x02) >> 1);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a020_alert20(void)
@@ -932,7 +980,8 @@ uint32_t CANRX_SAMPLE_GetS_SAMPLE_B_a020_alert20(void)
 // SAMPLE_B_a021_alert21
 uint8_t CANRX_SAMPLE_GetSRawFromFrame_SAMPLE_B_a021_alert21(const uint8_t * const pData)
 {
-    const uint8_t rawVal = (((pData[1]) & 0x04) >> 2);
+    const uint8_t rawVal =
+        (((pData[1]) & 0x04) >> 2);
     return rawVal;
 }
 uint8_t CANRX_SAMPLE_GetSRaw_SAMPLE_B_a021_alert21(void)
