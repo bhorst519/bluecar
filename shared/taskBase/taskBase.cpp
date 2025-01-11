@@ -26,6 +26,7 @@ void TaskBase::Init(void) const
 void TaskBase::Run(void) const
 {
     Update();
+    m_rxModuleRef.Receive();
 
     // Execute modules in list order
     for (size_t i = 0U; i < m_numberOfModules; i++)
@@ -36,6 +37,7 @@ void TaskBase::Run(void) const
         }
     }
 
+    m_txModuleRef.Transmit();
     Publish();
 }
 

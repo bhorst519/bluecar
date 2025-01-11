@@ -24,6 +24,28 @@ class ModuleBase
         virtual void Run(void) = 0;
 };
 
+class RxModuleBase
+{
+    public:
+        constexpr RxModuleBase()
+        {}
+
+        NOCOPY_NOMOVE(RxModuleBase);
+
+        virtual void Receive(void) = 0;
+};
+
+class TxModuleBase
+{
+    public:
+        constexpr TxModuleBase()
+        {}
+
+        NOCOPY_NOMOVE(TxModuleBase);
+
+        virtual void Transmit(void) = 0;
+};
+
 } // namespace Shared
 
 #endif // MODULE_BASE_HPP

@@ -49,6 +49,8 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     app/can/canModule.cpp
+    app/can/rxModule.cpp
+    app/can/txModule.cpp
     app/dataChannel/dataChannel.cpp
     app/generated/EIM_canReceiver.c
     app/generated/EIM_canTransmitter.c

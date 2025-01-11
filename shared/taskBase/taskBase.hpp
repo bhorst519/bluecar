@@ -28,13 +28,17 @@ class TaskBase
                 ModuleBasePtr * const pModulePtrList,
                 const size_t numberOfModules,
                 DataChannelBasePtr * const pDataChannelPtrList,
-                const size_t numberOfDataChannels
+                const size_t numberOfDataChannels,
+                RxModuleBase& rxModuleRef,
+                TxModuleBase& txModuleRef
             ) :
                 m_taskId(taskId),
                 m_pModulePtrList(pModulePtrList),
                 m_numberOfModules(numberOfModules),
                 m_pDataChannelPtrList(pDataChannelPtrList),
-                m_numberOfDataChannels(numberOfDataChannels)
+                m_numberOfDataChannels(numberOfDataChannels),
+                m_rxModuleRef(rxModuleRef),
+                m_txModuleRef(txModuleRef)
         {}
 
         NODEFAULT_NOCOPY_NOMOVE(TaskBase);
@@ -48,6 +52,8 @@ class TaskBase
         const size_t                m_numberOfModules;
         DataChannelBasePtr * const  m_pDataChannelPtrList;
         const size_t                m_numberOfDataChannels;
+        RxModuleBase&               m_rxModuleRef;
+        TxModuleBase&               m_txModuleRef;
 
         // Private Methods
         void Update(void) const;
