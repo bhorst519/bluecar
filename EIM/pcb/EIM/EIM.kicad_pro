@@ -637,12 +637,8 @@
         "pattern": "/CLUTCH_RTN"
       },
       {
-        "netclass": "12V - 2A",
-        "pattern": "+8V"
-      },
-      {
         "netclass": "12V - 5A",
-        "pattern": "/SERVO_8V"
+        "pattern": "/SERVO_12V"
       },
       {
         "netclass": "12V - 2A",
@@ -679,6 +675,10 @@
       {
         "netclass": "3V3 - 1A",
         "pattern": "+3V3"
+      },
+      {
+        "netclass": "12V - 5A",
+        "pattern": "/Power Supply/SERVO_FUSED"
       }
     ]
   },
