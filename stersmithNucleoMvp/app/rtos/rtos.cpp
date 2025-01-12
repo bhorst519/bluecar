@@ -1,19 +1,15 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "canModule.hpp"
+#include "app.hpp"
 #include "cmsis_os.h"
 #include "halWrappers.h"
-#include "klineModule.hpp"
 #include "rtos.h"
-#include "servoModule.hpp"
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-static Eim::CanModule m_canModule {};
-static Eim::KlineModule m_klineModule {};
-static Eim::ServoModule m_servoModule {};
+static Eim::App m_app {};
 
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
@@ -21,9 +17,7 @@ static Eim::ServoModule m_servoModule {};
 void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
 {
     HalWrappersInit(pHalWrappersInitArg);
-    m_canModule.Init();
-    m_klineModule.Init();
-    m_servoModule.Init();
+    m_app.Init();
 }
 
 void RtosRunTask1kHz(void)
@@ -32,8 +26,8 @@ void RtosRunTask1kHz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
-        m_canModule.Run();
         HalWrappersGpioToggle(GPIO_DEBUG_2);
+        m_app.RunTask1kHz();
     }
 }
 
@@ -48,7 +42,7 @@ void RtosRunTask10Hz(void)
     {
         (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
         HalWrappersGpioToggle(GPIO_LED_1);
-        m_servoModule.Run();
+        m_app.RunTask10Hz();
 
         HalWrappersSetPwm(pulse);
         pulse += pulseInc;
@@ -66,7 +60,7 @@ void RtosRunTask1Hz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
-        m_klineModule.Run();
         HalWrappersGpioToggle(GPIO_LED_2);
+        m_app.RunTask1Hz();
     }
 }

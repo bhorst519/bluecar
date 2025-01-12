@@ -6,6 +6,8 @@
 ***************************************************************************************************/
 #include "moduleBase.hpp"
 #include "servoCommTypes.hpp"
+#include "servoData.hpp"
+#include "servoInterface.hpp"
 
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
@@ -16,35 +18,32 @@ namespace Eim
 class ServoModule final : public Shared::ModuleBase
 {
     public:
-        constexpr ServoModule()
+        constexpr ServoModule(
+                const ServoInputInterface& inputRef
+            ) :
+                ModuleBase(),
+                m_inputData(inputRef)
         {}
 
         NOCOPY_NOMOVE(ServoModule);
 
         void Init(void) override;
         void Run(void) override;
-
-        void SetPositionToSet(const float degrees);
-        void SetLossOfCommPositionToSet(const float degrees);
-        void SetLossOfCommTimeoutToSet(const float seconds);
+        constexpr const ServoData_S& GetOutputDataReference(void) const { return m_outputData; };
 
     private:
-        bool m_initialRead {false};
+        const ServoInputInterface& m_inputData;
 
-        // Device data
-        uint8_t m_id {SERVO_BROADCAST_ID};
-        float m_positionDegrees {0.0F};
-        float m_lossOfCommPositionDegrees {0.0F};
-        float m_lossOfCommTimeout {0.0F};
-        float m_current {0.0F};
-        float m_temperature {0.0F};
-        float m_voltage {0.0F};
+        ServoData_S m_outputData {};
+        bool m_initialRead {false};
 
         // Data to set
         uint8_t m_idToSet {0U};
-        float m_positionToSetDegrees {0.0F};
-        float m_lossOfCommPositionToSetDegrees {0.0F};
+        float m_positionDegreesToSet {0.0F};
+        float m_lossOfCommPositionDegreesToSet {0.0F};
         float m_lossOfCommTimeoutToSet {0.0F};
+
+        void SanitizeInputs(void);
 
         uint16_t CalculateCrc(const uint8_t (&data)[SERVO_FRAME_NUM_DATA_BYTES]) const;
         bool VerifyCrc(const Servo_Comm_Frame_U& frame) const;

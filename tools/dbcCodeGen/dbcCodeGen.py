@@ -1,37 +1,13 @@
 import argparse, os, re
+from render import Render
 from helpers import *
 
 #---------------------------------------------------------------------------------------------------
 # Class for code generation management
 #---------------------------------------------------------------------------------------------------
 class DbcCodeGen:
-    from _genInfo import PrintMessageInfo
-    from _genReceiver import PrintReceiverHeader, PrintReceiver
-    from _genTransmitter import PrintTransmitterHeader, PrintTransmitter
-    from helpers import (
-        GetMsgTransmitMuxIdxGetName,
-        GetMsgTransmitStorageGetName,
-        GetTxArrLenName,
-        GetTxArrIdxName,
-        GetSignalSetRawFromFrameName,
-        GetSignalSetRawName,
-        GetSignalSetFromFrameName,
-        GetSignalSetName,
-        GetRxNumMsg,
-        GetMsgReceiveMidIdxGetName,
-        GetRxArrLenName,
-        GetRxArrIdxName,
-        GetSignalGetRawFromFrameName,
-        GetSignalGetRawName,
-        GetSignalGetFromFrameName,
-        GetSignalGetName,
-        GetMsgMidName,
-        GetMsgDlcName,
-        GetMsgMaxMuxName
-    )
-
-
     def __init__(self, dbcFilePath, generatedCodeDirPath, alias, node, genDebugFiles):
+        self.generatedCodeDirPath = generatedCodeDirPath
         self.alias = alias
         self.node = node
         self.genDebugFiles = genDebugFiles
@@ -39,18 +15,6 @@ class DbcCodeGen:
         self.dbcFileHandle = open(dbcFilePath, "r")
         if not os.path.exists(generatedCodeDirPath):
             os.mkdir(generatedCodeDirPath)
-
-        messageConstantsFile = os.path.join(generatedCodeDirPath, f"{alias}_messageInfo.h")
-        canReceiverHeaderFile = os.path.join(generatedCodeDirPath, f"{alias}_canReceiver.h")
-        canReceiverFile = os.path.join(generatedCodeDirPath, f"{alias}_canReceiver.c")
-        canTransmitterHeaderFile = os.path.join(generatedCodeDirPath, f"{alias}_canTransmitter.h")
-        canTrasmitterFile = os.path.join(generatedCodeDirPath, f"{alias}_canTransmitter.c")
-
-        self.messageConstantsFileHandle = open(messageConstantsFile, "w")
-        self.canReceiverHeaderFileHandle = open(canReceiverHeaderFile, "w")
-        self.canReceiverFileHandle = open(canReceiverFile, "w")
-        self.canTransmitterHeaderFileHandle = open(canTransmitterHeaderFile, "w")
-        self.canTransmitterFileHandle = open(canTrasmitterFile, "w")
 
         if genDebugFiles:
             signalInfoFile = os.path.join(generatedCodeDirPath, f"{alias}_signals.txt")
@@ -61,11 +25,6 @@ class DbcCodeGen:
 
     def Finish(self):
         self.dbcFileHandle.close()
-        self.messageConstantsFileHandle.close()
-        self.canReceiverHeaderFileHandle.close()
-        self.canReceiverFileHandle.close()
-        self.canTransmitterHeaderFileHandle.close()
-        self.canTransmitterFileHandle.close()
 
         if self.genDebugFiles:
             self.signalInfoFileHandle.close()
@@ -174,13 +133,14 @@ class DbcCodeGen:
                 self.messageInfoFileHandle.write(str(message) + "\n")
 
 
-        self.PrintMessageInfo(messagesToTransmit, messagesToReceive)
-
-        self.PrintReceiverHeader(signalsToReceive)
-        self.PrintReceiver(messagesToReceive, signalsToReceive)
-
-        self.PrintTransmitterHeader(messagesToTransmit, signalsToTransmit)
-        self.PrintTransmitter(messagesToTransmit, signalsToTransmit)
+        configDict = {
+            "alias": self.alias,
+            "messagesToTransmit": messagesToTransmit,
+            "signalsToTransmit": signalsToTransmit,
+            "messagesToReceive": messagesToReceive,
+            "signalsToReceive": signalsToReceive,
+        }
+        Render(targetDir=self.generatedCodeDirPath, alias=self.alias, configDict=configDict)
 
         self.Finish()
 

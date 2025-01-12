@@ -37,8 +37,8 @@ class CanModule final : public Shared::ModuleBase
         virtual void Run(void) override;
 
     private:
-        CanModule_Mux_Transmitter_S m_muxTransmit_SAMPLE_A_alertLog {};
-        CanModule_Mux_Transmitter_S m_muxTransmit_SAMPLE_A_alertMatrix {};
+        CanModule_Mux_Transmitter_S m_muxTransmit_EIM_EngineStatus {};
+        CanModule_Mux_Transmitter_S m_muxTransmit_EIM_ServoStatus {};
 
         bool ShouldTransmitMuxNow(CanModule_Mux_Transmitter_S& mux, uint32_t& muxIdx) const;
 };

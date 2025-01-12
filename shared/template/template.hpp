@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "moduleBase.hpp"
 #include "nocopy.hpp"
 #include "stdint.h"
 
@@ -31,16 +32,18 @@ static constexpr uint8_t COUNTER_MAX    { 100U };
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
 ***************************************************************************************************/
-class TemplateClass final
+class TemplateClass final : public Shared::ModuleBase
 {
     public:
-        constexpr TemplateClass()
+        constexpr TemplateClass(
+            ) :
+                ModuleBase()
         {}
 
         NOCOPY_NOMOVE(TemplateClass);
 
-        void Init(void);
-        void Run(void);
+        virtual void Init(void) override;
+        virtual void Run(void) override;
 
     private:
         uint8_t m_counter {0U};

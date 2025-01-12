@@ -284,77 +284,17 @@ bool KlineModule::SendRequest(const Kline_Request_E request)
 //--------------------------------------------------------------------------------------------------
 void KlineModule::ProcessData(const Kline_Comm_TableResponse_S * const pTableResponse)
 {
-    taskENTER_CRITICAL();
-    m_rpm = pTableResponse->rpm;
-    m_tpsVoltage = (float)pTableResponse->tpsVoltage * (5.0F / 256.0F);
-    m_tpsAngle = (float)pTableResponse->tpsAngle / 2.0F;
-    m_ectVoltage = (float)pTableResponse->ectVoltage * (5.0F / 256.0F);
-    m_ectTemp = (float)pTableResponse->ectTemp - 40.0F;
-    m_iatVoltage = (float)pTableResponse->iatVoltage * (5.0F / 256.0F);
-    m_iatTemp = (float)pTableResponse->iatTemp - 40.0F;
-    m_mapVoltage = (float)pTableResponse->mapVoltage * (5.0F / 256.0F);
-    m_mapPressure = (float)pTableResponse->mapPressure;
-    m_batteryVoltage = (float)pTableResponse->batteryVoltage / 10.0F;
-    m_vehicleSpeed = (float)pTableResponse->vehicleSpeed;
-    taskEXIT_CRITICAL();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Getter interfaces
-//--------------------------------------------------------------------------------------------------
-uint16_t KlineModule::GetRpm(void) const
-{
-    return m_rpm;
-}
-
-float KlineModule::GetTpsVoltage(void) const
-{
-    return m_tpsVoltage;
-}
-
-float KlineModule::GetTpsAngle(void) const
-{
-    return m_tpsAngle;
-}
-
-float KlineModule::GetEctVoltage(void) const
-{
-    return m_ectVoltage;
-}
-
-float KlineModule::GetEctTemp(void) const
-{
-    return m_ectTemp;
-}
-
-float KlineModule::GetIatVoltage(void) const
-{
-    return m_iatVoltage;
-}
-
-float KlineModule::GetIatTemp(void) const
-{
-    return m_iatTemp;
-}
-
-float KlineModule::GetMapVoltage(void) const
-{
-    return m_mapVoltage;
-}
-
-float KlineModule::GetMapPressure(void) const
-{
-    return m_mapPressure;
-}
-
-float KlineModule::GetBatteryVoltage(void) const
-{
-    return m_batteryVoltage;
-}
-
-float KlineModule::GetVehicleSpeed(void) const
-{
-    return m_vehicleSpeed;
+    m_outputData.rpm = pTableResponse->rpm;
+    m_outputData.tpsVoltage = (float)pTableResponse->tpsVoltage * (5.0F / 256.0F);
+    m_outputData.tpsAngle = (float)pTableResponse->tpsAngle / 2.0F;
+    m_outputData.ectVoltage = (float)pTableResponse->ectVoltage * (5.0F / 256.0F);
+    m_outputData.ectTemp = (float)pTableResponse->ectTemp - 40.0F;
+    m_outputData.iatVoltage = (float)pTableResponse->iatVoltage * (5.0F / 256.0F);
+    m_outputData.iatTemp = (float)pTableResponse->iatTemp - 40.0F;
+    m_outputData.mapVoltage = (float)pTableResponse->mapVoltage * (5.0F / 256.0F);
+    m_outputData.mapPressure = (float)pTableResponse->mapPressure;
+    m_outputData.batteryVoltage = (float)pTableResponse->batteryVoltage / 10.0F;
+    m_outputData.vehicleSpeed = (float)pTableResponse->vehicleSpeed;
 }
 
 } // namespace Eim
