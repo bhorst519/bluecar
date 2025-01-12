@@ -33,11 +33,11 @@ void CanModule::Init(void)
     HalWrappersCanStart(CAN_1);
 
     // Transmit manager initialization
-    m_muxTransmit_EIM_EngineStatus.periodMs = 10U;
+    m_muxTransmit_EIM_EngineStatus.periodMs = 1000U;
     m_muxTransmit_EIM_EngineStatus.numMuxes = (CAN_EIM_EIM_EngineStatus_MAX_MUX_IDX + 1U);
     m_muxTransmit_EIM_EngineStatus.counter = 0U;
 
-    m_muxTransmit_EIM_ServoStatus.periodMs = 1000U;
+    m_muxTransmit_EIM_ServoStatus.periodMs = 100U;
     m_muxTransmit_EIM_ServoStatus.numMuxes = (CAN_EIM_EIM_ServoStatus_MAX_MUX_IDX + 1U);
     m_muxTransmit_EIM_ServoStatus.counter = 0U;
 }

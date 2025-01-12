@@ -74,7 +74,7 @@ void ServoModule::Run(void)
     {
         // TODO remove demo
         static float gPosition = 0.0F;
-        static float gInc = 30.0F;
+        static float gInc = 5.0F;
         m_positionDegreesToSet = gPosition;
         gPosition = gPosition + gInc;
         if      (gPosition >= SERVO_POSITION_MAX) { gPosition = SERVO_POSITION_MAX; gInc *= -1.0F; }

@@ -55,7 +55,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ServoStatusMux(const uint32_t converted, uint8_
 {
     const uint32_t convertedSat = (converted > 15U ? 15U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_ServoStatusMux(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ServoStatusMux((uint8_t)rawVal, pData);
 }
 
 // EIM_Servo_Voltage
@@ -72,7 +72,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Voltage(const float converted, uint8_t * 
 {
     const float convertedSat = (converted > 51.0F ? 51.0F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.2F);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Voltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Voltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_Voltage(const float converted)
 {
@@ -94,7 +94,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Temp(const int32_t converted, uint8_t * c
 {
     const int32_t convertedSat = (converted > 205 ? 205 : (converted < -50 ? -50 : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - -50) / 1);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Temp(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Temp((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_Temp(const int32_t converted)
 {
@@ -117,8 +117,8 @@ void CANTX_EIM_SetSRaw_EIM_Servo_Position(const uint16_t rawVal)
 void CANTX_EIM_SetSFromFrame_EIM_Servo_Position(const float converted, uint8_t * const pData)
 {
     const float convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.8F ? -204.8F : converted));
-    const uint16_t rawVal = (uint16_t)((convertedSat - 0.0F) / 0.025F);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Position(rawVal, pData);
+    const int16_t rawVal = (int16_t)((convertedSat - 0.0F) / 0.025F);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Position((uint16_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_Position(const float converted)
 {
@@ -140,7 +140,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_LossOfCommTimeout(const uint32_t converte
 {
     const uint32_t convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommTimeout(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommTimeout((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_LossOfCommTimeout(const uint32_t converted)
 {
@@ -163,8 +163,8 @@ void CANTX_EIM_SetSRaw_EIM_Servo_LossOfCommPosition(const uint16_t rawVal)
 void CANTX_EIM_SetSFromFrame_EIM_Servo_LossOfCommPosition(const float converted, uint8_t * const pData)
 {
     const float convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.8F ? -204.8F : converted));
-    const uint16_t rawVal = (uint16_t)((convertedSat - 0.0F) / 0.025F);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommPosition(rawVal, pData);
+    const int16_t rawVal = (int16_t)((convertedSat - 0.0F) / 0.025F);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommPosition((uint16_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_LossOfCommPosition(const float converted)
 {
@@ -186,7 +186,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Id(const uint32_t converted, uint8_t * co
 {
     const uint32_t convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Id(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Id((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_Id(const uint32_t converted)
 {
@@ -208,7 +208,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Current(const float converted, uint8_t * 
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Current(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_Servo_Current((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_Servo_Current(const float converted)
 {
@@ -226,7 +226,7 @@ void CANTX_EIM_SetSFromFrame_EIM_EngineStatusMux(const uint32_t converted, uint8
 {
     const uint32_t convertedSat = (converted > 15U ? 15U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_EngineStatusMux(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_EngineStatusMux((uint8_t)rawVal, pData);
 }
 
 // EIM_ECM_VehicleSpeed
@@ -243,7 +243,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_VehicleSpeed(const uint32_t converted, uint
 {
     const uint32_t convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_VehicleSpeed(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_VehicleSpeed((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_VehicleSpeed(const uint32_t converted)
 {
@@ -265,7 +265,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_TpsVoltage(const float converted, uint8_t *
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsVoltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsVoltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_TpsVoltage(const float converted)
 {
@@ -287,7 +287,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_TpsAngle(const float converted, uint8_t * c
 {
     const float convertedSat = (converted > 127.5F ? 127.5F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.5F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsAngle(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsAngle((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_TpsAngle(const float converted)
 {
@@ -310,7 +310,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_Rpm(const uint32_t converted, uint8_t * con
 {
     const uint32_t convertedSat = (converted > 65535U ? 65535U : (converted < 0U ? 0U : converted));
     const uint16_t rawVal = (uint16_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_Rpm(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_Rpm((uint16_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_Rpm(const uint32_t converted)
 {
@@ -332,7 +332,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_MapVoltage(const float converted, uint8_t *
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapVoltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapVoltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_MapVoltage(const float converted)
 {
@@ -354,7 +354,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_MapPressure(const uint32_t converted, uint8
 {
     const uint32_t convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0U) / 1U);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapPressure(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapPressure((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_MapPressure(const uint32_t converted)
 {
@@ -376,7 +376,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_IatVoltage(const float converted, uint8_t *
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatVoltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatVoltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_IatVoltage(const float converted)
 {
@@ -398,7 +398,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_IatTemp(const int32_t converted, uint8_t * 
 {
     const int32_t convertedSat = (converted > 215 ? 215 : (converted < -40 ? -40 : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - -40) / 1);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatTemp(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatTemp((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_IatTemp(const int32_t converted)
 {
@@ -420,7 +420,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_EctVoltage(const float converted, uint8_t *
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctVoltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctVoltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_EctVoltage(const float converted)
 {
@@ -442,7 +442,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_EctTemp(const int32_t converted, uint8_t * 
 {
     const int32_t convertedSat = (converted > 215 ? 215 : (converted < -40 ? -40 : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - -40) / 1);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctTemp(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctTemp((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_EctTemp(const int32_t converted)
 {
@@ -464,7 +464,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_BatteryVoltage(const float converted, uint8
 {
     const float convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
     const uint8_t rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
-    CANTX_EIM_SetSRawFromFrame_EIM_ECM_BatteryVoltage(rawVal, pData);
+    CANTX_EIM_SetSRawFromFrame_EIM_ECM_BatteryVoltage((uint8_t)rawVal, pData);
 }
 void CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(const float converted)
 {

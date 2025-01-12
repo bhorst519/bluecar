@@ -117,8 +117,8 @@ void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convT
     const {{ signal["convType"] }} convertedSat = (converted > {{ max }} ? {{ max }} : (converted < {{ min }} ? {{ min }} : converted));
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
-    const {{ signal["rawType"] }} rawVal = ({{ signal["rawType"] }})((convertedSat - {{ offset }}) / {{ scale }});
-    CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(rawVal, pData);
+    const {{ signal["convIntType"] }} rawVal = ({{ signal["convIntType"] }})((convertedSat - {{ offset }}) / {{ scale }});
+    CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(({{ signal["rawType"] }})rawVal, pData);
 }
 {% if generateFramePointerFuncs %}
 void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} converted)
