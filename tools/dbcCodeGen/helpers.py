@@ -99,3 +99,16 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         "convIntType": GetIntTypeFromBitLength(bitLength, signed),
         "convType": GetTypeFromSignAndConv(bitLength, signedConvertedValue, scale, offset)
     }
+
+
+RE_SEARCH_SIGNAL_VAL_TABLE_INFO = "(?<=^VAL_) (\d+) (\S+) (\d+) \"(\S+)\""
+def GetSignalValTableInfo(regexSigValInfo):
+    signalName = regexSigValInfo.group(2)
+    # messageId = regexSigValInfo.group(1)
+    value = regexSigValInfo.group(3)
+    description = regexSigValInfo.group(4)
+    return {
+        "signal": signalName,
+        "value": int(value),
+        "description": description
+    }
