@@ -3,11 +3,12 @@ import jinja2, os, string
 this_dir = os.path.dirname(__file__)
 
 template_files = [
-    "ALIAS_messageInfo.h.jinja",
-    "ALIAS_canTransmitter.h.jinja",
-    "ALIAS_canTransmitter.c.jinja",
-    "ALIAS_canReceiver.h.jinja",
-    "ALIAS_canReceiver.c.jinja"
+    "ALIAS_messageInfo.hpp.jinja",
+    "ALIAS_canTransmitter.hpp.jinja",
+    "ALIAS_canTransmitter.cpp.jinja",
+    "ALIAS_canReceiver.hpp.jinja",
+    "ALIAS_canReceiver.cpp.jinja",
+    "ALIAS_canReceiverHook.h.jinja",
 ]
 
 def evalKeys(expression, keys):

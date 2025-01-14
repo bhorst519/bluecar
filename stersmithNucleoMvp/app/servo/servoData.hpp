@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "qualifiedValTypes.hpp"
 #include "util.h"
 
 /***************************************************************************************************
@@ -15,12 +16,12 @@ namespace Eim
 struct ServoData_S
 {
     uint8_t id;
-    float positionDegrees;
-    float lossOfCommPositionDegrees;
-    float lossOfCommTimeout;
-    float current;
-    float temperature;
-    float voltage;
+    float_q positionDegrees;
+    float_q lossOfCommPositionDegrees;
+    float_q lossOfCommTimeout;
+    float_q current;
+    float_q temperature;
+    float_q voltage;
 };
 
 } // namespace Eim

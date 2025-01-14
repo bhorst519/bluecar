@@ -52,8 +52,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     app/can/rxModule.cpp
     app/can/txModule.cpp
     app/dataChannel/dataChannel.cpp
-    app/generated/EIM_canReceiver.c
-    app/generated/EIM_canTransmitter.c
+    app/generated/EIM_canReceiver.cpp
+    app/generated/EIM_canTransmitter.cpp
     app/hal/halWrappers.c
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp

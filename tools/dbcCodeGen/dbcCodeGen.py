@@ -36,9 +36,11 @@ class DbcCodeGen:
         inMessage = None
         messageInfo = []
         signalInfo = []
+        signalNames = []  # Order must align with that of signalInfo
         for idx, line in enumerate(self.dbcFileHandle):
             regexMessageStart = re.search(RE_SEARCH_MESSAGE_START, line)
             regexSignalInfo = re.search(RE_SEARCH_SIGNAL_INFO, line)
+            regexSignalValTableInfo = re.search(RE_SEARCH_SIGNAL_VAL_TABLE_INFO, line)
 
             if regexMessageStart is not None:
                 thisMessageInfo = GetMessageInfo(regexMessageStart)
@@ -60,10 +62,31 @@ class DbcCodeGen:
                             thisSignalInfo["muxIdx"]
                         )
                     signalInfo += [thisSignalInfo]
+                    signalNames += [signalName]
                 else:
                     raise Exception(f"Signal info found without a message on line {idx+1}: {signalName}")
             else:
                 inMessage = None
+
+            if regexSignalValTableInfo is not None:
+                thisSignalInfo = GetSignalValTableInfo(regexSignalValTableInfo)
+                signalName = thisSignalInfo["signal"]
+                if signalName not in signalNames:
+                    raise Exception(f"Value table listed for unidentified signal {signalName}")
+                if thisSignalInfo["description"].lower() == "sna":
+                    # Only support SNA value table entry
+                    signalIdx = signalNames.index(signalName)
+                    signalInfo[signalIdx]["SNA"] = thisSignalInfo["value"]
+                    # Replace convType with QualifiedVal type
+                    convType = signalInfo[signalIdx]["convType"]
+                    signalInfo[signalIdx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
+
+
+        if self.genDebugFiles:
+            for signal in signalInfo:
+                self.signalInfoFileHandle.write(str(signal) + "\n")
+            for message in messageInfo:
+                self.messageInfoFileHandle.write(str(message) + "\n")
 
 
         # Check for errors
@@ -85,6 +108,21 @@ class DbcCodeGen:
                 maxEndBitId = max(maxEndBitId, signal["startBit"] + signal["bitLength"])
             if (maxEndBitId > (message["length"] * 8)):
                 raise Exception(f"Message with shorter length than required for signals: {messageName} with DLC {message['length']} and max bit idx {str(maxEndBitId-1)}")
+
+
+        # Check for more errors
+        for signal in signalInfo:
+            if "SNA" in signal:
+                signed = signal["signed"]
+                bitLength = signal["bitLength"]
+                snaValue = signal["SNA"]
+                # SNA value is represented as an unsigned int here
+                # Signed min as unsigned is 2^(bitLength-1)
+                # Signed max as unsigned is 2^(bitLength-1) - 1
+                minValid = 0
+                maxValid = (2 ** (bitLength-1)) if signed else (2 ** bitLength) - 1
+                if snaValue < minValid or snaValue > maxValid:
+                    raise Exception(f"SNA value for signal {signal['name']} with value {snaValue} violates signal width of {bitLength}")
 
 
         # Filter for transmit info
@@ -124,13 +162,6 @@ class DbcCodeGen:
             receiveMuxIdxs.remove(None)
             receiveMuxIdxs.sort()
             messagesToReceive[idx]["receiveMuxIdxs"] = receiveMuxIdxs
-
-
-        if self.genDebugFiles:
-            for signal in signalInfo:
-                self.signalInfoFileHandle.write(str(signal) + "\n")
-            for message in messageInfo:
-                self.messageInfoFileHandle.write(str(message) + "\n")
 
 
         configDict = {

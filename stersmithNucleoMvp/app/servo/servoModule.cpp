@@ -90,6 +90,7 @@ void ServoModule::Run(void)
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT);
         }
 
+        InvalidateData();
         (void)SendRequest(Servo_Request_E::READ_VOLTAGE);
         (void)SendRequest(Servo_Request_E::SET_POSITION);
         (void)SendRequest(Servo_Request_E::READ_CURRENT);
@@ -107,6 +108,14 @@ void ServoModule::SanitizeInputs(void)
 
     const float lossOfCommTimeoutToSet = m_inputData.GetLossOfCommTimeoutToSet();
     m_lossOfCommTimeoutToSet = MathUtil::Saturate(lossOfCommTimeoutToSet, 0.0F, SERVO_LOSS_OF_COMM_TIMEOUT_MAX);
+}
+
+void ServoModule::InvalidateData(void)
+{
+    m_outputData.positionDegrees = SignalStatus_E::SNA;
+    m_outputData.current = SignalStatus_E::SNA;
+    m_outputData.temperature = SignalStatus_E::SNA;
+    m_outputData.voltage = SignalStatus_E::SNA;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,7 +232,7 @@ bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequ
     return success;
 }
 
-bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data) const
+bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
 {
     bool success = true;
 
@@ -255,6 +264,8 @@ bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
                   (m_lossOfCommPositionDegreesToSet + SERVO_POSITION_ROUND)
                 / SERVO_POSITION_SCALE );
             data = ENDIANSWAP_U16(static_cast<uint16_t>(data));
+            // Invalidate stored config data
+            m_outputData.lossOfCommTimeout = SignalStatus_E::SNA;
             break;
         case Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT:
         {
@@ -262,6 +273,8 @@ bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
                   (m_lossOfCommTimeoutToSet + SERVO_LOSS_OF_COMM_TIMEOUT_ROUND)
                 / SERVO_LOSS_OF_COMM_TIMEOUT_SCALE );
             data = U16(dataToSet, dataToSet);
+            // Invalidate stored config data
+            m_outputData.lossOfCommPositionDegrees = SignalStatus_E::SNA;
             break;
         }
         case Servo_Request_E::READ_ACTUATOR_ID:
@@ -333,29 +346,35 @@ bool ServoModule::ProcessResponse(const Servo_Request_E request, const uint16_t 
         {
             const int16_t readData = static_cast<int16_t>(data);
             m_outputData.positionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
+            m_outputData.positionDegrees = SignalStatus_E::VALID;
             break;
         }
+        case Servo_Request_E::SET_LOSS_OF_COMM_POSITION:
         case Servo_Request_E::READ_LOSS_OF_COMM_POSITION:
         {
             const int16_t readData = static_cast<int16_t>(data);
             m_outputData.lossOfCommPositionDegrees = static_cast<float>(readData) * SERVO_POSITION_SCALE;
+            m_outputData.lossOfCommPositionDegrees = SignalStatus_E::VALID;
             break;
         }
+        case Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT:
         case Servo_Request_E::READ_LOSS_OF_COMM_TIMEOUT:
             m_outputData.lossOfCommTimeout = static_cast<float>(U16_LSB(data)) * SERVO_LOSS_OF_COMM_TIMEOUT_SCALE;
+            m_outputData.lossOfCommTimeout = SignalStatus_E::VALID;
             break;
         case Servo_Request_E::READ_CURRENT:
             m_outputData.current = static_cast<float>(U16_LSB(data)) * SERVO_CURRENT_SCALE;
+            m_outputData.current = SignalStatus_E::VALID;
             break;
         case Servo_Request_E::READ_TEMPERATURE:
             m_outputData.temperature = static_cast<float>(U16_LSB(data)) + SERVO_TEMPERATURE_OFFSET;
+            m_outputData.temperature = SignalStatus_E::VALID;
             break;
         case Servo_Request_E::READ_VOLTAGE:
             m_outputData.voltage = static_cast<float>(U16_LSB(data)) * SERVO_VOLTAGE_SCALE;
+            m_outputData.voltage = SignalStatus_E::VALID;
             break;
         case Servo_Request_E::SILENT_SET_POSITION:
-        case Servo_Request_E::SET_LOSS_OF_COMM_POSITION:
-        case Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT:
         case Servo_Request_E::SET_EEPROM_PARAM:
         case Servo_Request_E::SET_EEPROM_LOW_PARAM:
         case Servo_Request_E::SET_EEPROM_HIGH_PARAM:

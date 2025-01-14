@@ -1,7 +1,10 @@
-#include "{{ alias }}_canTransmitter.h"
-#include "{{ alias }}_messageInfo.h"
+#include "{{ alias }}_canTransmitter.hpp"
+#include "{{ alias }}_messageInfo.hpp"
 #include "stdbool.h"
 #include "stdint.h"
+
+namespace CanGen
+{
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage
@@ -111,13 +114,26 @@ void CANTX_{{ alias }}_SetSRaw_{{ signal["name"] }}(const {{ signal["rawType"] }
 {% endif %}
 void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convType"] }} converted, uint8_t * const pData)
 {
-{% set convAppend = "F" if signal["convType"] == "float" else "U" if signal["convType"].startswith("u") else "" %}
+    {{ signal["convIntType"] }} rawVal;
+{% set checkValidity = "SNA" in signal %}
+{% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
+{% if checkValidity %}
+    if (!converted.Valid())
+    {
+        rawVal = {{ signal["SNA"]|string + convIntAppend }}; // SNA value
+    }
+    else
+{% endif %}
+    {
+{% set convType = "decltype(converted.Val())" if checkValidity else signal["convType"] %}
+{% set convAppend = "F" if signal["convType"].startswith("float") else "U" if signal["convType"].startswith("u") else "" %}
 {% set min = signal["min"]|string + convAppend %}
 {% set max = signal["max"]|string + convAppend %}
-    const {{ signal["convType"] }} convertedSat = (converted > {{ max }} ? {{ max }} : (converted < {{ min }} ? {{ min }} : converted));
+        const {{ convType }} convertedSat = (converted > {{ max }} ? {{ max }} : (converted < {{ min }} ? {{ min }} : converted));
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
-    const {{ signal["convIntType"] }} rawVal = ({{ signal["convIntType"] }})((convertedSat - {{ offset }}) / {{ scale }});
+        rawVal = ({{ signal["convIntType"] }})((convertedSat - {{ offset }}) / {{ scale }});
+    }
     CANTX_{{ alias }}_SetSRawFromFrame_{{ signal["name"] }}(({{ signal["rawType"] }})rawVal, pData);
 }
 {% if generateFramePointerFuncs %}
@@ -149,3 +165,5 @@ bool CANTX_{{ alias }}_Init(void)
 {% endfor %}
     return true;
 }
+
+} // namespace CanGen

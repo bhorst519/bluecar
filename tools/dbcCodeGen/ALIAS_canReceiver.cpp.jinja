@@ -1,8 +1,11 @@
 {% set BIT_LENGTH_FROM_TYPE = {"int8_t": 8, "int16_t": 16, "int32_t": 32, "int64_t": 64} %}
-#include "{{ alias }}_canReceiver.h"
-#include "{{ alias }}_messageInfo.h"
+#include "{{ alias }}_canReceiver.hpp"
+#include "{{ alias }}_messageInfo.hpp"
 #include "stdbool.h"
 #include "stdint.h"
+
+namespace CanGen
+{
 
 //--------------------------------------------------------------------------------------------------
 // Receive message storage
@@ -163,9 +166,13 @@ static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
 }
 
 {% endfor %}
+} // namespace CanGen
+
 //--------------------------------------------------------------------------------------------------
 // Message receive hook
 //--------------------------------------------------------------------------------------------------
+extern "C" {
+
 bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
 {
 {% if messagesToReceive|length == 0 %}
@@ -199,3 +206,5 @@ bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint
 
     return success;
 }
+
+} // extern "C"

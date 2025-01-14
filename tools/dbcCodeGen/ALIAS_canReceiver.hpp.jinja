@@ -1,12 +1,12 @@
-#ifndef CAN_RECEIVER_H
-#define CAN_RECEIVER_H
+#ifndef CAN_RECEIVER_HPP
+#define CAN_RECEIVER_HPP
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include "{{ alias }}_canReceiverHook.h"
 #include "stdbool.h"
 #include "stdint.h"
+
+namespace CanGen
+{
 
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration
@@ -24,13 +24,6 @@ uint32_t CANRX_{{ alias }}_GetMidFromIdx(const uint32_t muxIdx);
 {{ signal["convType"] }} CANRX_{{ alias }}_GetS_{{ signal["name"] }}(void);
 
 {% endfor %}
-//--------------------------------------------------------------------------------------------------
-// Message receive hook
-//--------------------------------------------------------------------------------------------------
-bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData);
+} // namespace CanGen
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif // CAN_RECEIVER_H
+#endif // CAN_RECEIVER_HPP

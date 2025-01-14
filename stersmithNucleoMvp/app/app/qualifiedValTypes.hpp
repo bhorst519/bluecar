@@ -1,21 +1,15 @@
+#ifndef QUALIFIED_VAL_TYPES_HPP
+#define QUALIFIED_VAL_TYPES_HPP
+
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "cmsis_os.h"
-#include "EIM_canReceiver.hpp"
-#include "rxModule.hpp"
+#include "qualifiedVal.hpp"
+#include "util.h"
 
 /***************************************************************************************************
-*                                 M E T H O D  D E F I N I T I O N S                               *
+*                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
-{
+using namespace QualifiedVal;
 
-using namespace CanGen;
-
-void RxNoneModule::Receive(void)
-{
-    // Nothing to do
-}
-
-} // namespace Eim
+#endif // QUALIFIED_VAL_TYPES_HPP

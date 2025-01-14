@@ -1,9 +1,5 @@
-#ifndef MESSAGE_INFO_H
-#define MESSAGE_INFO_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef MESSAGE_INFO_HPP
+#define MESSAGE_INFO_HPP
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message info macros
@@ -29,8 +25,4 @@ extern "C" {
 //--------------------------------------------------------------------------------------------------
 #define CANRX_EIM_NUM_MESSAGES (0U)
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif // MESSAGE_INFO_H
+#endif // MESSAGE_INFO_HPP
