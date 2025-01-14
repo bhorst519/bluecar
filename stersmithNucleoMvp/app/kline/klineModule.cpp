@@ -121,14 +121,18 @@ Kline_State_E KlineModule::RunInitState(void)
 
 Kline_State_E KlineModule::RunActiveState(void)
 {
+    InvalidateData();
     const bool success = SendRequest(Kline_Request_E::DATA);
 
     return success ? Kline_State_E::ACTIVE : Kline_State_E::INIT_PEND;
 }
 
-void KlineModule::ExecuteStateTransition(const Kline_State_E nextState) const
+void KlineModule::ExecuteStateTransition(const Kline_State_E nextState)
 {
-    (void)nextState;
+    if (nextState != Kline_State_E::ACTIVE)
+    {
+        InvalidateData();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,6 +299,33 @@ void KlineModule::ProcessData(const Kline_Comm_TableResponse_S * const pTableRes
     m_outputData.mapPressure = (float)pTableResponse->mapPressure;
     m_outputData.batteryVoltage = (float)pTableResponse->batteryVoltage / 10.0F;
     m_outputData.vehicleSpeed = (float)pTableResponse->vehicleSpeed;
+
+    m_outputData.rpm = SignalStatus_E::VALID;
+    m_outputData.tpsVoltage = SignalStatus_E::VALID;
+    m_outputData.tpsAngle = SignalStatus_E::VALID;
+    m_outputData.ectVoltage = SignalStatus_E::VALID;
+    m_outputData.ectTemp = SignalStatus_E::VALID;
+    m_outputData.iatVoltage = SignalStatus_E::VALID;
+    m_outputData.iatTemp = SignalStatus_E::VALID;
+    m_outputData.mapVoltage = SignalStatus_E::VALID;
+    m_outputData.mapPressure = SignalStatus_E::VALID;
+    m_outputData.batteryVoltage = SignalStatus_E::VALID;
+    m_outputData.vehicleSpeed = SignalStatus_E::VALID;
+}
+
+void KlineModule::InvalidateData(void)
+{
+    m_outputData.rpm = SignalStatus_E::SNA;
+    m_outputData.tpsVoltage = SignalStatus_E::SNA;
+    m_outputData.tpsAngle = SignalStatus_E::SNA;
+    m_outputData.ectVoltage = SignalStatus_E::SNA;
+    m_outputData.ectTemp = SignalStatus_E::SNA;
+    m_outputData.iatVoltage = SignalStatus_E::SNA;
+    m_outputData.iatTemp = SignalStatus_E::SNA;
+    m_outputData.mapVoltage = SignalStatus_E::SNA;
+    m_outputData.mapPressure = SignalStatus_E::SNA;
+    m_outputData.batteryVoltage = SignalStatus_E::SNA;
+    m_outputData.vehicleSpeed = SignalStatus_E::SNA;
 }
 
 } // namespace Eim

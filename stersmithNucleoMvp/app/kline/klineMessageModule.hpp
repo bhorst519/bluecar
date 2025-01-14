@@ -28,57 +28,57 @@ class KlineMessageModule final : public KlineOutputInterface
 
         NOCOPY_NOMOVE(KlineMessageModule);
 
-        virtual float GetBatteryVoltage(void) const override
+        virtual float_q GetBatteryVoltage(void) const override
         {
             return m_dataRef.batteryVoltage;
         }
 
-        virtual float GetEctTemp(void) const override
+        virtual float_q GetEctTemp(void) const override
         {
             return m_dataRef.ectTemp;
         }
 
-        virtual float GetEctVoltage(void) const override
+        virtual float_q GetEctVoltage(void) const override
         {
             return m_dataRef.ectVoltage;
         }
 
-        virtual float GetIatTemp(void) const override
+        virtual float_q GetIatTemp(void) const override
         {
             return m_dataRef.iatTemp;
         }
 
-        virtual float GetIatVoltage(void) const override
+        virtual float_q GetIatVoltage(void) const override
         {
             return m_dataRef.iatVoltage;
         }
 
-        virtual float GetMapPressure(void) const override
+        virtual float_q GetMapPressure(void) const override
         {
             return m_dataRef.mapPressure;
         }
 
-        virtual float GetMapVoltage(void) const override
+        virtual float_q GetMapVoltage(void) const override
         {
             return m_dataRef.mapVoltage;
         }
 
-        virtual uint16_t GetRpm(void) const override
+        virtual uint16_q GetRpm(void) const override
         {
             return m_dataRef.rpm;
         }
 
-        virtual float GetTpsAngle(void) const override
+        virtual float_q GetTpsAngle(void) const override
         {
             return m_dataRef.tpsAngle;
         }
 
-        virtual float GetTpsVoltage(void) const override
+        virtual float_q GetTpsVoltage(void) const override
         {
             return m_dataRef.tpsVoltage;
         }
 
-        virtual float GetVehicleSpeed(void) const override
+        virtual float_q GetVehicleSpeed(void) const override
         {
             return m_dataRef.vehicleSpeed;
         }

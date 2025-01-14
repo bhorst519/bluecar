@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "qualifiedValTypes.hpp"
 #include "util.h"
 
 /***************************************************************************************************
@@ -14,21 +15,21 @@ namespace Eim
 
 struct KlineData_S
 {
-    uint16_t rpm;
-    float batteryVoltage;
-    float vehicleSpeed;
+    uint16_q rpm;
+    float_q batteryVoltage;
+    float_q vehicleSpeed;
     // Throttle position sensor
-    float tpsVoltage;
-    float tpsAngle;
+    float_q tpsVoltage;
+    float_q tpsAngle;
     // Engine coolant temp sensor
-    float ectVoltage;
-    float ectTemp;
+    float_q ectVoltage;
+    float_q ectTemp;
     // Intake air temp sensor
-    float iatVoltage;
-    float iatTemp;
+    float_q iatVoltage;
+    float_q iatTemp;
     // Manifold absolute pressure sensor
-    float mapVoltage;
-    float mapPressure;
+    float_q mapVoltage;
+    float_q mapPressure;
 };
 
 } // namespace Eim

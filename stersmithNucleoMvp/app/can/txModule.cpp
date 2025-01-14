@@ -37,17 +37,17 @@ void Tx1HzModule::Transmit(void)
 {
     taskENTER_CRITICAL();
 
-    // CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(m_klineRef.GetBatteryVoltage());
-    // CANTX_EIM_SetS_EIM_ECM_EctTemp(static_cast<int32_t>(m_klineRef.GetEctTemp()));
-    // CANTX_EIM_SetS_EIM_ECM_EctVoltage(m_klineRef.GetEctVoltage());
-    // CANTX_EIM_SetS_EIM_ECM_IatTemp(static_cast<int32_t>(m_klineRef.GetIatTemp()));
-    // CANTX_EIM_SetS_EIM_ECM_IatVoltage(m_klineRef.GetIatVoltage());
-    // CANTX_EIM_SetS_EIM_ECM_MapPressure(static_cast<uint32_t>(m_klineRef.GetMapPressure()));
-    // CANTX_EIM_SetS_EIM_ECM_MapVoltage(m_klineRef.GetMapVoltage());
-    // CANTX_EIM_SetS_EIM_ECM_Rpm(m_klineRef.GetRpm());
-    // CANTX_EIM_SetS_EIM_ECM_TpsAngle(m_klineRef.GetTpsAngle());
-    // CANTX_EIM_SetS_EIM_ECM_TpsVoltage(m_klineRef.GetTpsVoltage());
-    // CANTX_EIM_SetS_EIM_ECM_VehicleSpeed(static_cast<uint32_t>(m_klineRef.GetVehicleSpeed()));
+    CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(m_klineRef.GetBatteryVoltage());
+    CANTX_EIM_SetS_EIM_ECM_EctTemp(m_klineRef.GetEctTemp().Convert(int32_t()));
+    CANTX_EIM_SetS_EIM_ECM_EctVoltage(m_klineRef.GetEctVoltage());
+    CANTX_EIM_SetS_EIM_ECM_IatTemp(m_klineRef.GetIatTemp().Convert(int32_t()));
+    CANTX_EIM_SetS_EIM_ECM_IatVoltage(m_klineRef.GetIatVoltage());
+    CANTX_EIM_SetS_EIM_ECM_MapPressure(m_klineRef.GetMapPressure().Convert(uint32_t()));
+    CANTX_EIM_SetS_EIM_ECM_MapVoltage(m_klineRef.GetMapVoltage());
+    CANTX_EIM_SetS_EIM_ECM_Rpm(m_klineRef.GetRpm().Convert(uint32_t()));
+    CANTX_EIM_SetS_EIM_ECM_TpsAngle(m_klineRef.GetTpsAngle());
+    CANTX_EIM_SetS_EIM_ECM_TpsVoltage(m_klineRef.GetTpsVoltage());
+    CANTX_EIM_SetS_EIM_ECM_VehicleSpeed(m_klineRef.GetVehicleSpeed().Convert(uint32_t()));
 
     taskEXIT_CRITICAL();
 }

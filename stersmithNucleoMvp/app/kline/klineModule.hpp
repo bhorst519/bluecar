@@ -48,7 +48,7 @@ class KlineModule final : public Shared::ModuleBase
         Kline_State_E RunInitPendState(void) const;
         Kline_State_E RunInitState(void);
         Kline_State_E RunActiveState(void);
-        void ExecuteStateTransition(const Kline_State_E nextState) const;
+        void ExecuteStateTransition(const Kline_State_E nextState);
 
         // Communication
         uint8_t CalculateCrc(const uint8_t * const pData, const uint8_t numBytes) const;
@@ -59,6 +59,7 @@ class KlineModule final : public Shared::ModuleBase
 
         // Process data
         void ProcessData(const Kline_Comm_TableResponse_S * const pTableResponse);
+        void InvalidateData(void);
 };
 
 } // namespace Eim
