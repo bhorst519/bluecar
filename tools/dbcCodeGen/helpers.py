@@ -1,5 +1,12 @@
 import os, re
 
+
+def RemoveSuffix(string, suffix):
+    if string.endswith(suffix):
+        string = string[:-len(suffix)]
+    return string
+
+
 #---------------------------------------------------------------------------------------------------
 # Helper functions - data type interpretation
 #---------------------------------------------------------------------------------------------------

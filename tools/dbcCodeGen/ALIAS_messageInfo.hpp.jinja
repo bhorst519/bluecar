@@ -1,9 +1,5 @@
-#ifndef MESSAGE_INFO_H
-#define MESSAGE_INFO_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef MESSAGE_INFO_HPP
+#define MESSAGE_INFO_HPP
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message info macros
@@ -35,8 +31,4 @@ extern "C" {
 #define CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN ({{ message["receiveMuxIdxs"]|length|max(1) }}U)
 
 {% endfor %}
-#ifdef __cplusplus
-}
-#endif
-
-#endif // MESSAGE_INFO_H
+#endif // MESSAGE_INFO_HPP

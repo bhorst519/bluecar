@@ -1,7 +1,10 @@
-#include "EIM_canReceiver.h"
-#include "EIM_messageInfo.h"
+#include "EIM_canReceiver.hpp"
+#include "EIM_messageInfo.hpp"
 #include "stdbool.h"
 #include "stdint.h"
+
+namespace CanGen
+{
 
 //--------------------------------------------------------------------------------------------------
 // Receive message storage
@@ -23,9 +26,13 @@ uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t msgIdx)
 //--------------------------------------------------------------------------------------------------
 // Message receive storage functions
 //--------------------------------------------------------------------------------------------------
+} // namespace CanGen
+
 //--------------------------------------------------------------------------------------------------
 // Message receive hook
 //--------------------------------------------------------------------------------------------------
+extern "C" {
+
 bool CANRX_EIM_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
 {
     (void)dlc;
@@ -43,3 +50,5 @@ bool CANRX_EIM_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * co
 
     return success;
 }
+
+} // extern "C"

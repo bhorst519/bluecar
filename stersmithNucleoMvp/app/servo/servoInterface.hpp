@@ -5,6 +5,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "nocopy.hpp"
+#include "servoData.hpp"
 #include "util.h"
 
 /**************************************************************************************************
@@ -34,13 +35,13 @@ class ServoOutputInterface
 
         NOCOPY_NOMOVE(ServoOutputInterface);
 
-        virtual float GetCurrent(void) const = 0;
+        virtual float_q GetCurrent(void) const = 0;
         virtual uint8_t GetId(void) const = 0;
-        virtual float GetLossOfCommPositionDegrees(void) const = 0;
-        virtual float GetLossOfCommTimeout(void) const = 0;
-        virtual float GetPositionDegrees(void) const = 0;
-        virtual float GetTemperature(void) const = 0;
-        virtual float GetVoltage(void) const = 0;
+        virtual float_q GetLossOfCommPositionDegrees(void) const = 0;
+        virtual float_q GetLossOfCommTimeout(void) const = 0;
+        virtual float_q GetPositionDegrees(void) const = 0;
+        virtual float_q GetTemperature(void) const = 0;
+        virtual float_q GetVoltage(void) const = 0;
 };
 
 } // namespace Eim

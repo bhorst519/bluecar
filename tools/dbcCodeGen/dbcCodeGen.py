@@ -77,6 +77,9 @@ class DbcCodeGen:
                     # Only support SNA value table entry
                     signalIdx = signalNames.index(signalName)
                     signalInfo[signalIdx]["SNA"] = thisSignalInfo["value"]
+                    # Replace convType with QualifiedVal type
+                    convType = signalInfo[signalIdx]["convType"]
+                    signalInfo[signalIdx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
 
 
         if self.genDebugFiles:

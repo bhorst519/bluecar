@@ -85,7 +85,6 @@ VAL_ 1025 EIM_Servo_Temp 255 "SNA" ;
 VAL_ 1025 EIM_Servo_Position 8192 "SNA" ;
 VAL_ 1025 EIM_Servo_LossOfCommTimeout 255 "SNA" ;
 VAL_ 1025 EIM_Servo_LossOfCommPosition 8192 "SNA" ;
-VAL_ 1025 EIM_Servo_Id 255 "SNA" ;
 VAL_ 1025 EIM_Servo_Current 255 "SNA" ;
 VAL_ 1024 EIM_ECM_VehicleSpeed 255 "SNA" ;
 VAL_ 1024 EIM_ECM_TpsVoltage 255 "SNA" ;

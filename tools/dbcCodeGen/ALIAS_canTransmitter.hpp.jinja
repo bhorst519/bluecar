@@ -1,12 +1,14 @@
-#ifndef CAN_TRANSMITTER_H
-#define CAN_TRANSMITTER_H
+#ifndef CAN_TRANSMITTER_HPP
+#define CAN_TRANSMITTER_HPP
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include "qualifiedVal.hpp"
 #include "stdbool.h"
 #include "stdint.h"
+
+namespace CanGen
+{
+
+using namespace QualifiedVal;
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
@@ -48,8 +50,6 @@ void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} 
 //--------------------------------------------------------------------------------------------------
 bool CANTX_{{ alias }}_Init(void);
 
-#ifdef __cplusplus
-}
-#endif
+} // namespace CanGen
 
-#endif // CAN_TRANSMITTER_H
+#endif // CAN_TRANSMITTER_HPP

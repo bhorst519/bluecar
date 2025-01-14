@@ -28,7 +28,7 @@ class ServoMessageModule final : public ServoOutputInterface
 
         NOCOPY_NOMOVE(ServoMessageModule);
 
-        virtual float GetCurrent(void) const override
+        virtual float_q GetCurrent(void) const override
         {
             return m_dataRef.current;
         }
@@ -38,27 +38,27 @@ class ServoMessageModule final : public ServoOutputInterface
             return m_dataRef.id;
         }
 
-        virtual float GetLossOfCommPositionDegrees(void) const override
+        virtual float_q GetLossOfCommPositionDegrees(void) const override
         {
             return m_dataRef.lossOfCommPositionDegrees;
         }
 
-        virtual float GetLossOfCommTimeout(void) const override
+        virtual float_q GetLossOfCommTimeout(void) const override
         {
             return m_dataRef.lossOfCommTimeout;
         }
 
-        virtual float GetPositionDegrees(void) const override
+        virtual float_q GetPositionDegrees(void) const override
         {
             return m_dataRef.positionDegrees;
         }
 
-        virtual float GetTemperature(void) const override
+        virtual float_q GetTemperature(void) const override
         {
             return m_dataRef.temperature;
         }
 
-        virtual float GetVoltage(void) const override
+        virtual float_q GetVoltage(void) const override
         {
             return m_dataRef.voltage;
         }

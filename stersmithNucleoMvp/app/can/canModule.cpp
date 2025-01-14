@@ -3,9 +3,9 @@
 ***************************************************************************************************/
 #include "canModule.hpp"
 #include "halWrappers.h"
-#include "EIM_canReceiver.h"
-#include "EIM_canTransmitter.h"
-#include "EIM_messageInfo.h"
+#include "EIM_canReceiver.hpp"
+#include "EIM_canTransmitter.hpp"
+#include "EIM_messageInfo.hpp"
 
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
@@ -18,6 +18,8 @@ UTIL_ASSERT(CANRX_EIM_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
 ***************************************************************************************************/
 namespace Eim
 {
+
+using namespace CanGen;
 
 void CanModule::Init(void)
 {
