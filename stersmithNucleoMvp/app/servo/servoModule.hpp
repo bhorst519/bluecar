@@ -44,12 +44,13 @@ class ServoModule final : public Shared::ModuleBase
         float m_lossOfCommTimeoutToSet {0.0F};
 
         void SanitizeInputs(void);
+        void InvalidateData(void);
 
         uint16_t CalculateCrc(const uint8_t (&data)[SERVO_FRAME_NUM_DATA_BYTES]) const;
         bool VerifyCrc(const Servo_Comm_Frame_U& frame) const;
         bool VerifyResponse(const Servo_Request_E request, const Servo_Comm_Frame_U& frame, const uint16_t requestData) const;
         bool Transceive(const Servo_Request_E request, const bool checkRequest) const;
-        bool PrepareRequest(const Servo_Request_E request, uint16_t& data) const;
+        bool PrepareRequest(const Servo_Request_E request, uint16_t& data);
         bool PrepareSpecialRequest(const Servo_Special_Request_E request, uint16_t& data) const;
         bool ProcessResponse(const Servo_Request_E request, const uint16_t data);
         bool SendRequest(const Servo_Request_E request, bool checkRequest=true);
