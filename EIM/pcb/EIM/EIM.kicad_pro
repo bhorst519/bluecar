@@ -58,7 +58,17 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "duplicate_footprints|113321930|174750000|4fd63b1c-7b07-4cb5-811a-730fd8fdca3b|36a8ea7c-762f-4bbb-9c9c-dad12316b695",
+        "duplicate_footprints|194571930|98750000|6de66074-b788-45dd-9c88-07dadcc407f8|36a8ea7c-762f-4bbb-9c9c-dad12316b695",
+        "duplicate_footprints|32071930|68750000|e26acd44-781b-42c8-94d5-7e05a15a0ddb|36a8ea7c-762f-4bbb-9c9c-dad12316b695",
+        "duplicate_footprints|32071930|98750000|636fb7ac-f6c2-4731-9adf-2fbdfbb053da|36a8ea7c-762f-4bbb-9c9c-dad12316b695",
+        "lib_footprint_mismatch|145571930|168250000|debfa6a9-0bbf-43d9-843e-d8918c200d83|00000000-0000-0000-0000-000000000000",
+        "starved_thermal|129533623|100733623|ec49a555-150a-4383-b686-dd9b783e1274|3c5bc511-a56a-450e-a327-f9bc8f6ef1b6|F.Cu",
+        "starved_thermal|136758623|93333623|ec49a555-150a-4383-b686-dd9b783e1274|93798142-c338-47c4-b9f5-a0faccc1637a|F.Cu",
+        "starved_thermal|142070000|111950000|ec49a555-150a-4383-b686-dd9b783e1274|649694f9-7570-4b34-b422-e1c713d2a97c|F.Cu",
+        "starved_thermal|148670000|111950000|ec49a555-150a-4383-b686-dd9b783e1274|da6ecfd2-5301-4a16-bc64-266f08ee9f7c|F.Cu"
+      ],
       "meta": {
         "version": 2
       },
@@ -72,7 +82,7 @@
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
-        "duplicate_footprints": "warning",
+        "duplicate_footprints": "error",
         "extra_footprint": "warning",
         "footprint": "error",
         "footprint_symbol_mismatch": "warning",
@@ -81,7 +91,7 @@
         "hole_near_hole": "error",
         "holes_co_located": "warning",
         "invalid_outline": "error",
-        "isolated_copper": "warning",
+        "isolated_copper": "ignore",
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
         "length_out_of_range": "error",
@@ -90,7 +100,7 @@
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "missing_courtyard": "ignore",
-        "missing_footprint": "warning",
+        "missing_footprint": "error",
         "net_conflict": "warning",
         "npth_inside_courtyard": "ignore",
         "padstack": "warning",
@@ -101,7 +111,7 @@
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
         "solder_mask_bridge": "error",
-        "starved_thermal": "error",
+        "starved_thermal": "warning",
         "text_height": "warning",
         "text_thickness": "warning",
         "through_hole_pad_without_hole": "error",
