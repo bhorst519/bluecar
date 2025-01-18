@@ -140,7 +140,7 @@ void HalWrappersGpioToggle(const HalWrappers_Gpio_E gpio)
 void HalWrappersSetPwm(const float dutyCycle)
 {
     // Timer is configured to reload at 56000 counts.
-    // For a 48MHz clock, this sets a 1.5kHz frequency
+    // For a 84MHz clock, this sets a 1.5kHz frequency
     uint16_t pulse = (uint16_t)(dutyCycle * 56000.0F);
     sConfigOC.Pulse = pulse;
     (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC, PWM_CHANNEL);
@@ -301,6 +301,19 @@ void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
     (void)HAL_UART_Abort_IT(pHalWrappersInit->pSerial[serial]);
     (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Timer
+//--------------------------------------------------------------------------------------------------
+void HalWrappersClearTimerUs(void)
+{
+    __HAL_TIM_SET_COUNTER(pHalWrappersInit->pUsTim, 0U);
+}
+
+uint32_t HalWrappersGetTimerUs(void)
+{
+    return __HAL_TIM_GET_COUNTER(pHalWrappersInit->pUsTim);
 }
 
 //--------------------------------------------------------------------------------------------------
