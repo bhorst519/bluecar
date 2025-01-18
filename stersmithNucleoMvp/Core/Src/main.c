@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "profiler.h"
 #include "rtos.h"
 
 /* USER CODE END Includes */
@@ -64,13 +65,17 @@ uint32_t task1kHzBuffer[ 256 ];
 osStaticThreadDef_t task1kHzControlBlock;
 /* USER CODE BEGIN PV */
 
-HalWrappers_Init_S halWrappersInitData =
+static HalWrappers_Init_S halWrappersInitData =
 {
   .pSerial = {&huart3, &huart6},
   .pPwmTim = &htim3,
   .pUsTim = &htim5,
   .pCan = {&hcan1},
 };
+
+static Profiler_Data_S g1kHzProfilerData;
+static Profiler_Data_S g10HzProfilerData;
+static Profiler_Data_S g1HzProfilerData;
 
 /* USER CODE END PV */
 
@@ -169,6 +174,17 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
+  vTaskSetThreadLocalStoragePointer(task_1kHzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1kHzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1KHZ, (void *)task_1kHzHandle);
+
+  g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
+  vTaskSetThreadLocalStoragePointer(task_10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_10HZ, (void *)task_10HzHandle);
+
+  g1HzProfilerData.configWindowNumPeriods = 2U; // 1Hz * 2
+  vTaskSetThreadLocalStoragePointer(task_1HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1HZ, (void *)task_1HzHandle);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */

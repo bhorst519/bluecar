@@ -4,6 +4,7 @@
 #include "app.hpp"
 #include "cmsis_os.h"
 #include "halWrappers.h"
+#include "profiler.h"
 #include "rtos.h"
 
 /***************************************************************************************************
@@ -26,8 +27,12 @@ void RtosRunTask1kHz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
         HalWrappersGpioToggle(GPIO_DEBUG_2);
         m_app.RunTask1kHz();
+
+        ProfilerScheduledTaskCheckOut();
     }
 }
 
@@ -41,6 +46,8 @@ void RtosRunTask10Hz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
         HalWrappersGpioToggle(GPIO_LED_1);
         m_app.RunTask10Hz();
 
@@ -50,6 +57,8 @@ void RtosRunTask10Hz(void)
         {
             pulseInc = pulseInc * -1.0F;
         }
+
+        ProfilerScheduledTaskCheckOut();
     }
 }
 
@@ -60,7 +69,12 @@ void RtosRunTask1Hz(void)
     for(;;)
     {
         (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
         HalWrappersGpioToggle(GPIO_LED_2);
         m_app.RunTask1Hz();
+
+        ProfilerUpdateLoad();
+        ProfilerScheduledTaskCheckOut();
     }
 }

@@ -99,10 +99,11 @@ class DbcCodeGen:
             maxEndBitId = 0
             for signal in thisMessageSignalInfo:
                 signalName = signal["name"]
-                if signal["isMuxer"] and messageMuxer is not None:
-                    raise Exception(f"Message identified with more than one muxer: {messageName} with muxers {messageMuxer} and {signalName}")
-                else:
-                    messageMuxer = signalName
+                if signal["isMuxer"]:
+                    if messageMuxer is not None:
+                        raise Exception(f"Message identified with more than one muxer: {messageName} with muxers {messageMuxer} and {signalName}")
+                    else:
+                        messageMuxer = signalName
                 if signal["muxIdx"] is not None and signal["muxIdx"] > message["maxMuxIdx"]:
                     raise Exception(f"Mux index out of range: {messageName} signal {signalName}")
                 maxEndBitId = max(maxEndBitId, signal["startBit"] + signal["bitLength"])

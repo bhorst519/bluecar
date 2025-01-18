@@ -81,12 +81,12 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
         {{ SignalRawGetterHelper(startByte, overallByteMask, startRShift, False)|indent }};
 {% else %}
         {{ SignalRawGetterHelper(startByte, startByteMask, startRShift, False)|indent }} +
-        {% set lshift = startLShift %}
+        {% set ns = namespace(lshift=startLShift) %}
         {% for byte in range(startByte+1, endByte) %}
-        {{ SignalRawGetterHelper(byte, 0xFF, lshift, True)|indent }} +
-        {% set lshift = lshift + 8 %}
+        {{ SignalRawGetterHelper(byte, 0xFF, ns.lshift, True)|indent }} +
+        {% set ns.lshift = ns.lshift + 8 %}
         {% endfor %}
-        {{ SignalRawGetterHelper(endByte, endByteMask, lshift, True)|indent }};
+        {{ SignalRawGetterHelper(endByte, endByteMask, ns.lshift, True)|indent }};
 {% endif %}
     return rawVal;
 }

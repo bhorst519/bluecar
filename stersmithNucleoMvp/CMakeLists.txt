@@ -58,6 +58,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp
     app/servo/servoModule.cpp
+    ../shared/profiler/profiler.c
     ../shared/taskBase/taskBase.cpp
 )
 
@@ -73,7 +74,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/rtos
     app/servo
     ../shared/dataChannel
+    ../shared/FreeRTOS
     ../shared/moduleBase
+    ../shared/profiler
     ../shared/taskBase
     ../shared/utils
 )

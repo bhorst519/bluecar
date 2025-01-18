@@ -124,6 +124,7 @@ void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg)
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     sConfigOC.Pulse = 0U;
     (void)HAL_TIM_PWM_Start(pHalWrappersInit->pPwmTim, PWM_CHANNEL);
+    (void)HAL_TIM_Base_Start(pHalWrappersInit->pUsTim);
 }
 
 void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool set)

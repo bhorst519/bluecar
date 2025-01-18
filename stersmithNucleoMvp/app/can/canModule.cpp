@@ -35,6 +35,10 @@ void CanModule::Init(void)
     HalWrappersCanStart(CAN_1);
 
     // Transmit manager initialization
+    m_muxTransmit_EIM_CpuStats.periodMs = 1000U;
+    m_muxTransmit_EIM_CpuStats.numMuxes = (CAN_EIM_EIM_CpuStats_MAX_MUX_IDX + 1U);
+    m_muxTransmit_EIM_CpuStats.counter = 0U;
+
     m_muxTransmit_EIM_EngineStatus.periodMs = 1000U;
     m_muxTransmit_EIM_EngineStatus.numMuxes = (CAN_EIM_EIM_EngineStatus_MAX_MUX_IDX + 1U);
     m_muxTransmit_EIM_EngineStatus.counter = 0U;
@@ -47,6 +51,12 @@ void CanModule::Init(void)
 void CanModule::Run(void)
 {
     uint32_t muxIdx = 0U;
+
+    if (ShouldTransmitMuxNow(m_muxTransmit_EIM_CpuStats, muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_CpuStats(muxIdx);
+        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_CpuStats_MID, CAN_EIM_EIM_CpuStats_DLC, pCanData);
+    }
 
     if (ShouldTransmitMuxNow(m_muxTransmit_EIM_EngineStatus, muxIdx))
     {

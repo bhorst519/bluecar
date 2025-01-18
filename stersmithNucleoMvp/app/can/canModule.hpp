@@ -37,6 +37,7 @@ class CanModule final : public Shared::ModuleBase
         virtual void Run(void) override;
 
     private:
+        CanModule_Mux_Transmitter_S m_muxTransmit_EIM_CpuStats {};
         CanModule_Mux_Transmitter_S m_muxTransmit_EIM_EngineStatus {};
         CanModule_Mux_Transmitter_S m_muxTransmit_EIM_ServoStatus {};
 
