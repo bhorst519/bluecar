@@ -1,10 +1,11 @@
-#ifndef RX_MODULE_HPP
-#define RX_MODULE_HPP
+#ifndef RX_INTERFACE_HPP
+#define RX_INTERFACE_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "moduleBase.hpp"
+#include "nocopy.hpp"
+#include "rxData.hpp"
 #include "util.h"
 
 /**************************************************************************************************
@@ -13,19 +14,17 @@
 namespace Eim
 {
 
-class RxNoneModule final : public Shared::RxModuleBase
+class Rx10HzOutputInterface
 {
     public:
-        constexpr RxNoneModule(
-            ) :
-                RxModuleBase()
+        constexpr Rx10HzOutputInterface()
         {}
 
-        NOCOPY_NOMOVE(RxNoneModule);
+        NOCOPY_NOMOVE(Rx10HzOutputInterface);
 
-        virtual void Receive(void) override;
+        virtual float_q GetServoPositionRequest(void) const = 0;
 };
 
 } // namespace Eim
 
-#endif // RX_MODULE_HPP
+#endif // RX_INTERFACE_HPP

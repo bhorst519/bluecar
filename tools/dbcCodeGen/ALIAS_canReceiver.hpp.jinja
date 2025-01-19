@@ -2,11 +2,14 @@
 #define CAN_RECEIVER_HPP
 
 #include "{{ alias }}_canReceiverHook.h"
+#include "qualifiedVal.hpp"
 #include "stdbool.h"
 #include "stdint.h"
 
 namespace CanGen
 {
+
+using namespace ::QualifiedVal;
 
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration

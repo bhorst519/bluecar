@@ -13,6 +13,7 @@ namespace CanGen
 {% for message in messagesToReceive %}
 static uint8_t g{{ message["name"] }}_RX_ARR[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN][CAN_{{ alias }}_{{ message["name"] }}_DLC];
 static uint8_t * g{{ message["name"] }}_LatestRxPtr = &g{{ message["name"] }}_RX_ARR[0U][0U];
+static bool g{{ message["name"] }}_EverReceived[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN];
 {% endfor %}
 
 //--------------------------------------------------------------------------------------------------
@@ -31,13 +32,17 @@ uint32_t CANRX_{{ alias }}_GetMidFromIdx(const uint32_t msgIdx)
 //--------------------------------------------------------------------------------------------------
 // Signal receive unpack functions
 //--------------------------------------------------------------------------------------------------
+{% macro RxArrIdx(messageName, muxIdx) -%}
+{{ "0U" if muxIdx == None else "CANRX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) }}
+{%- endmacro %}
+{#
+#}
 {% macro FramePointer(messageName, muxIdx, messageIsMuxed) -%}
 {% if muxIdx == None and messageIsMuxed %}
 // This signal belongs to a muxed message but is static. Get contents from latest-received frame
 const uint8_t * const pData = g{{ messageName }}_LatestRxPtr;
 {%- else %}
-{% set rxArrIdx = "0U" if muxIdx == None else "CANRX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) %}
-const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
+const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName, muxIdx) }}][0U];
 {%- endif %}
 {%- endmacro %}
 {#
@@ -98,17 +103,33 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
 {{ signal["convType"] }} CANRX_{{ alias }}_GetSFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
 {
     {{ signal["convIntType"] }} raw = ({{ signal["convIntType"] }})CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(pData);
+    {{ signal["convType"] }} converted;
+{% set checkValidity = "SNA" in signal %}
+{% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
+{% if checkValidity %}
+    if (   (raw == {{ signal["SNA"]|string + convIntAppend }}) // SNA value
+        || (!g{{ signal["message"] }}_EverReceived[{{ RxArrIdx(signal["message"], signal["muxIdx"]) }}]) )
+    {
+        converted = SignalStatus_E::SNA;
+    }
+    else
+{% endif %}
+    {
 {% if signal["signed"] %}
     {% set bitsToShift = BIT_LENGTH_FROM_TYPE[signal["convIntType"]] - signal["bitLength"] %}
     {% if bitsToShift > 0 %}
-    // Sign extend
-    raw = (raw << {{ bitsToShift }}) >> {{ bitsToShift }};
+        // Sign extend
+        const {{ signal["convIntType"] }} rawTemp = raw << {{ bitsToShift }};
+        raw = rawTemp >> {{ bitsToShift }};
     {% endif %}
 {% endif %}
-{% set convAppend = "F" if signal["convType"] == "float" else "U" if signal["convType"].startswith("u") else "" %}
+{% set convType = "decltype(converted.Val())" if checkValidity else signal["convType"] %}
+{% set convAppend = "F" if signal["convType"].startswith("float") else "U" if signal["convType"].startswith("u") else "" %}
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
-    {{ signal["convType"] }} converted = ((({{ signal["convType"] }})raw) * {{ scale }}) + {{ offset }};
+        converted = ((( {{ convType }} )raw) * {{ scale }}) + {{ offset }};
+        converted = SignalStatus_E::VALID;
+    }
     return converted;
 }
 {{ signal["convType"] }} CANRX_{{ alias }}_GetS_{{ signal["name"] }}(void)
@@ -122,8 +143,9 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
 // Message receive storage functions
 //--------------------------------------------------------------------------------------------------
 {% macro MessageMuxReceiver(messageName, muxIdx) -%}
-{% set rxArrIdx = "0U" if muxIdx == None else "CANRX_{}_{}_M{}_ARR_IDX".format(alias, messageName, muxIdx) %}
+{% set rxArrIdx = RxArrIdx(messageName, muxIdx) %}
 g{{ messageName }}_LatestRxPtr = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
+g{{ messageName }}_EverReceived[{{ rxArrIdx }}] = true;
 {%- endmacro %}
 {#
 #}
@@ -192,7 +214,7 @@ bool CANRX_{{ alias }}_Receive(const uint16_t mid, const uint8_t dlc, const uint
             }
             else
             {
-                success = CANRX_ProcessM_{{ message["name"] }}(pData);
+                success = CanGen::CANRX_ProcessM_{{ message["name"] }}(pData);
             }
             break;
         }
