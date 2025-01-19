@@ -49,15 +49,15 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     app/can/canModule.cpp
-    app/can/rxModule.cpp
-    app/can/txModule.cpp
     app/dataChannel/dataChannel.cpp
     app/generated/EIM_canReceiver.cpp
     app/generated/EIM_canTransmitter.cpp
     app/hal/halWrappers.c
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp
+    app/rx/rxModule.cpp
     app/servo/servoModule.cpp
+    app/tx/txModule.cpp
     ../shared/profiler/profiler.c
     ../shared/taskBase/taskBase.cpp
 )
@@ -72,7 +72,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/hal
     app/kline
     app/rtos
+    app/rx
     app/servo
+    app/tx
     ../shared/dataChannel
     ../shared/FreeRTOS
     ../shared/moduleBase

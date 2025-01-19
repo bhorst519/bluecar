@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "rxInterface.hpp"
 #include "servoInterface.hpp"
 
 /**************************************************************************************************
@@ -14,10 +15,15 @@ namespace Eim
 
 class ServoInputMessageModule final : public ServoInputInterface
 {
+    private:
+        const Rx10HzOutputInterface& m_rx10HzRef;
+
     public:
         constexpr ServoInputMessageModule(
+                const Rx10HzOutputInterface& rx10HzRef
             ) :
-                ServoInputInterface()
+                ServoInputInterface(),
+                m_rx10HzRef(rx10HzRef)
         {}
 
         NOCOPY_NOMOVE(ServoInputMessageModule);
@@ -32,9 +38,9 @@ class ServoInputMessageModule final : public ServoInputInterface
             return 1.0F;
         }
 
-        virtual float GetPositionDegreesToSet(void) const override
+        virtual float_q GetPositionDegreesToSet(void) const override
         {
-            return 0.0F;
+            return m_rx10HzRef.GetServoPositionRequest();
         }
 };
 

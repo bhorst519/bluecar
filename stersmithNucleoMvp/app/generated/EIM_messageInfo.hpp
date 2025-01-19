@@ -33,6 +33,12 @@
 //--------------------------------------------------------------------------------------------------
 // Receive message info macros
 //--------------------------------------------------------------------------------------------------
-#define CANRX_EIM_NUM_MESSAGES (0U)
+#define CANRX_EIM_NUM_MESSAGES (1U)
+
+// TESTER_request
+#define CAN_EIM_TESTER_request_MID (1280U)
+#define CAN_EIM_TESTER_request_DLC (2U)
+#define CAN_EIM_TESTER_request_MAX_MUX_IDX (0U)
+#define CANRX_EIM_TESTER_request_ARR_LEN (1U)
 
 #endif // MESSAGE_INFO_HPP

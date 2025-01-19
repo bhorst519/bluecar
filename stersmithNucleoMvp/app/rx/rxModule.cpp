@@ -18,4 +18,9 @@ void RxNoneModule::Receive(void)
     // Nothing to do
 }
 
+void Rx10HzModule::Receive(void)
+{
+    m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
+}
+
 } // namespace Eim
