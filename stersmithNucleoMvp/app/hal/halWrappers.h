@@ -65,6 +65,7 @@ typedef struct
 {
     UART_HandleTypeDef * pSerial[MAX_NUM_SERIAL];
     TIM_HandleTypeDef * pPwmTim;
+    TIM_HandleTypeDef * pUsTim;
     CAN_HandleTypeDef * pCan[MAX_NUM_CAN];
 } HalWrappers_Init_S;
 
@@ -90,6 +91,10 @@ bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * 
 bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes);
 bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitMs);
 void HalWrappersUartAbort(const HalWrappers_Serial_E serial);
+
+// Timer
+void HalWrappersClearTimerUs(void);
+uint32_t HalWrappersGetTimerUs(void);
 
 #ifdef __cplusplus
 }

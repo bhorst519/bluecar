@@ -39,6 +39,22 @@ VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
 
 
+BO_ 1026 EIM_CpuStats: 8 EIM
+ SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_10Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1kHz_Load m0 : 18|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MaxPeriod m2 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MinPeriod m2 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MaxPeriod m1 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MinPeriod m1 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_AvgPeriod m1 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_CpuStatsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+
 BO_ 1025 EIM_ServoStatus: 8 EIM
  SG_ EIM_ServoStatusMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
  SG_ EIM_Servo_Voltage m1 : 24|8@1+ (0.2,0) [0|51] "V" Vector__XXX

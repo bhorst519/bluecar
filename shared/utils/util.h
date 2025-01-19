@@ -9,6 +9,7 @@ extern "C" {
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "assert.h"
+#include "limits.h"
 #include "stdbool.h"
 #include "stddef.h"
 #include "stdint.h"
@@ -65,6 +66,9 @@ extern "C" {
 #define U32_LSW(w)  ((uint16_t)(w))                                                             // LSW of uint32_t
 
 #define ENDIANSWAP_U16(data) (uint16_t)(((uint16_t)data << 8U) | ((uint16_t)data >> 8U))
+
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 #ifdef __cplusplus
 }

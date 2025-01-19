@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "profiler.h"
 #include "rtos.h"
 
 /* USER CODE END Includes */
@@ -45,6 +46,7 @@
 CAN_HandleTypeDef hcan1;
 
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim5;
 
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
@@ -63,12 +65,17 @@ uint32_t task1kHzBuffer[ 256 ];
 osStaticThreadDef_t task1kHzControlBlock;
 /* USER CODE BEGIN PV */
 
-HalWrappers_Init_S halWrappersInitData =
+static HalWrappers_Init_S halWrappersInitData =
 {
   .pSerial = {&huart3, &huart6},
   .pPwmTim = &htim3,
+  .pUsTim = &htim5,
   .pCan = {&hcan1},
 };
+
+static Profiler_Data_S g1kHzProfilerData;
+static Profiler_Data_S g10HzProfilerData;
+static Profiler_Data_S g1HzProfilerData;
 
 /* USER CODE END PV */
 
@@ -79,6 +86,7 @@ static void MX_USART3_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_TIM5_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask10Hz(void const * argument);
 void StartTask1Hz(void const * argument);
@@ -126,6 +134,7 @@ int main(void)
   MX_CAN1_Init();
   MX_TIM3_Init();
   MX_USART6_UART_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
   RtosInit(&halWrappersInitData);
   /* USER CODE END 2 */
@@ -165,6 +174,17 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
+  vTaskSetThreadLocalStoragePointer(task_1kHzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1kHzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1KHZ, (void *)task_1kHzHandle);
+
+  g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
+  vTaskSetThreadLocalStoragePointer(task_10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_10HZ, (void *)task_10HzHandle);
+
+  g1HzProfilerData.configWindowNumPeriods = 2U; // 1Hz * 2
+  vTaskSetThreadLocalStoragePointer(task_1HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1HZ, (void *)task_1HzHandle);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -321,6 +341,51 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
+
+}
+
+/**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 84;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 4294967295;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
 
 }
 

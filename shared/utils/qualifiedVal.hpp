@@ -13,17 +13,7 @@
                                                                   const QualifiedVal rhs)\
                                 {\
                                     return (lhs.m_val op rhs.m_val);\
-/*                              }\
-                                friend constexpr bool operator op(const T lhs,\
-                                                                  const QualifiedVal rhs)\
-                                {\
-                                    return (lhs op rhs.m_val);\
-                                }\
-                                friend constexpr bool operator op(const QualifiedVal lhs,\
-                                                                  const T rhs)\
-                                {\
-                                    return (lhs.m_val op rhs);\
-*/                              }
+                                }
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
