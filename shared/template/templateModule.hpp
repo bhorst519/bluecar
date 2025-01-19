@@ -1,12 +1,12 @@
-#ifndef TEMPLATE_HPP
-#define TEMPLATE_HPP
+#ifndef TEMPLATE_MODULE_HPP
+#define TEMPLATE_MODULE_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "moduleBase.hpp"
 #include "nocopy.hpp"
-#include "stdint.h"
+#include "templateInterface.hpp"
 
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
@@ -32,25 +32,30 @@ static constexpr uint8_t COUNTER_MAX    { 100U };
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
 ***************************************************************************************************/
-class TemplateClass final : public Shared::ModuleBase
+class TemplateModule final : public Shared::ModuleBase
 {
     public:
-        constexpr TemplateClass(
+        constexpr TemplateModule(
+                const TemplateInputInterface& inputRef
             ) :
-                ModuleBase()
+                ModuleBase(),
+                m_inputData(inputRef)
         {}
 
-        NOCOPY_NOMOVE(TemplateClass);
+        NOCOPY_NOMOVE(TemplateModule);
 
         virtual void Init(void) override;
         virtual void Run(void) override;
+        constexpr const TemplateData_S& GetOutputDataReference(void) const { return m_outputData; };
 
     private:
-        uint8_t m_counter {0U};
+        const TemplateInputInterface& m_inputData;
+
+        TemplateData_S m_outputData {};
 
         void IncrementCounter(uint8_t& counter) const;
 };
 
 } // namespace Template
 
-#endif // TEMPLATE_HPP
+#endif // TEMPLATE_MODULE_HPP
