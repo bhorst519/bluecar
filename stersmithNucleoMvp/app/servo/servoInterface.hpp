@@ -24,7 +24,7 @@ class ServoInputInterface
 
         virtual float GetLossOfCommPositionDegreesToSet(void) const = 0;
         virtual float GetLossOfCommTimeoutToSet(void) const = 0;
-        virtual float GetPositionDegreesToSet(void) const = 0;
+        virtual float_q GetPositionDegreesToSet(void) const = 0;
 };
 
 class ServoOutputInterface

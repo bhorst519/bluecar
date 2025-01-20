@@ -33,11 +33,14 @@ NS_ :
 
 BS_:
 
-BU_: EIM
+BU_: TESTER EIM
 VAL_TABLE_ SNA_Signed_14 8192 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
 
+
+BO_ 1280 TESTER_request: 2 TESTER
+ SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM
  SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
@@ -96,6 +99,8 @@ BA_DEF_DEF_  "NmStationAddress" 0;
 BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
 BA_ "DBName" "EIM";
+BA_ "NmStationAddress" BU_ TESTER 1;
+VAL_ 1280 TESTER_Servo_Position 8192 "SNA" ;
 VAL_ 1025 EIM_Servo_Voltage 255 "SNA" ;
 VAL_ 1025 EIM_Servo_Temp 255 "SNA" ;
 VAL_ 1025 EIM_Servo_Position 8192 "SNA" ;

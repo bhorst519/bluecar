@@ -17,6 +17,7 @@
 
 // Message modules
 #include "klineMessageModule.hpp"
+#include "rxMessageModule.hpp"
 #include "servoMessageModule.hpp"
 
 // Input message modules
@@ -93,12 +94,15 @@ class App final
         // 10Hz objects
         //------------------------------------------------------------------------------------------
         // TX/RX modules
+        Rx10HzModule m_rx10HzModule {};
         Tx10HzModule m_tx10HzModule {
             m_servoMessageModule10Hz
         };
 
         // Inputs
-        ServoInputMessageModule m_servoInput {};
+        ServoInputMessageModule m_servoInput {
+            m_rx10HzMessageModule10Hz
+        };
 
         // Modules
         ServoModule m_servoModule {
@@ -136,6 +140,11 @@ class App final
         // Data channels
         //------------------------------------------------------------------------------------------
         // 10Hz source
+        DataChannel< Rx10HzData_S
+                   , Task10Hz   // source task
+                           >m_rx10HzDataChannel{ m_rx10HzModule.GetOutputDataReference() };
+        Rx10HzMessageModule m_rx10HzMessageModule10Hz { m_rx10HzDataChannel.GetBuffer(Task10Hz_t) };
+
         DataChannel< ServoData_S
                    , Task10Hz   // source task
                           >m_servoDataChannel{ m_servoModule.GetOutputDataReference() };
@@ -147,10 +156,11 @@ class App final
                           >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
         KlineMessageModule m_klineMessageModule1Hz { m_klineDataChannel.GetBuffer(Task1Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 2U;
+        static constexpr size_t m_numberOfDataChannels = 3U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
             // 10Hz source
+            &m_rx10HzDataChannel,
             &m_servoDataChannel,
             // 1Hz source
             &m_klineDataChannel,
@@ -174,7 +184,7 @@ class App final
                         , m_numberOfModules10Hz
                         , m_dataChannelList
                         , m_numberOfDataChannels
-                        , m_rxNoneModule
+                        , m_rx10HzModule
                         , m_tx10HzModule
                     };
         TaskBase    m_task1Hz{

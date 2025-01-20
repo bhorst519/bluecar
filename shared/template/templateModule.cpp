@@ -1,7 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "template.hpp"
+#include "templateModule.hpp"
 #include "template.h"
 
 /***************************************************************************************************
@@ -48,17 +48,18 @@ void TemplateRun(void)
 namespace Template
 {
 
-void TemplateClass::Init(void)
+void TemplateModule::Init(void)
 {
-    m_counter = COUNTER_INIT;
+    m_outputData.counter = COUNTER_INIT;
 }
 
-void TemplateClass::Run(void)
+void TemplateModule::Run(void)
 {
-    IncrementCounter(m_counter);
+    (void)m_inputData.GetInputBool();
+    IncrementCounter(m_outputData.counter);
 }
 
-void TemplateClass::IncrementCounter(uint8_t& counter) const
+void TemplateModule::IncrementCounter(uint8_t& counter) const
 {
     if (++counter > COUNTER_MAX)
     {
