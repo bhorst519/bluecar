@@ -7,7 +7,9 @@ cmake_minimum_required(VERSION 3.22)
 # User is free to modify the file as much as necessary
 #
 
+#---------------------------------------------------------------------------------------------------
 # Setup compiler settings
+#---------------------------------------------------------------------------------------------------
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
@@ -40,6 +42,29 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 
+#---------------------------------------------------------------------------------------------------
+# Generate code
+#---------------------------------------------------------------------------------------------------
+set(CANGEN_SCRIPT_DIR               ${CMAKE_SOURCE_DIR}/../tools/dbcCodeGen)
+file(GLOB CANGEN_SCRIPT_SOURCES     "${CANGEN_SCRIPT_DIR}/*.py")
+set(CANGEN_SCRIPT                   ${CANGEN_SCRIPT_DIR}/dbcCodeGen.py)
+set(DBC_FILE                        ${CMAKE_SOURCE_DIR}/../tools/network/EIM.dbc)
+set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
+set(TARGET_SOURCES_CANGEN
+    ${TARGET_DIR_CANGEN}/EIM_canReceiver.cpp
+    ${TARGET_DIR_CANGEN}/EIM_canTransmitter.cpp
+)
+add_custom_command(
+    OUTPUT ${TARGET_DIR_CANGEN} ${TARGET_SOURCES_CANGEN}
+    COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node EIM
+    DEPENDS ${DBC_FILE}
+            ${CANGEN_SCRIPT_SOURCES}
+    VERBATIM
+)
+
+#---------------------------------------------------------------------------------------------------
+# Setup build
+#---------------------------------------------------------------------------------------------------
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
@@ -47,10 +72,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 set(TARGET_SOURCES
+    ${TARGET_SOURCES_CANGEN}
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
-    app/generated/EIM_canReceiver.cpp
-    app/generated/EIM_canTransmitter.cpp
     app/hal/halWrappers.c
     app/kline/klineModule.cpp
     app/rtos/rtos.cpp
@@ -73,10 +97,10 @@ set_source_files_properties(
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    ${TARGET_DIR_CANGEN}
     app/app
     app/can
     app/dataChannel
-    app/generated
     app/hal
     app/kline
     app/rtos

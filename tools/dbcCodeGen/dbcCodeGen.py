@@ -200,5 +200,6 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
+    print(f"Generating CAN code for alias: {args.alias}, node: {args.node}")
     sampleCodeGen = DbcCodeGen(args.dbcFile, args.targetDir, args.alias, args.node, args.genDebugFiles)
     sampleCodeGen.Run()
