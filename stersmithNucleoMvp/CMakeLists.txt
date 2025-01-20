@@ -46,8 +46,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add sources to executable
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
+set(TARGET_SOURCES
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
     app/generated/EIM_canReceiver.cpp
@@ -60,6 +59,15 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     app/tx/txModule.cpp
     ../shared/profiler/profiler.c
     ../shared/taskBase/taskBase.cpp
+)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    # Add user sources here
+    ${TARGET_SOURCES}
+)
+set_source_files_properties(
+    ${TARGET_SOURCES}
+    PROPERTIES
+    COMPILE_FLAGS "-Wextra"
 )
 
 # Add include paths

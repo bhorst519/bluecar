@@ -411,7 +411,7 @@ bool ServoModule::SendRequest(const Servo_Request_E request, bool checkRequest)
     {
         // Since the data struct is packed, need to be careful not to use pointers/references
         // due to risk of losing alignment
-        uint16_t dataToSet;
+        uint16_t dataToSet = 0U;
         success = PrepareRequest(request, dataToSet);
         gRequestFrame.frame.data = dataToSet;
     }
@@ -440,7 +440,7 @@ bool ServoModule::SendSpecialRequest(const Servo_Special_Request_E request)
     {
         // Since the data struct is packed, need to be careful not to use pointers/references
         // due to risk of losing alignment
-        uint16_t dataToSet;
+        uint16_t dataToSet = 0U;
         success = PrepareSpecialRequest(request, dataToSet);
         gRequestFrame.frame.data = dataToSet;
     }

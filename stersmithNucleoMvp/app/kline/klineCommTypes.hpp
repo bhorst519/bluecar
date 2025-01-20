@@ -72,20 +72,20 @@ union Kline_Comm_Request_U
 //--------------------------------------------------------------------------------------------------
 // Preformatted requests
 //--------------------------------------------------------------------------------------------------
-#define KLINE_PREFORMAT_WAKE_REQUEST ( (Kline_Comm_WakeRequest_S)\
-    {.headerCode=0xFE, .numBytes=0x04, .data=0x72, .crc=0x8C}\
+#define KLINE_PREFORMAT_WAKE_REQUEST ( Kline_Comm_WakeRequest_S\
+    {/*.headerCode=*/0xFE, /*.numBytes=*/0x04, /*.data=*/0x72, /*.crc=*/0x8C}\
 )
 
-#define KLINE_PREFORMAT_INIT_REQUEST ( (Kline_Comm_TableRequest_S)\
-    {.headerCode=0x72, .numBytes=0x05, .table=0x00, .address=0xF0, .crc=0x99}\
+#define KLINE_PREFORMAT_INIT_REQUEST ( Kline_Comm_TableRequest_S\
+    {/*.headerCode=*/0x72, /*.numBytes=*/0x05, /*.table=*/0x00, /*.address=*/0xF0, /*.crc=*/0x99}\
 )
 
-#define KLINE_PREFORMAT_ECM_ID_REQUEST ( (Kline_Comm_TableRequest_S)\
-    {.headerCode=0x72, .numBytes=0x05, .table=0x71, .address=0x00, .crc=0x18}\
+#define KLINE_PREFORMAT_ECM_ID_REQUEST ( Kline_Comm_TableRequest_S\
+    {/*.headerCode=*/0x72, /*.numBytes=*/0x05, /*.table=*/0x71, /*.address=*/0x00, /*.crc=*/0x18}\
 )
 
-#define KLINE_PREFORMAT_DATA_REQUEST ( (Kline_Comm_TableRequest_S)\
-    {.headerCode=0x72, .numBytes=0x05, .table=0x71, .address=0x11, .crc=0x07}\
+#define KLINE_PREFORMAT_DATA_REQUEST ( Kline_Comm_TableRequest_S\
+    {/*.headerCode=*/0x72, /*.numBytes=*/0x05, /*.table=*/0x71, /*.address=*/0x11, /*.crc=*/0x07}\
 )
 
 //--------------------------------------------------------------------------------------------------

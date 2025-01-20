@@ -436,7 +436,8 @@ void CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(const uint32_t converted, uint8_t *
 {
     uint8_t rawVal;
     {
-        const uint32_t convertedSat = (converted > 15U ? 15U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 15U ? 15U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_CpuStatsMux((uint8_t)rawVal, pData);
@@ -452,7 +453,8 @@ void CANTX_EIM_SetSFromFrame_EIM_ServoStatusMux(const uint32_t converted, uint8_
 {
     uint8_t rawVal;
     {
-        const uint32_t convertedSat = (converted > 15U ? 15U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 15U ? 15U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ServoStatusMux((uint8_t)rawVal, pData);
@@ -569,7 +571,8 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_LossOfCommTimeout(const uint32_q converte
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommTimeout((uint8_t)rawVal, pData);
@@ -626,7 +629,8 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Id(const uint32_t converted, uint8_t * co
 {
     uint8_t rawVal;
     {
-        const uint32_t convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 255U ? 255U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_Id((uint8_t)rawVal, pData);
@@ -677,7 +681,8 @@ void CANTX_EIM_SetSFromFrame_EIM_EngineStatusMux(const uint32_t converted, uint8
 {
     uint8_t rawVal;
     {
-        const uint32_t convertedSat = (converted > 15U ? 15U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 15U ? 15U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_EngineStatusMux((uint8_t)rawVal, pData);
@@ -702,7 +707,8 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_VehicleSpeed(const uint32_q converted, uint
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_VehicleSpeed((uint8_t)rawVal, pData);
@@ -793,7 +799,8 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_Rpm(const uint32_q converted, uint8_t * con
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 65535U ? 65535U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 65535U ? 65535U : converted);
         rawVal = (uint16_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_Rpm((uint16_t)rawVal, pData);
@@ -853,7 +860,8 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_MapPressure(const uint32_q converted, uint8
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : (converted < 0U ? 0U : converted));
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapPressure((uint8_t)rawVal, pData);
