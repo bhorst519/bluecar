@@ -1,21 +1,23 @@
+#ifndef TEMPLATE_DATA_HPP
+#define TEMPLATE_DATA_HPP
+
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "cmsis_os.h"
-#include "EIM_canReceiver.hpp"
-#include "rxModule.hpp"
+#include "qualifiedValTypes.hpp"
+#include "util.h"
 
 /***************************************************************************************************
-*                                 M E T H O D  D E F I N I T I O N S                               *
+*                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Template
 {
 
-using namespace CanGen;
-
-void RxNoneModule::Receive(void)
+struct TemplateData_S
 {
-    // Nothing to do
-}
+    uint8_t counter;
+};
 
-} // namespace Eim
+} // namespace Template
+
+#endif // TEMPLATE_DATA_HPP

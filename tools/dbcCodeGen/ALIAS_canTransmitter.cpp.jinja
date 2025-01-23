@@ -129,7 +129,12 @@ void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convT
 {% set convAppend = "F" if signal["convType"].startswith("float") else "U" if signal["convType"].startswith("u") else "" %}
 {% set min = signal["min"]|string + convAppend %}
 {% set max = signal["max"]|string + convAppend %}
+    {% if convAppend == "U" and signal["min"] == 0 %}
+        // min = {{ min }} and converted type is unsigned, so don't need to check
+        const {{ convType }} convertedSat = (converted > {{ max }} ? {{ max }} : converted);
+    {% else %}
         const {{ convType }} convertedSat = (converted > {{ max }} ? {{ max }} : (converted < {{ min }} ? {{ min }} : converted));
+    {% endif %}
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
         rawVal = ({{ signal["convIntType"] }})((convertedSat - {{ offset }}) / {{ scale }});

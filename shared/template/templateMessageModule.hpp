@@ -1,31 +1,38 @@
-#ifndef RX_MODULE_HPP
-#define RX_MODULE_HPP
+#ifndef TEMPLATE_MESSAGE_MODULE_HPP
+#define TEMPLATE_MESSAGE_MODULE_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "moduleBase.hpp"
-#include "util.h"
+#include "templateInterface.hpp"
 
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
 **************************************************************************************************/
-namespace Eim
+namespace Template
 {
 
-class RxNoneModule final : public Shared::RxModuleBase
+class TemplateMessageModule final : public TemplateOutputInterface
 {
+    private:
+        const TemplateData_S& m_dataRef;
+
     public:
-        constexpr RxNoneModule(
+        constexpr TemplateMessageModule(
+                const TemplateData_S& dataRef
             ) :
-                RxModuleBase()
+                TemplateOutputInterface(),
+                m_dataRef(dataRef)
         {}
 
-        NOCOPY_NOMOVE(RxNoneModule);
+        NOCOPY_NOMOVE(TemplateMessageModule);
 
-        virtual void Receive(void) override;
+        virtual uint8_t GetCounter(void) const override
+        {
+            return m_dataRef.counter;
+        }
 };
 
-} // namespace Eim
+} // namespace Template
 
-#endif // RX_MODULE_HPP
+#endif // TEMPLATE_MESSAGE_MODULE_HPP

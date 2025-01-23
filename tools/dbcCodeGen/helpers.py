@@ -102,8 +102,11 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         "offset": float(offset) if anyFloat else offset,
         "min": float(min) if anyFloat else min,
         "max": float(max) if anyFloat else max,
+        # Unsigned integer type to pack into/unpack from raw bytes
         "rawType": GetRawTypeFromBitLength(bitLength),
+        # Integer type representing scaled/offset signal before packing/unpacking
         "convIntType": GetIntTypeFromBitLength(bitLength, signed),
+        # Converted underlying type
         "convType": GetTypeFromSignAndConv(bitLength, signedConvertedValue, scale, offset)
     }
 

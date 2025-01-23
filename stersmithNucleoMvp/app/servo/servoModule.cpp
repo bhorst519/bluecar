@@ -72,14 +72,6 @@ void ServoModule::Run(void)
     }
     else
     {
-        // TODO remove demo
-        static float gPosition = 0.0F;
-        static float gInc = 5.0F;
-        m_positionDegreesToSet = gPosition;
-        gPosition = gPosition + gInc;
-        if      (gPosition >= SERVO_POSITION_MAX) { gPosition = SERVO_POSITION_MAX; gInc *= -1.0F; }
-        else if (gPosition <= SERVO_POSITION_MIN) { gPosition = SERVO_POSITION_MIN; gInc *= -1.0F; }
-
         if (m_lossOfCommPositionDegreesToSet != m_outputData.lossOfCommPositionDegrees)
         {
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_POSITION);
@@ -100,8 +92,21 @@ void ServoModule::Run(void)
 
 void ServoModule::SanitizeInputs(void)
 {
-    const float positionDegreesToSet = m_inputData.GetPositionDegreesToSet();
-    m_positionDegreesToSet = MathUtil::Saturate(positionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+    const float_q positionDegreesToSet = m_inputData.GetPositionDegreesToSet();
+    if (positionDegreesToSet.Valid())
+    {
+        m_positionDegreesToSet = MathUtil::Saturate(positionDegreesToSet.Val(), SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+    }
+    // else
+    // {
+    //     // TODO remove demo
+    //     static float gInc = 5.0F;
+    //     float position = m_positionDegreesToSet;
+    //     position = position + gInc;
+    //     if      (position >= SERVO_POSITION_MAX) { position = SERVO_POSITION_MAX; gInc *= -1.0F; }
+    //     else if (position <= SERVO_POSITION_MIN) { position = SERVO_POSITION_MIN; gInc *= -1.0F; }
+    //     m_positionDegreesToSet = position;
+    // }
 
     const float lossOfCommPositionDegreesToSet = m_inputData.GetLossOfCommPositionDegreesToSet();
     m_lossOfCommPositionDegreesToSet = MathUtil::Saturate(lossOfCommPositionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
@@ -406,7 +411,7 @@ bool ServoModule::SendRequest(const Servo_Request_E request, bool checkRequest)
     {
         // Since the data struct is packed, need to be careful not to use pointers/references
         // due to risk of losing alignment
-        uint16_t dataToSet;
+        uint16_t dataToSet = 0U;
         success = PrepareRequest(request, dataToSet);
         gRequestFrame.frame.data = dataToSet;
     }
@@ -435,7 +440,7 @@ bool ServoModule::SendSpecialRequest(const Servo_Special_Request_E request)
     {
         // Since the data struct is packed, need to be careful not to use pointers/references
         // due to risk of losing alignment
-        uint16_t dataToSet;
+        uint16_t dataToSet = 0U;
         success = PrepareSpecialRequest(request, dataToSet);
         gRequestFrame.frame.data = dataToSet;
     }

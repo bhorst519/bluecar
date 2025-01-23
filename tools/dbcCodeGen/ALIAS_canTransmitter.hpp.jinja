@@ -8,7 +8,7 @@
 namespace CanGen
 {
 
-using namespace QualifiedVal;
+using namespace ::QualifiedVal;
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
