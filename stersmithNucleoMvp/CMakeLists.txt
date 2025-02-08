@@ -47,6 +47,7 @@ add_subdirectory(cmake/stm32cubemx)
 #---------------------------------------------------------------------------------------------------
 set(CANGEN_SCRIPT_DIR               ${CMAKE_SOURCE_DIR}/../tools/dbcCodeGen)
 file(GLOB CANGEN_SCRIPT_SOURCES     "${CANGEN_SCRIPT_DIR}/*.py")
+file(GLOB CANGEN_SCRIPT_TEMPLATES   "${CANGEN_SCRIPT_DIR}/*.jinja")
 set(CANGEN_SCRIPT                   ${CANGEN_SCRIPT_DIR}/dbcCodeGen.py)
 set(DBC_FILE                        ${CMAKE_SOURCE_DIR}/../tools/network/EIM.dbc)
 set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
@@ -59,6 +60,7 @@ add_custom_command(
     COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node EIM
     DEPENDS ${DBC_FILE}
             ${CANGEN_SCRIPT_SOURCES}
+            ${CANGEN_SCRIPT_TEMPLATES}
     VERBATIM
 )
 

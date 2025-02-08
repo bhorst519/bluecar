@@ -6,20 +6,21 @@
 #include "EIM_canReceiverHook.h"
 
 /***************************************************************************************************
-*                                          D E F I N E S                                           *
-***************************************************************************************************/
-#define PWM_CHANNEL (TIM_CHANNEL_1)
-
-/***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
 typedef uint16_t Gpio_Id;
+typedef uint32_t Pwm_Ch;
 
 typedef struct
 {
     Gpio_Id id;
     GPIO_TypeDef * periph;
 } HalWrappers_Gpio_Info_S;
+
+typedef struct
+{
+    Pwm_Ch ch;
+} HalWrappers_Pwm_Info_S;
 
 typedef struct
 {
@@ -49,20 +50,21 @@ static uint32_t gCanFilterBankIdx[MAX_NUM_CAN] = {0U};
 static bool gCanUseFifo1[MAX_NUM_CAN] = {false};
 
 // Static storage for HAL interfaces
-static TIM_OC_InitTypeDef sConfigOC = {0};
+static TIM_OC_InitTypeDef sConfigOC[MAX_NUM_PWM] = {0};
 
 // Peripheral info wrappers for HAL interfaces
 static const HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
-    /* GPIO_LED_1 */        {.id = GPIO_PIN_0,  .periph = GPIOB},
-    /* GPIO_LED_2 */        {.id = GPIO_PIN_7,  .periph = GPIOB},
-    /* GPIO_SERVO_TX_EN */  {.id = GPIO_PIN_13, .periph = GPIOE},
-    /* GPIO_KLINE_TX */     {.id = GPIO_PIN_8,  .periph = GPIOD},
-    /* GPIO_KLINE_RX */     {.id = GPIO_PIN_9,  .periph = GPIOD},
-    /* GPIO_SERVO_TX */     {.id = GPIO_PIN_6,  .periph = GPIOC},
-    /* GPIO_SERVO_RX */     {.id = GPIO_PIN_7,  .periph = GPIOC},
-    /* GPIO_DEBUG_1 */      {.id = GPIO_PIN_9,  .periph = GPIOG},
-    /* GPIO_DEBUG_2 */      {.id = GPIO_PIN_14, .periph = GPIOG},
-    /* GPIO_DEBUG_3 */      {.id = GPIO_PIN_15, .periph = GPIOF},
+    /* GPIO_KLINE_TX */     {.id = GPIO_PIN_9,  .periph = GPIOA},
+    /* GPIO_KLINE_RX */     {.id = GPIO_PIN_10, .periph = GPIOA},
+    /* GPIO_SERVO_TX */     {.id = GPIO_PIN_5,  .periph = GPIOD},
+    /* GPIO_SERVO_RX */     {.id = GPIO_PIN_6,  .periph = GPIOD},
+};
+
+static const HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
+    /* PWM_LED_1 */         {.ch = TIM_CHANNEL_3},
+    /* PWM_LED_2R */        {.ch = TIM_CHANNEL_1},
+    /* PWM_LED_2G */        {.ch = TIM_CHANNEL_2},
+    /* PWM_LED_2B */        {.ch = TIM_CHANNEL_4},
 };
 
 static const HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
@@ -117,11 +119,14 @@ void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg)
     pHalWrappersInit = pHalWrappersInitArg;
 
     // PWM - start, disabled
-    sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    sConfigOC.Pulse = 0U;
-    (void)HAL_TIM_PWM_Start(pHalWrappersInit->pPwmTim, PWM_CHANNEL);
+    for (uint8_t i = 0U; i < (uint8_t)MAX_NUM_PWM; ++i)
+    {
+        sConfigOC[i].OCMode = TIM_OCMODE_PWM1;
+        sConfigOC[i].OCPolarity = TIM_OCPOLARITY_HIGH;
+        sConfigOC[i].OCFastMode = TIM_OCFAST_DISABLE;
+        sConfigOC[i].Pulse = 0U;
+        (void)HAL_TIM_PWM_Start(pHalWrappersInit->pPwmTim, gPwmInfo[i].ch);
+    }
     (void)HAL_TIM_Base_Start(pHalWrappersInit->pUsTim);
 }
 
@@ -136,13 +141,13 @@ void HalWrappersGpioToggle(const HalWrappers_Gpio_E gpio)
     HAL_GPIO_TogglePin(gGpioInfo[gpio].periph, gGpioInfo[gpio].id);
 }
 
-void HalWrappersSetPwm(const float dutyCycle)
+void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle)
 {
-    // Timer is configured to reload at 56000 counts.
-    // For a 84MHz clock, this sets a 1.5kHz frequency
-    uint16_t pulse = (uint16_t)(dutyCycle * 56000.0F);
-    sConfigOC.Pulse = pulse;
-    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC, PWM_CHANNEL);
+    // Timer is configured to reload at 8000 counts.
+    // For a 16MHz clock, this sets a 2.0kHz frequency
+    uint16_t pulse = (uint16_t)(dutyCycle * 8000.0F);
+    sConfigOC[pwm].Pulse = pulse;
+    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC[pwm], gPwmInfo[pwm].ch);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -193,7 +198,6 @@ void HalWrappersCanStart(const HalWrappers_Can_E can)
 
 void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, const uint32_t dlc, const uint8_t * const pData)
 {
-    HalWrappersGpioToggle(GPIO_DEBUG_3);
     CAN_TxHeaderTypeDef txHeader = {0};
     txHeader.IDE = CAN_ID_STD;
     txHeader.RTR = CAN_RTR_DATA;
@@ -201,7 +205,6 @@ void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, con
     txHeader.DLC = dlc;
     uint32_t txMailboxStorage;
     (void)HAL_CAN_AddTxMessage(pHalWrappersInit->pCan[can], &txHeader, pData, &txMailboxStorage);
-    HalWrappersGpioToggle(GPIO_DEBUG_3);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -320,20 +323,32 @@ uint32_t HalWrappersGetTimerUs(void)
 //--------------------------------------------------------------------------------------------------
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    HalWrappersGpioToggle(GPIO_DEBUG_1);
     CAN_RxHeaderTypeDef rxHeader;
     uint8_t data[8U];
     (void)HAL_CAN_GetRxMessage(hcan, 0U, &rxHeader, &data[0U]);
-    (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
-    HalWrappersGpioToggle(GPIO_DEBUG_1);
+
+    if (hcan == pHalWrappersInit->pCan[CAN_1])
+    {
+        (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+    }
+    else
+    {
+        // Invalid pointer
+    }
 }
 
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    HalWrappersGpioToggle(GPIO_DEBUG_1);
     CAN_RxHeaderTypeDef rxHeader;
     uint8_t data[8U];
-    (void)HAL_CAN_GetRxMessage(hcan, 1U, &rxHeader, &data[0U]);
-    (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
-    HalWrappersGpioToggle(GPIO_DEBUG_1);
+    (void)HAL_CAN_GetRxMessage(hcan, 0U, &rxHeader, &data[0U]);
+
+    if (hcan == pHalWrappersInit->pCan[CAN_1])
+    {
+        (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+    }
+    else
+    {
+        // Invalid pointer
+    }
 }

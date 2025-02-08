@@ -145,6 +145,11 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+#define INCLUDE_xTaskGetIdleTaskHandle               1
+#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H    1
+
+#define configNUM_THREAD_LOCAL_STORAGE_POINTERS      1
+#define THREAD_LOCAL_STORAGE_PROFILER_IDX            0U
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

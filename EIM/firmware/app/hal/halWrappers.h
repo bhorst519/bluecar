@@ -35,22 +35,26 @@ extern "C" {
 ***************************************************************************************************/
 typedef enum
 {
-    GPIO_LED_1,
-    GPIO_LED_2,
-    GPIO_SERVO_TX_EN,
     GPIO_KLINE_TX,
     GPIO_KLINE_RX,
     GPIO_SERVO_TX,
     GPIO_SERVO_RX,
-    GPIO_DEBUG_1,
-    GPIO_DEBUG_2,
-    GPIO_DEBUG_3,
     MAX_NUM_GPIO
 } HalWrappers_Gpio_E;
 
 typedef enum
 {
+    PWM_LED_1,
+    PWM_LED_2R,
+    PWM_LED_2G,
+    PWM_LED_2B,
+    MAX_NUM_PWM
+} HalWrappers_Pwm_E;
+
+typedef enum
+{
     CAN_1,
+    CAN_2,
     MAX_NUM_CAN
 } HalWrappers_Can_E;
 
@@ -77,7 +81,7 @@ void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg);
 // GPIO
 void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool level);
 void HalWrappersGpioToggle(const HalWrappers_Gpio_E gpio);
-void HalWrappersSetPwm(const float dutyCycle);
+void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle);
 
 // CAN
 void HalWrappersCanRegisterRxFilter(const HalWrappers_Can_E can, const uint32_t mid);

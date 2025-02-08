@@ -22,6 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "profiler.h"
+#include "rtos.h"
 
 /* USER CODE END Includes */
 
@@ -71,6 +73,18 @@ osThreadId Task1HzHandle;
 uint32_t Task1HzBuffer[ 256 ];
 osStaticThreadDef_t Task1HzControlBlock;
 /* USER CODE BEGIN PV */
+
+static HalWrappers_Init_S halWrappersInitData =
+{
+  .pSerial = {&huart1, &huart2},
+  .pPwmTim = &htim4,
+  .pUsTim = &htim5,
+  .pCan = {&hcan1, &hcan2},
+};
+
+static Profiler_Data_S g1kHzProfilerData;
+static Profiler_Data_S g10HzProfilerData;
+static Profiler_Data_S g1HzProfilerData;
 
 /* USER CODE END PV */
 
@@ -143,7 +157,7 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-
+  RtosInit(&halWrappersInitData);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -181,6 +195,17 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
+  vTaskSetThreadLocalStoragePointer(Task1kHzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1kHzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1KHZ, (void *)Task1kHzHandle);
+
+  g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
+  vTaskSetThreadLocalStoragePointer(Task10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_10HZ, (void *)Task10HzHandle);
+
+  g1HzProfilerData.configWindowNumPeriods = 2U; // 1Hz * 2
+  vTaskSetThreadLocalStoragePointer(Task1HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1HZ, (void *)Task1HzHandle);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -464,6 +489,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -473,9 +499,18 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 0;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 65535;
+  htim4.Init.Period = 8000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
@@ -836,11 +871,8 @@ void StartDefaultTask(void const * argument)
 void StartTask1kHz(void const * argument)
 {
   /* USER CODE BEGIN StartTask1kHz */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  (void)argument;
+  RtosRunTask1kHz();
   /* USER CODE END StartTask1kHz */
 }
 
@@ -854,11 +886,8 @@ void StartTask1kHz(void const * argument)
 void StartTask10Hz(void const * argument)
 {
   /* USER CODE BEGIN StartTask10Hz */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  (void)argument;
+  RtosRunTask10Hz();
   /* USER CODE END StartTask10Hz */
 }
 
@@ -872,11 +901,8 @@ void StartTask10Hz(void const * argument)
 void StartTask1Hz(void const * argument)
 {
   /* USER CODE BEGIN StartTask1Hz */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  (void)argument;
+  RtosRunTask1Hz();
   /* USER CODE END StartTask1Hz */
 }
 

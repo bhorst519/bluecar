@@ -13,11 +13,11 @@
             // Or fixed file path: "${workspaceFolder}/path/to/filename.elf"
             "request": "launch",
             "servertype": "stlink",
-            "device": "STM32F439ZITx", //MCU used
+            "device": "stm32F429ZITx", //MCU used
             "interface": "swd",
             "serialNumber": "",        //Set ST-Link ID if you use multiple at the same time
             "runToEntryPoint": "main",
-            "svdFile": "${config:STM32VSCodeExtension.cubeCLT.path}/STMicroelectronics_CMSIS_SVD/STM32F439.svd",
+            "svdFile": "${config:STM32VSCodeExtension.cubeCLT.path}/STMicroelectronics_CMSIS_SVD/stm32F429.svd",
             "v1": false,               //Change it depending on ST Link version
             "serverpath": "${config:STM32VSCodeExtension.cubeCLT.path}/STLink-gdb-server/bin/ST-LINK_gdbserver",
             "stm32cubeprogrammer":"${config:STM32VSCodeExtension.cubeCLT.path}/STM32CubeProgrammer/bin",
@@ -40,11 +40,11 @@
             // Or fixed file path: "${workspaceFolder}/path/to/filename.elf"
             "request": "attach",
             "servertype": "stlink",
-            "device": "STM32F439ZITx", //MCU used
+            "device": "stm32F429ZITx", //MCU used
             "interface": "swd",
             "serialNumber": "",        //Set ST-Link ID if you use multiple at the same time
             "runToEntryPoint": "main",
-            "svdFile": "${config:STM32VSCodeExtension.cubeCLT.path}/STMicroelectronics_CMSIS_SVD/STM32F439.svd",
+            "svdFile": "${config:STM32VSCodeExtension.cubeCLT.path}/STMicroelectronics_CMSIS_SVD/stm32F429.svd",
             "v1": false,               //Change it depending on ST Link version
             "serverpath": "${config:STM32VSCodeExtension.cubeCLT.path}/STLink-gdb-server/bin/ST-LINK_gdbserver",
             "stm32cubeprogrammer":"${config:STM32VSCodeExtension.cubeCLT.path}/STM32CubeProgrammer/bin",
