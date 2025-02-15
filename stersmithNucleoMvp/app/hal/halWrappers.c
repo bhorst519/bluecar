@@ -76,9 +76,8 @@ static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL] = {0};
 ***************************************************************************************************/
 void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
 {
-    (void)huart;
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_KLINE], HAL_UART_TX_COMPLETE_CB_ID);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_KLINE], HAL_UART_RX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
 
     // Task notify
     if (NULL != gSerialTaskToNotify[SERIAL_KLINE])
@@ -93,9 +92,8 @@ void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
 
 void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
 {
-    (void)huart;
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_SERVO], HAL_UART_TX_COMPLETE_CB_ID);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[SERIAL_SERVO], HAL_UART_RX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
 
     // Task notify
     if (NULL != gSerialTaskToNotify[SERIAL_SERVO])
