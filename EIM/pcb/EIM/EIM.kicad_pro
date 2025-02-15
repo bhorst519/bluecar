@@ -700,7 +700,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "EIM.step",
       "svg": "",
       "vrml": ""
     },
