@@ -140,7 +140,8 @@ void HalWrappersSetPwm(const float dutyCycle)
 {
     // Timer is configured to reload at 56000 counts.
     // For a 84MHz clock, this sets a 1.5kHz frequency
-    uint16_t pulse = (uint16_t)(dutyCycle * 56000.0F);
+    const float dutyCycleToUse = SATURATE(dutyCycle, 0.0F, 1.0F);
+    uint16_t pulse = (uint16_t)(dutyCycleToUse * 56000.0F);
     sConfigOC.Pulse = pulse;
     (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC, PWM_CHANNEL);
 }
