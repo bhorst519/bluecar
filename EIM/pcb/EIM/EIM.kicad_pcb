@@ -16044,7 +16044,7 @@
 		(descr "Fuse SMD 2920 (7451 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size from: http://www.megastar.com/products/fusetronic/polyswitch/PDF/smd2920.pdf), generated with kicad-footprint-generator")
 		(tags "fuse")
 		(property "Reference" "F2"
-			(at -6.187184 0.53033 -45)
+			(at -6.187184 0.53033 135)
 			(layer "F.SilkS")
 			(uuid "a8570770-0578-4675-a663-736bc04216b3")
 			(effects
@@ -16238,7 +16238,7 @@
 			(pintype "passive")
 			(uuid "73c8bf77-a871-4178-ab37-2266a8e9ee8b")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -25553,7 +25553,7 @@
 			(pintype "power_in")
 			(uuid "a9e309eb-b517-4d4e-ba82-8d42f71b7144")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Oscillator.3dshapes/ASE-8.000MHZ-E-T.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -36861,7 +36861,7 @@
 			(pintype "power_in")
 			(uuid "f8231e47-9345-44d6-80d4-95556a9db35e")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Oscillator.3dshapes/ASE-8.000MHZ-E-T.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -37385,9 +37385,9 @@
 			(pintype "passive")
 			(uuid "a53cbd69-90b0-40d6-830a-9bd4d895ab9d")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Bourns-SRN8040_8x8.15mm.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Bourns-SRN8040_8x8.15mm.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 0 0 3.8)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -43877,7 +43877,7 @@
 			(pintype "passive")
 			(uuid "b0d23fa0-d843-4d78-af6d-215bb7fd14a3")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -57773,7 +57773,7 @@
 			(pintype "passive")
 			(uuid "d6324e88-9eef-4bbc-a94e-010cccd464e6")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -61142,7 +61142,7 @@
 			(pintype "passive")
 			(uuid "a6251d64-9aaa-425c-81ac-9d666bb61468")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/LED_SMD.3dshapes/LED_CREE_CLV1L-FKB-CJ1N1E1BB7B3B3.step"
 			(offset
 				(xyz 0 0 0)
 			)
