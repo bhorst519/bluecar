@@ -3,6 +3,7 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "EIM_canReceiver.hpp"
+#include "halWrappers.h"
 #include "rxModule.hpp"
 
 /***************************************************************************************************
@@ -21,6 +22,9 @@ void RxNoneModule::Receive(void)
 void Rx10HzModule::Receive(void)
 {
     m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
+
+    const uint32_t relayEn = CANRX_EIM_GetS_TESTER_Relay_Enable();
+    HalWrappersGpioSet(GPIO_MAIN_RELAY_EN, static_cast<bool>(relayEn));
 }
 
 } // namespace Eim

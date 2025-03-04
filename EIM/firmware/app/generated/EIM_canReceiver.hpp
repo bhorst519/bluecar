@@ -19,6 +19,12 @@ uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t muxIdx);
 //--------------------------------------------------------------------------------------------------
 // Signal receive unpack functions
 //--------------------------------------------------------------------------------------------------
+// TESTER_Relay_Enable
+uint8_t CANRX_EIM_GetSRawFromFrame_TESTER_Relay_Enable(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_TESTER_Relay_Enable(void);
+uint32_t CANRX_EIM_GetSFromFrame_TESTER_Relay_Enable(const uint8_t * const pData);
+uint32_t CANRX_EIM_GetS_TESTER_Relay_Enable(void);
+
 // TESTER_Servo_Position
 uint16_t CANRX_EIM_GetSRawFromFrame_TESTER_Servo_Position(const uint8_t * const pData);
 uint16_t CANRX_EIM_GetSRaw_TESTER_Servo_Position(void);
