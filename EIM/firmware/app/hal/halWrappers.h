@@ -35,10 +35,37 @@ extern "C" {
 ***************************************************************************************************/
 typedef enum
 {
+    // Outputs
+    GPIO_MAIN_RELAY_EN,         // To power engine controller
+    GPIO_HEADLIGHT_RELAY_EN,
+    GPIO_ENG_ON_EN,             // To enable engine run/crank
+    GPIO_ENG_START_EN,          // To crank engine
+    GPIO_BRAKE_LIGHT_EN,
+    GPIO_TURN_R_EN,
+    GPIO_TURN_L_EN,
+    GPIO_HIGH_BEAM_EN,
+    GPIO_HORN_EN,
+    GPIO_KLINE_EN,
     GPIO_KLINE_TX,
     GPIO_KLINE_RX,
+    GPIO_SERVO_COMM_DIR,
     GPIO_SERVO_TX,
     GPIO_SERVO_RX,
+    // Inputs
+    GPIO_TACH,                  // Needs PWM-in/timer to determine RPM
+    GPIO_GEAR_N,
+    GPIO_GEAR_1,
+    GPIO_GEAR_2,
+    GPIO_GEAR_3,
+    GPIO_GEAR_4,
+    GPIO_GEAR_5,
+    GPIO_GEAR_6,
+    GPIO_TURN_R,
+    GPIO_TURN_L,
+    GPIO_LOW_BEAM,
+    GPIO_HIGH_BEAM,
+    GPIO_FAULT_IND,
+    GPIO_OIL_P_LOW,
     MAX_NUM_GPIO
 } HalWrappers_Gpio_E;
 
@@ -50,6 +77,17 @@ typedef enum
     PWM_LED_2B,
     MAX_NUM_PWM
 } HalWrappers_Pwm_E;
+
+typedef enum
+{
+    ANALOG_12V,
+    ANALOG_SERVO_12V,
+    ANALOG_ENG_12V,
+    ANALOG_ENG_TEMP,
+    ANALOG_FUEL_LEVEL,
+    ANALOG_FUEL_LOW,
+    MAX_NUM_ANALOG
+} HalWrappers_Analog_E; // TODO
 
 typedef enum
 {

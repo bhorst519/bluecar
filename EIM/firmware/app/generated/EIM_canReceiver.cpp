@@ -27,6 +27,33 @@ uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t msgIdx)
 //--------------------------------------------------------------------------------------------------
 // Signal receive unpack functions
 //--------------------------------------------------------------------------------------------------
+// TESTER_Relay_Enable
+uint8_t CANRX_EIM_GetSRawFromFrame_TESTER_Relay_Enable(const uint8_t * const pData)
+{
+    const uint8_t rawVal =
+        (((pData[1]) & 0x40) >> 6);
+    return rawVal;
+}
+uint8_t CANRX_EIM_GetSRaw_TESTER_Relay_Enable(void)
+{
+    const uint8_t * const pData = &gTESTER_request_RX_ARR[0U][0U];
+    return CANRX_EIM_GetSRawFromFrame_TESTER_Relay_Enable(pData);
+}
+uint32_t CANRX_EIM_GetSFromFrame_TESTER_Relay_Enable(const uint8_t * const pData)
+{
+    uint8_t raw = (uint8_t)CANRX_EIM_GetSRawFromFrame_TESTER_Relay_Enable(pData);
+    uint32_t converted;
+    {
+        converted = ((( uint32_t )raw) * 1U) + 0U;
+    }
+    return converted;
+}
+uint32_t CANRX_EIM_GetS_TESTER_Relay_Enable(void)
+{
+    const uint8_t * const pData = &gTESTER_request_RX_ARR[0U][0U];
+    return CANRX_EIM_GetSFromFrame_TESTER_Relay_Enable(pData);
+}
+
 // TESTER_Servo_Position
 uint16_t CANRX_EIM_GetSRawFromFrame_TESTER_Servo_Position(const uint8_t * const pData)
 {

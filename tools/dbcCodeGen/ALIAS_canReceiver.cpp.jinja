@@ -128,7 +128,9 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
         converted = ((( {{ convType }} )raw) * {{ scale }}) + {{ offset }};
+{% if checkValidity %}
         converted = SignalStatus_E::VALID;
+{% endif %}
     }
     return converted;
 }

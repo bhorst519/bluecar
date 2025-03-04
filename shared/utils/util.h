@@ -69,6 +69,7 @@ extern "C" {
 
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
+#define SATURATE(x, y, z) ((x) < (y) ? (y) : (x) > (z) ? (z) : (x))
 
 #ifdef __cplusplus
 }

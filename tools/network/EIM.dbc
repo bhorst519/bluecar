@@ -40,6 +40,7 @@ VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
 
 
 BO_ 1280 TESTER_request: 2 TESTER
+ SG_ TESTER_Relay_Enable : 14|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM

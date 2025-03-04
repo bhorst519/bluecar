@@ -54,10 +54,38 @@ static TIM_OC_InitTypeDef sConfigOC[MAX_NUM_PWM] = {0};
 
 // Peripheral info wrappers for HAL interfaces
 static const HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
-    /* GPIO_KLINE_TX */     {.id = GPIO_PIN_9,  .periph = GPIOA},
-    /* GPIO_KLINE_RX */     {.id = GPIO_PIN_10, .periph = GPIOA},
-    /* GPIO_SERVO_TX */     {.id = GPIO_PIN_5,  .periph = GPIOD},
-    /* GPIO_SERVO_RX */     {.id = GPIO_PIN_6,  .periph = GPIOD},
+    // Outputs
+    /* GPIO_MAIN_RELAY_EN */        {.id = GPIO_PIN_3,  .periph = GPIOF},
+    /* GPIO_HEADLIGHT_RELAY_EN */   {.id = GPIO_PIN_13, .periph = GPIOE},
+    /* GPIO_ENG_ON_EN */            {.id = GPIO_PIN_4,  .periph = GPIOF},
+    /* GPIO_ENG_START_EN */         {.id = GPIO_PIN_5,  .periph = GPIOF},
+    /* GPIO_BRAKE_LIGHT_EN */       {.id = GPIO_PIN_6,  .periph = GPIOF},
+    /* GPIO_TURN_R_EN */            {.id = GPIO_PIN_9,  .periph = GPIOF},
+    /* GPIO_TURN_L_EN */            {.id = GPIO_PIN_8,  .periph = GPIOF},
+    /* GPIO_HIGH_BEAM_EN */         {.id = GPIO_PIN_7,  .periph = GPIOF},
+    /* GPIO_HORN_EN */              {.id = GPIO_PIN_10, .periph = GPIOF},
+    /* GPIO_KLINE_EN */             {.id = GPIO_PIN_2,  .periph = GPIOF},
+    /* GPIO_KLINE_TX */             {.id = GPIO_PIN_9,  .periph = GPIOA},
+    /* GPIO_KLINE_RX */             {.id = GPIO_PIN_10, .periph = GPIOA},
+    /* GPIO_SERVO_COMM_DIR */       {.id = GPIO_PIN_4,  .periph = GPIOD},
+    /* GPIO_SERVO_TX */             {.id = GPIO_PIN_5,  .periph = GPIOD},
+    /* GPIO_SERVO_RX */             {.id = GPIO_PIN_6,  .periph = GPIOD},
+
+    // Inputs
+    /* GPIO_TACH */                 {.id = GPIO_PIN_12, .periph = GPIOF},
+    /* GPIO_GEAR_N */               {.id = GPIO_PIN_13, .periph = GPIOF},
+    /* GPIO_GEAR_1 */               {.id = GPIO_PIN_12, .periph = GPIOE},
+    /* GPIO_GEAR_2 */               {.id = GPIO_PIN_11, .periph = GPIOE},
+    /* GPIO_GEAR_3 */               {.id = GPIO_PIN_10, .periph = GPIOE},
+    /* GPIO_GEAR_4 */               {.id = GPIO_PIN_9,  .periph = GPIOE},
+    /* GPIO_GEAR_5 */               {.id = GPIO_PIN_8,  .periph = GPIOE},
+    /* GPIO_GEAR_6 */               {.id = GPIO_PIN_7,  .periph = GPIOE},
+    /* GPIO_TURN_R  */              {.id = GPIO_PIN_1,  .periph = GPIOG},
+    /* GPIO_TURN_L  */              {.id = GPIO_PIN_0,  .periph = GPIOG},
+    /* GPIO_LOW_BEAM */             {.id = GPIO_PIN_14, .periph = GPIOF},
+    /* GPIO_HIGH_BEAM */            {.id = GPIO_PIN_15, .periph = GPIOF},
+    /* GPIO_FAULT_IND */            {.id = GPIO_PIN_5,  .periph = GPIOC},
+    /* GPIO_OIL_P_LOW */            {.id = GPIO_PIN_11, .periph = GPIOF},
 };
 
 static const HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
@@ -143,9 +171,10 @@ void HalWrappersGpioToggle(const HalWrappers_Gpio_E gpio)
 
 void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle)
 {
-    // Timer is configured to reload at 8000 counts.
-    // For a 16MHz clock, this sets a 2.0kHz frequency
-    uint16_t pulse = (uint16_t)(dutyCycle * 8000.0F);
+    // Timer is configured to reload at 45000 counts.
+    // For a 90MHz clock, this sets a 2.0kHz frequency
+    const float dutyCycleToUse = SATURATE(dutyCycle, 0.0F, 1.0F);
+    uint16_t pulse = (uint16_t)(dutyCycleToUse * 45000.0F);
     sConfigOC[pwm].Pulse = pulse;
     (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC[pwm], gPwmInfo[pwm].ch);
 }
