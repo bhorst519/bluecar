@@ -74,16 +74,16 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 set(TARGET_SOURCES
     ${TARGET_SOURCES_CANGEN}
-    # app/can/canModule.cpp
-    # app/dataChannel/dataChannel.cpp
+    app/can/canModule.cpp
+    app/dataChannel/dataChannel.cpp
     app/hal/halWrappers.c
-    # app/kline/klineModule.cpp
+    app/kline/klineModule.cpp
     app/rtos/rtos.cpp
-    # app/rx/rxModule.cpp
-    # app/servo/servoModule.cpp
-    # app/tx/txModule.cpp
+    app/rx/rxModule.cpp
+    app/servo/servoModule.cpp
+    app/tx/txModule.cpp
     ../../shared/profiler/profiler.c
-    # ../../shared/taskBase/taskBase.cpp
+    ../../shared/taskBase/taskBase.cpp
 )
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
@@ -100,19 +100,19 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     ${TARGET_DIR_CANGEN}
     app/app
-    # app/can
-    # app/dataChannel
+    app/can
+    app/dataChannel
     app/hal
-    # app/kline
+    app/kline
     app/rtos
-    # app/rx
-    # app/servo
-    # app/tx
-    # ../../shared/dataChannel
+    app/rx
+    app/servo
+    app/tx
+    ../../shared/dataChannel
     ../../shared/FreeRTOS
-    # ../../shared/moduleBase
+    ../../shared/moduleBase
     ../../shared/profiler
-    # ../../shared/taskBase
+    ../../shared/taskBase
     ../../shared/utils
 )
 

@@ -1,7 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-// #include "app.hpp"
+#include "app.hpp"
 #include "cmsis_os.h"
 #include "halWrappers.h"
 #include "profiler.h"
@@ -18,7 +18,7 @@
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-// static Eim::App m_app {};
+static Eim::App m_app {};
 
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
@@ -26,7 +26,7 @@
 void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
 {
     HalWrappersInit(pHalWrappersInitArg);
-    // m_app.Init();
+    m_app.Init();
 
     HalWrappersSetPwm(PWM_LED_2R, 1.0F);
     HalWrappersSetPwm(PWM_LED_2G, 1.0F);
@@ -45,7 +45,7 @@ void RtosRunTask1kHz(void)
         (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        // m_app.RunTask1kHz();
+        m_app.RunTask1kHz();
 
         HalWrappersSetPwm(PWM_LED_1, pulse);
         pulse += pulseInc;
@@ -69,7 +69,7 @@ void RtosRunTask10Hz(void)
         (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        // m_app.RunTask10Hz();
+        m_app.RunTask10Hz();
 
         HalWrappersSetPwm(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;
@@ -89,7 +89,7 @@ void RtosRunTask1Hz(void)
         (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        // m_app.RunTask1Hz();
+        m_app.RunTask1Hz();
 
         HalWrappersSetPwm(PWM_LED_2R, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;
