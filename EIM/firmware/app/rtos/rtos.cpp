@@ -3,7 +3,7 @@
 ***************************************************************************************************/
 #include "app.hpp"
 #include "cmsis_os.h"
-#include "halWrappers.h"
+#include "halWrappers.hpp"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -23,14 +23,14 @@ static Eim::App m_app {};
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
 ***************************************************************************************************/
-void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
+void RtosInit(HalWrappers_Config_S * const pHalWrappersConfig)
 {
-    HalWrappersInit(pHalWrappersInitArg);
+    Eim::HalWrappersInit(pHalWrappersConfig);
     m_app.Init();
 
-    HalWrappersSetPwm(PWM_LED_2R, 1.0F);
-    HalWrappersSetPwm(PWM_LED_2G, 1.0F);
-    HalWrappersSetPwm(PWM_LED_2B, 1.0F);
+    Eim::HalWrappersSetPwm(PWM_LED_2R, 1.0F);
+    Eim::HalWrappersSetPwm(PWM_LED_2G, 1.0F);
+    Eim::HalWrappersSetPwm(PWM_LED_2B, 1.0F);
 }
 
 void RtosRunTask1kHz(void)
@@ -47,7 +47,7 @@ void RtosRunTask1kHz(void)
 
         m_app.RunTask1kHz();
 
-        HalWrappersSetPwm(PWM_LED_1, pulse);
+        Eim::HalWrappersSetPwm(PWM_LED_1, pulse);
         pulse += pulseInc;
         if ((pulse > PWM_ON_1) || (pulse < PWM_OFF_1))
         {
@@ -71,7 +71,7 @@ void RtosRunTask10Hz(void)
 
         m_app.RunTask10Hz();
 
-        HalWrappersSetPwm(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
+        Eim::HalWrappersSetPwm(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;
 
         ProfilerScheduledTaskCheckOut();
@@ -91,7 +91,7 @@ void RtosRunTask1Hz(void)
 
         m_app.RunTask1Hz();
 
-        HalWrappersSetPwm(PWM_LED_2R, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
+        Eim::HalWrappersSetPwm(PWM_LED_2R, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;
 
         ProfilerUpdateLoad();

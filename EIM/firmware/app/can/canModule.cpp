@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "canModule.hpp"
-#include "halWrappers.h"
+#include "halWrappers.hpp"
 #include "EIM_canReceiver.hpp"
 #include "EIM_canTransmitter.hpp"
 #include "EIM_messageInfo.hpp"
@@ -10,15 +10,15 @@
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
+namespace Eim
+{
+
 UTIL_ASSERT(CANRX_EIM_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
     "CAN bus with too many messages for filter config");
 
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
-namespace Eim
-{
-
 using namespace CanGen;
 
 void CanModule::Init(void)

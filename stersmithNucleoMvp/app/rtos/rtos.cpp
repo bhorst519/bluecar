@@ -15,9 +15,9 @@ static Eim::App m_app {};
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
 ***************************************************************************************************/
-void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg)
+void RtosInit(HalWrappers_Config_S * const pHalWrappersConfig)
 {
-    HalWrappersInit(pHalWrappersInitArg);
+    HalWrappersInit(pHalWrappersConfig);
     m_app.Init();
 }
 

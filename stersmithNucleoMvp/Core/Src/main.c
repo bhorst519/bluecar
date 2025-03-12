@@ -65,7 +65,7 @@ uint32_t task1kHzBuffer[ 256 ];
 osStaticThreadDef_t task1kHzControlBlock;
 /* USER CODE BEGIN PV */
 
-static HalWrappers_Init_S halWrappersInitData =
+static HalWrappers_Config_S halWrappersConfig =
 {
   .pSerial = {&huart3, &huart6},
   .pPwmTim = &htim3,
@@ -136,7 +136,7 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  RtosInit(&halWrappersInitData);
+  RtosInit(&halWrappersConfig);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

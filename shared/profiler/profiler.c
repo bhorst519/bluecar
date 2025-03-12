@@ -2,7 +2,6 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.h"
 #include "profiler.h"
 
 #define FREERTOS_TASK_ADDITIONS_AS_HEADER (1)
@@ -92,12 +91,12 @@ static void ProfilerCollectPeriodStats(Profiler_Data_S * const pData, const uint
 //--------------------------------------------------------------------------------------------------
 void configureTimerForRunTimeStats(void)
 {
-    HalWrappersClearTimerUs();
+    ProfilerSpecificClearTimerUs();
 }
 
 unsigned long getRunTimeCounterValue(void)
 {
-    return HalWrappersGetTimerUs();
+    return ProfilerSpecificGetTimerUs();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,7 +125,7 @@ void ProfilerScheduledTaskCheckIn(void)
     if (NULL != tlsPointer)
     {
         Profiler_Data_S * const pData = (Profiler_Data_S * const)tlsPointer;
-        pData->checkInTime = HalWrappersGetTimerUs();
+        pData->checkInTime = ProfilerSpecificGetTimerUs();
     }
 }
 
@@ -143,7 +142,7 @@ void ProfilerScheduledTaskCheckOut(void)
     {
         Profiler_Data_S * const pData = (Profiler_Data_S * const)tlsPointer;
         taskENTER_CRITICAL();
-        const uint32_t period = HalWrappersGetTimerUs() - pData->checkInTime;
+        const uint32_t period = ProfilerSpecificGetTimerUs() - pData->checkInTime;
         ProfilerCollectPeriodStats(pData, period);
         taskEXIT_CRITICAL();
     }
@@ -155,7 +154,7 @@ void ProfilerCheckIn(const Profiler_E profiler)
 
     if (NULL != pData)
     {
-        pData->checkInTime = HalWrappersGetTimerUs();
+        pData->checkInTime = ProfilerSpecificGetTimerUs();
     }
 }
 
@@ -166,7 +165,7 @@ void ProfilerCheckOut(const Profiler_E profiler)
     if (NULL != pData)
     {
         taskENTER_CRITICAL();
-        const uint32_t period = HalWrappersGetTimerUs() - pData->checkInTime;
+        const uint32_t period = ProfilerSpecificGetTimerUs() - pData->checkInTime;
         ProfilerCollectPeriodStats(pData, period);
         taskEXIT_CRITICAL();
     }
@@ -179,7 +178,7 @@ void ProfilerUpdateLoad(void)
 {
     // Take a snapshot of CPU counts
     taskENTER_CRITICAL();
-    const uint32_t cpuTicksNow = HalWrappersGetTimerUs();
+    const uint32_t cpuTicksNow = ProfilerSpecificGetTimerUs();
     const uint32_t idleTicksNow = ulTaskGetIdleRunTimeCounter();
 
     for (size_t i = 0U; i < (size_t)PROFILER_MAX_NUM; ++i)

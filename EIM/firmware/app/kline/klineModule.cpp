@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.h"
+#include "halWrappers.hpp"
 #include "klineCommTypes.hpp"
 #include "klineModule.hpp"
 #include "string.h"

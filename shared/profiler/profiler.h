@@ -54,6 +54,10 @@ uint32_t ProfilerGetAvgPeriodUs(const Profiler_E profiler);
 uint32_t ProfilerGetMinPeriodUs(const Profiler_E profiler);
 uint32_t ProfilerGetMaxPeriodUs(const Profiler_E profiler);
 
+// To be implemented by component
+void ProfilerSpecificClearTimerUs(void);
+uint32_t ProfilerSpecificGetTimerUs(void);
+
 #ifdef __cplusplus
 }
 #endif

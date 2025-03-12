@@ -67,12 +67,12 @@ typedef struct
     TIM_HandleTypeDef * pPwmTim;
     TIM_HandleTypeDef * pUsTim;
     CAN_HandleTypeDef * pCan[MAX_NUM_CAN];
-} HalWrappers_Init_S;
+} HalWrappers_Config_S;
 
 /**************************************************************************************************
 *                     P U B L I C   F U N C T I O N   D E C L A R A T I O N S                     *
 **************************************************************************************************/
-void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg);
+void HalWrappersInit(HalWrappers_Config_S * const pHalWrappersConfigArg);
 
 // GPIO
 void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool level);

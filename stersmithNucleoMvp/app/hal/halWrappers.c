@@ -43,7 +43,7 @@ void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-static HalWrappers_Init_S * pHalWrappersInit;
+static HalWrappers_Config_S * pHalWrappersConfig;
 static HalWrappers_Can_PendingRxFilter_S gPendingRxFilter[MAX_NUM_CAN] = {0};
 static uint32_t gCanFilterBankIdx[MAX_NUM_CAN] = {0U};
 static bool gCanUseFifo1[MAX_NUM_CAN] = {false};
@@ -112,17 +112,17 @@ void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
 //--------------------------------------------------------------------------------------------------
 // GPIO
 //--------------------------------------------------------------------------------------------------
-void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg)
+void HalWrappersInit(HalWrappers_Config_S * const pHalWrappersConfigArg)
 {
-    pHalWrappersInit = pHalWrappersInitArg;
+    pHalWrappersConfig = pHalWrappersConfigArg;
 
     // PWM - start, disabled
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     sConfigOC.Pulse = 0U;
-    (void)HAL_TIM_PWM_Start(pHalWrappersInit->pPwmTim, PWM_CHANNEL);
-    (void)HAL_TIM_Base_Start(pHalWrappersInit->pUsTim);
+    (void)HAL_TIM_PWM_Start(pHalWrappersConfig->pPwmTim, PWM_CHANNEL);
+    (void)HAL_TIM_Base_Start(pHalWrappersConfig->pUsTim);
 }
 
 void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool set)
@@ -143,7 +143,7 @@ void HalWrappersSetPwm(const float dutyCycle)
     const float dutyCycleToUse = SATURATE(dutyCycle, 0.0F, 1.0F);
     uint16_t pulse = (uint16_t)(dutyCycleToUse * 56000.0F);
     sConfigOC.Pulse = pulse;
-    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC, PWM_CHANNEL);
+    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersConfig->pPwmTim, &sConfigOC, PWM_CHANNEL);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can)
     rxFilter.FilterIdHigh = (numFilt > 2U) ? gPendingRxFilter[can].filt[2U] : 0U;
     rxFilter.FilterMaskIdHigh = (numFilt > 3U) ? gPendingRxFilter[can].filt[3U] : 0U;
 
-    (void)HAL_CAN_ConfigFilter(pHalWrappersInit->pCan[can], &rxFilter);
+    (void)HAL_CAN_ConfigFilter(pHalWrappersConfig->pCan[can], &rxFilter);
     // Filter bank has been claimed - increment
     gCanFilterBankIdx[can]++;
     // Alternate FIFOs - this should be done with better load balancing
@@ -187,9 +187,9 @@ void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can)
 void HalWrappersCanStart(const HalWrappers_Can_E can)
 {
     // CAN - enable RX interrupts, set to normal mode to begin RX/TX
-    (void)HAL_CAN_ActivateNotification(pHalWrappersInit->pCan[can], CAN_IT_RX_FIFO0_MSG_PENDING);
-    (void)HAL_CAN_ActivateNotification(pHalWrappersInit->pCan[can], CAN_IT_RX_FIFO1_MSG_PENDING);
-    (void)HAL_CAN_Start(pHalWrappersInit->pCan[can]);
+    (void)HAL_CAN_ActivateNotification(pHalWrappersConfig->pCan[can], CAN_IT_RX_FIFO0_MSG_PENDING);
+    (void)HAL_CAN_ActivateNotification(pHalWrappersConfig->pCan[can], CAN_IT_RX_FIFO1_MSG_PENDING);
+    (void)HAL_CAN_Start(pHalWrappersConfig->pCan[can]);
 }
 
 void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, const uint32_t dlc, const uint8_t * const pData)
@@ -201,7 +201,7 @@ void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, con
     txHeader.StdId = mid;
     txHeader.DLC = dlc;
     uint32_t txMailboxStorage;
-    (void)HAL_CAN_AddTxMessage(pHalWrappersInit->pCan[can], &txHeader, pData, &txMailboxStorage);
+    (void)HAL_CAN_AddTxMessage(pHalWrappersConfig->pCan[can], &txHeader, pData, &txMailboxStorage);
     HalWrappersGpioToggle(GPIO_DEBUG_3);
 }
 
@@ -215,7 +215,7 @@ void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToG
 
     if (setToGpio)
     {
-        HAL_UART_MspDeInit(pHalWrappersInit->pSerial[serial]);
+        HAL_UART_MspDeInit(pHalWrappersConfig->pSerial[serial]);
         GPIO_InitTypeDef GPIO_InitStruct = {0};
         GPIO_InitStruct.Pin = gGpioInfo[txPin].id;
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -227,7 +227,7 @@ void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToG
     {
         HAL_GPIO_DeInit(gGpioInfo[rxPin].periph, gGpioInfo[rxPin].id);
         HAL_GPIO_DeInit(gGpioInfo[txPin].periph, gGpioInfo[txPin].id);
-        HAL_UART_MspInit(pHalWrappersInit->pSerial[serial]);
+        HAL_UART_MspInit(pHalWrappersConfig->pSerial[serial]);
     }
 }
 
@@ -238,14 +238,14 @@ bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * 
     // Start receive
     if ((status == HAL_OK) && notify)
     {
-        status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
+        status = HAL_UART_RegisterCallback(pHalWrappersConfig->pSerial[serial],
                                            HAL_UART_TX_COMPLETE_CB_ID,
                                            gSerialInfo[serial].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Transmit_IT(pHalWrappersInit->pSerial[serial], pTx, numBytes);
+        status = HAL_UART_Transmit_IT(pHalWrappersConfig->pSerial[serial], pTx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
@@ -263,14 +263,14 @@ bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const p
     // Start receive
     if (status == HAL_OK)
     {
-        status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
+        status = HAL_UART_RegisterCallback(pHalWrappersConfig->pSerial[serial],
                                            HAL_UART_RX_COMPLETE_CB_ID,
                                            gSerialInfo[serial].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Receive_IT(pHalWrappersInit->pSerial[serial], pRx, numBytes);
+        status = HAL_UART_Receive_IT(pHalWrappersConfig->pSerial[serial], pRx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
@@ -298,9 +298,9 @@ bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitM
 
 void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
 {
-    (void)HAL_UART_Abort_IT(pHalWrappersInit->pSerial[serial]);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
+    (void)HAL_UART_Abort_IT(pHalWrappersConfig->pSerial[serial]);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersConfig->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersConfig->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -308,12 +308,12 @@ void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
 //--------------------------------------------------------------------------------------------------
 void HalWrappersClearTimerUs(void)
 {
-    __HAL_TIM_SET_COUNTER(pHalWrappersInit->pUsTim, 0U);
+    __HAL_TIM_SET_COUNTER(pHalWrappersConfig->pUsTim, 0U);
 }
 
 uint32_t HalWrappersGetTimerUs(void)
 {
-    return __HAL_TIM_GET_COUNTER(pHalWrappersInit->pUsTim);
+    return __HAL_TIM_GET_COUNTER(pHalWrappersConfig->pUsTim);
 }
 
 //--------------------------------------------------------------------------------------------------

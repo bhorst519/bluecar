@@ -2,38 +2,48 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.h"
+#include "halWrappers.hpp"
 #include "EIM_canReceiverHook.h"
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-typedef uint16_t Gpio_Id;
-typedef uint32_t Pwm_Ch;
+namespace Eim
+{
 
-typedef struct
+using Gpio_Id = uint16_t;
+using Pwm_Ch = uint32_t;
+
+struct HalWrappers_Gpio_Info_S
 {
     Gpio_Id id;
     GPIO_TypeDef * periph;
-} HalWrappers_Gpio_Info_S;
+};
 
-typedef struct
+struct HalWrappers_Adc_Info_S
+{
+    uint32_t ch;
+    float scale;
+    float offset;
+};
+
+struct HalWrappers_Pwm_Info_S
 {
     Pwm_Ch ch;
-} HalWrappers_Pwm_Info_S;
+};
 
-typedef struct
+struct HalWrappers_Serial_Info_S
 {
     HalWrappers_Gpio_E rxPin;
     HalWrappers_Gpio_E txPin;
     void (* rxTxCompleteCallback)(UART_HandleTypeDef * huart);
-} HalWrappers_Serial_Info_S;
+};
 
-typedef struct
+struct HalWrappers_Can_PendingRxFilter_S
 {
     uint16_t filt[HAL_WRAPPERS_FILTERS_PER_BANK];
     uint8_t currentFiltIdx;
-} HalWrappers_Can_PendingRxFilter_S;
+};
 
 /***************************************************************************************************
 *                    P R I V A T E   F U N C T I O N   D E C L A R A T I O N S                     *
@@ -44,16 +54,14 @@ void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-static HalWrappers_Init_S * pHalWrappersInit;
-static HalWrappers_Can_PendingRxFilter_S gPendingRxFilter[MAX_NUM_CAN] = {0};
-static uint32_t gCanFilterBankIdx[MAX_NUM_CAN] = {0U};
-static bool gCanUseFifo1[MAX_NUM_CAN] = {false};
-
-// Static storage for HAL interfaces
-static TIM_OC_InitTypeDef sConfigOC[MAX_NUM_PWM] = {0};
+static HalWrappers_Config_S * pHalWrappersConfig;
+static float_q gAdcValues[MAX_NUM_ANALOG];
+static HalWrappers_Can_PendingRxFilter_S gPendingRxFilter[MAX_NUM_CAN];
+static uint32_t gCanFilterBankIdx[MAX_NUM_CAN];
+static bool gCanUseFifo1[MAX_NUM_CAN];
 
 // Peripheral info wrappers for HAL interfaces
-static const HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
+static constexpr HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
     // Outputs
     /* GPIO_MAIN_RELAY_EN */        {.id = GPIO_PIN_3,  .periph = GPIOF},
     /* GPIO_HEADLIGHT_RELAY_EN */   {.id = GPIO_PIN_13, .periph = GPIOE},
@@ -88,22 +96,80 @@ static const HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
     /* GPIO_OIL_P_LOW */            {.id = GPIO_PIN_11, .periph = GPIOF},
 };
 
-static const HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
+static constexpr HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
     /* PWM_LED_1 */         {.ch = TIM_CHANNEL_3},
     /* PWM_LED_2R */        {.ch = TIM_CHANNEL_1},
     /* PWM_LED_2G */        {.ch = TIM_CHANNEL_2},
     /* PWM_LED_2B */        {.ch = TIM_CHANNEL_4},
 };
 
-static const HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
-    /* SERIAL_KLINE */      {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* SERIAL_SERVO */      {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
+    /* ANALOG_12V                */ {.ch = ADC_CHANNEL_9,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_SERVO_12V          */ {.ch = ADC_CHANNEL_7,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_ENG_12V            */ {.ch = ADC_CHANNEL_3,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_ENG_TEMP           */ {.ch = ADC_CHANNEL_6,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_FUEL_LEVEL         */ {.ch = ADC_CHANNEL_4,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -5.4F}, // 2.5mV / degC, .076V @ 25degC
+    /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_BRAKE_LIGHT_ISENSE */ {.ch = ADC_CHANNEL_1,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_TURN_R_ISENSE      */ {.ch = ADC_CHANNEL_12,         .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_TURN_L_ISENSE      */ {.ch = ADC_CHANNEL_13,         .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_HIGH_BEAM_ISENSE   */ {.ch = ADC_CHANNEL_0,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_HORN_ISENSE        */ {.ch = ADC_CHANNEL_11,         .scale = 1.0F, .offset = 0.0F},
+
 };
-static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL] = {0};
+static HalWrappers_Analog_E gAdcToPoll;
+
+static constexpr HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
+    /* SERIAL_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
+    /* SERIAL_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+};
+static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL];
 
 /***************************************************************************************************
 *                                P R I V A T E   F U N C T I O N S                                 *
 ***************************************************************************************************/
+void HalWrappersAdcStartConversion(const HalWrappers_Analog_E adc)
+{
+    ADC_ChannelConfTypeDef adcChannel{};
+    adcChannel.Channel = gAdcInfo[adc].ch;
+    adcChannel.Rank = 1;
+    adcChannel.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    if (HAL_ADC_ConfigChannel(pHalWrappersConfig->pAdc, &adcChannel) == HAL_OK)
+    {
+        (void)HAL_ADC_Start_IT(pHalWrappersConfig->pAdc);
+    }
+}
+
+void HalWrappersAdcProcessConversion(const HalWrappers_Analog_E adc)
+{
+    uint32_t resMax;
+    switch (ADC_GET_RESOLUTION(pHalWrappersConfig->pAdc))
+    {
+        case ADC_RESOLUTION_6B:
+            resMax = BIT_U32(6U) - 1U;
+            break;
+        case ADC_RESOLUTION_8B:
+            resMax = BIT_U32(8) - 1;
+            break;
+        case ADC_RESOLUTION_10B:
+            resMax = BIT_U32(10) - 1;
+            break;
+        case ADC_RESOLUTION_12B:
+        default:
+            resMax = BIT_U32(12) - 1;
+            break;
+    }
+
+    const uint32_t resRaw = HAL_ADC_GetValue(pHalWrappersConfig->pAdc);
+    const float resV = (static_cast<float>(resRaw) / static_cast<float>(resMax)) * ADC_REF_V;
+    gAdcValues[adc] = (resV * gAdcInfo[adc].scale) + gAdcInfo[adc].offset;
+    gAdcValues[adc] = SignalStatus_E::VALID;
+}
+
 void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
 {
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
@@ -142,20 +208,16 @@ void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
 //--------------------------------------------------------------------------------------------------
 // GPIO
 //--------------------------------------------------------------------------------------------------
-void HalWrappersInit(HalWrappers_Init_S * const pHalWrappersInitArg)
+void HalWrappersInit(HalWrappers_Config_S * const pHalWrappersConfigArg)
 {
-    pHalWrappersInit = pHalWrappersInitArg;
+    pHalWrappersConfig = pHalWrappersConfigArg;
 
     // PWM - start, disabled
-    for (uint8_t i = 0U; i < (uint8_t)MAX_NUM_PWM; ++i)
+    for (uint8_t i = 0U; i < static_cast<uint8_t>(MAX_NUM_PWM); ++i)
     {
-        sConfigOC[i].OCMode = TIM_OCMODE_PWM1;
-        sConfigOC[i].OCPolarity = TIM_OCPOLARITY_HIGH;
-        sConfigOC[i].OCFastMode = TIM_OCFAST_DISABLE;
-        sConfigOC[i].Pulse = 0U;
-        (void)HAL_TIM_PWM_Start(pHalWrappersInit->pPwmTim, gPwmInfo[i].ch);
+        (void)HAL_TIM_PWM_Start(pHalWrappersConfig->pPwmTim, gPwmInfo[i].ch);
     }
-    (void)HAL_TIM_Base_Start(pHalWrappersInit->pUsTim);
+    (void)HAL_TIM_Base_Start(pHalWrappersConfig->pUsTim);
 }
 
 void HalWrappersGpioSet(const HalWrappers_Gpio_E gpio, const bool set)
@@ -174,9 +236,38 @@ void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle)
     // Timer is configured to reload at 45000 counts.
     // For a 90MHz clock, this sets a 2.0kHz frequency
     const float dutyCycleToUse = SATURATE(dutyCycle, 0.0F, 1.0F);
-    uint16_t pulse = (uint16_t)(dutyCycleToUse * 45000.0F);
-    sConfigOC[pwm].Pulse = pulse;
-    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersInit->pPwmTim, &sConfigOC[pwm], gPwmInfo[pwm].ch);
+    uint16_t pulse = static_cast<uint16_t>(dutyCycleToUse * 45000.0F);
+
+    TIM_OC_InitTypeDef pwmChannel{};
+    pwmChannel.OCMode = TIM_OCMODE_PWM1;
+    pwmChannel.OCPolarity = TIM_OCPOLARITY_HIGH;
+    pwmChannel.OCFastMode = TIM_OCFAST_DISABLE;
+    pwmChannel.Pulse = pulse;
+    (void)HAL_TIM_PWM_ConfigChannel(pHalWrappersConfig->pPwmTim, &pwmChannel, gPwmInfo[pwm].ch);
+}
+
+//--------------------------------------------------------------------------------------------------
+// ADC
+//--------------------------------------------------------------------------------------------------
+void HalWrappersAdcTriggerStart(void)
+{
+    for (uint8_t i = 0U; i < static_cast<uint8_t>(MAX_NUM_ANALOG); ++i)
+    {
+        gAdcValues[i] = SignalStatus_E::SNA;
+    }
+
+    gAdcToPoll = static_cast<HalWrappers_Analog_E>(0U);
+    HalWrappersAdcStartConversion(gAdcToPoll);
+}
+
+bool HalWrappersAdcGetFinished(void)
+{
+    return (gAdcToPoll >= MAX_NUM_ANALOG);
+}
+
+float_q HalWrappersAdcGetValue(const HalWrappers_Analog_E adc)
+{
+    return gAdcValues[adc];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,7 +276,7 @@ void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle)
 void HalWrappersCanRegisterRxFilter(const HalWrappers_Can_E can, const uint32_t mid)
 {
     const uint8_t currentFiltIdx = gPendingRxFilter[can].currentFiltIdx;
-    gPendingRxFilter[can].filt[currentFiltIdx] = (uint16_t)((mid << 5U) & 0xFFFF);
+    gPendingRxFilter[can].filt[currentFiltIdx] = static_cast<uint16_t>((mid << 5U) & 0xFFFF);
     if (++gPendingRxFilter[can].currentFiltIdx >= HAL_WRAPPERS_FILTERS_PER_BANK)
     {
         // Filled this pending filter bank - write it and clear
@@ -196,7 +287,7 @@ void HalWrappersCanRegisterRxFilter(const HalWrappers_Can_E can, const uint32_t 
 
 void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can)
 {
-    CAN_FilterTypeDef rxFilter = {0};
+    CAN_FilterTypeDef rxFilter{};
     rxFilter.SlaveStartFilterBank = (HAL_WRAPPERS_MAX_FILTER_BANKS / 2U);
     rxFilter.FilterBank = gCanFilterBankIdx[can];
     rxFilter.FilterScale = CAN_FILTERSCALE_16BIT;
@@ -210,7 +301,7 @@ void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can)
     rxFilter.FilterIdHigh = (numFilt > 2U) ? gPendingRxFilter[can].filt[2U] : 0U;
     rxFilter.FilterMaskIdHigh = (numFilt > 3U) ? gPendingRxFilter[can].filt[3U] : 0U;
 
-    (void)HAL_CAN_ConfigFilter(pHalWrappersInit->pCan[can], &rxFilter);
+    (void)HAL_CAN_ConfigFilter(pHalWrappersConfig->pCan[can], &rxFilter);
     // Filter bank has been claimed - increment
     gCanFilterBankIdx[can]++;
     // Alternate FIFOs - this should be done with better load balancing
@@ -220,20 +311,20 @@ void HalWrappersCanSetRxFilters(const HalWrappers_Can_E can)
 void HalWrappersCanStart(const HalWrappers_Can_E can)
 {
     // CAN - enable RX interrupts, set to normal mode to begin RX/TX
-    (void)HAL_CAN_ActivateNotification(pHalWrappersInit->pCan[can], CAN_IT_RX_FIFO0_MSG_PENDING);
-    (void)HAL_CAN_ActivateNotification(pHalWrappersInit->pCan[can], CAN_IT_RX_FIFO1_MSG_PENDING);
-    (void)HAL_CAN_Start(pHalWrappersInit->pCan[can]);
+    (void)HAL_CAN_ActivateNotification(pHalWrappersConfig->pCan[can], CAN_IT_RX_FIFO0_MSG_PENDING);
+    (void)HAL_CAN_ActivateNotification(pHalWrappersConfig->pCan[can], CAN_IT_RX_FIFO1_MSG_PENDING);
+    (void)HAL_CAN_Start(pHalWrappersConfig->pCan[can]);
 }
 
 void HalWrappersCanTransmit(const HalWrappers_Can_E can, const uint32_t mid, const uint32_t dlc, const uint8_t * const pData)
 {
-    CAN_TxHeaderTypeDef txHeader = {0};
+    CAN_TxHeaderTypeDef txHeader{};
     txHeader.IDE = CAN_ID_STD;
     txHeader.RTR = CAN_RTR_DATA;
     txHeader.StdId = mid;
     txHeader.DLC = dlc;
     uint32_t txMailboxStorage;
-    (void)HAL_CAN_AddTxMessage(pHalWrappersInit->pCan[can], &txHeader, pData, &txMailboxStorage);
+    (void)HAL_CAN_AddTxMessage(pHalWrappersConfig->pCan[can], &txHeader, pData, &txMailboxStorage);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -246,8 +337,8 @@ void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToG
 
     if (setToGpio)
     {
-        HAL_UART_MspDeInit(pHalWrappersInit->pSerial[serial]);
-        GPIO_InitTypeDef GPIO_InitStruct = {0};
+        HAL_UART_MspDeInit(pHalWrappersConfig->pSerial[serial]);
+        GPIO_InitTypeDef GPIO_InitStruct{};
         GPIO_InitStruct.Pin = gGpioInfo[txPin].id;
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -258,7 +349,7 @@ void HalWrappersSetUartGpio(const HalWrappers_Serial_E serial, const bool setToG
     {
         HAL_GPIO_DeInit(gGpioInfo[rxPin].periph, gGpioInfo[rxPin].id);
         HAL_GPIO_DeInit(gGpioInfo[txPin].periph, gGpioInfo[txPin].id);
-        HAL_UART_MspInit(pHalWrappersInit->pSerial[serial]);
+        HAL_UART_MspInit(pHalWrappersConfig->pSerial[serial]);
     }
 }
 
@@ -269,14 +360,14 @@ bool HalWrappersUartTransmit(const HalWrappers_Serial_E serial, const uint8_t * 
     // Start receive
     if ((status == HAL_OK) && notify)
     {
-        status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
+        status = HAL_UART_RegisterCallback(pHalWrappersConfig->pSerial[serial],
                                            HAL_UART_TX_COMPLETE_CB_ID,
                                            gSerialInfo[serial].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Transmit_IT(pHalWrappersInit->pSerial[serial], pTx, numBytes);
+        status = HAL_UART_Transmit_IT(pHalWrappersConfig->pSerial[serial], pTx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
@@ -294,14 +385,14 @@ bool HalWrappersUartReceive(const HalWrappers_Serial_E serial, uint8_t * const p
     // Start receive
     if (status == HAL_OK)
     {
-        status = HAL_UART_RegisterCallback(pHalWrappersInit->pSerial[serial],
+        status = HAL_UART_RegisterCallback(pHalWrappersConfig->pSerial[serial],
                                            HAL_UART_RX_COMPLETE_CB_ID,
                                            gSerialInfo[serial].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Receive_IT(pHalWrappersInit->pSerial[serial], pRx, numBytes);
+        status = HAL_UART_Receive_IT(pHalWrappersConfig->pSerial[serial], pRx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
@@ -329,9 +420,9 @@ bool HalWrappersUartWait(const HalWrappers_Serial_E serial, const uint32_t waitM
 
 void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
 {
-    (void)HAL_UART_Abort_IT(pHalWrappersInit->pSerial[serial]);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
-    (void)HAL_UART_UnRegisterCallback(pHalWrappersInit->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
+    (void)HAL_UART_Abort_IT(pHalWrappersConfig->pSerial[serial]);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersConfig->pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(pHalWrappersConfig->pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,24 +430,28 @@ void HalWrappersUartAbort(const HalWrappers_Serial_E serial)
 //--------------------------------------------------------------------------------------------------
 void HalWrappersClearTimerUs(void)
 {
-    __HAL_TIM_SET_COUNTER(pHalWrappersInit->pUsTim, 0U);
+    __HAL_TIM_SET_COUNTER(pHalWrappersConfig->pUsTim, 0U);
 }
 
 uint32_t HalWrappersGetTimerUs(void)
 {
-    return __HAL_TIM_GET_COUNTER(pHalWrappersInit->pUsTim);
+    return __HAL_TIM_GET_COUNTER(pHalWrappersConfig->pUsTim);
 }
+
+} // namespace Eim
 
 //--------------------------------------------------------------------------------------------------
 // ISR callbacks
 //--------------------------------------------------------------------------------------------------
+extern "C" {
+
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
     CAN_RxHeaderTypeDef rxHeader;
     uint8_t data[8U];
     (void)HAL_CAN_GetRxMessage(hcan, 0U, &rxHeader, &data[0U]);
 
-    if (hcan == pHalWrappersInit->pCan[CAN_1])
+    if (hcan == Eim::pHalWrappersConfig->pCan[CAN_1])
     {
         (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     }
@@ -372,7 +467,7 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
     uint8_t data[8U];
     (void)HAL_CAN_GetRxMessage(hcan, 0U, &rxHeader, &data[0U]);
 
-    if (hcan == pHalWrappersInit->pCan[CAN_1])
+    if (hcan == Eim::pHalWrappersConfig->pCan[CAN_1])
     {
         (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     }
@@ -381,3 +476,18 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
         // Invalid pointer
     }
 }
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
+    (void)hadc;
+    Eim::HalWrappersAdcProcessConversion(Eim::gAdcToPoll);
+
+    const uint32_t adcToPollInt = static_cast<uint32_t>(Eim::gAdcToPoll);
+    Eim::gAdcToPoll = static_cast<HalWrappers_Analog_E>(adcToPollInt + 1U);
+    if (Eim::gAdcToPoll < MAX_NUM_ANALOG)
+    {
+        Eim::HalWrappersAdcStartConversion(Eim::gAdcToPoll);
+    }
+}
+
+} // extern "C"
