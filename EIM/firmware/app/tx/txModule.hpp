@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "adcInterface.hpp"
 #include "klineInterface.hpp"
 #include "moduleBase.hpp"
 #include "servoInterface.hpp"
@@ -26,6 +27,24 @@ class TxNoneModule final : public Shared::TxModuleBase
         NOCOPY_NOMOVE(TxNoneModule);
 
         virtual void Transmit(void) override;
+};
+
+class Tx100HzModule final : public Shared::TxModuleBase
+{
+    public:
+        constexpr Tx100HzModule(
+                const AdcOutputInterface& adcRef
+            ) :
+                TxModuleBase(),
+                m_adcRef(adcRef)
+        {}
+
+        NOCOPY_NOMOVE(Tx100HzModule);
+
+        virtual void Transmit(void) override;
+
+    private:
+        const AdcOutputInterface& m_adcRef;
 };
 
 class Tx10HzModule final : public Shared::TxModuleBase

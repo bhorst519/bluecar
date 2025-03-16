@@ -21,6 +21,8 @@ class AdcOutputInterface
         {}
 
         NOCOPY_NOMOVE(AdcOutputInterface);
+
+        virtual float_q GetAdcFilt10Hz(const HalWrappers_Analog_E adc) const = 0;
 };
 
 } // namespace Eim

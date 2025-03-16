@@ -138,7 +138,8 @@ static void HalWrappersAdcStartConversion(const HalWrappers_Analog_E adc)
     ADC_ChannelConfTypeDef adcChannel{};
     adcChannel.Channel = gAdcInfo[adc].ch;
     adcChannel.Rank = 1;
-    adcChannel.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    // adcChannel.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    adcChannel.SamplingTime = ADC_SAMPLETIME_84CYCLES;
     if (HAL_ADC_ConfigChannel(pHalWrappersConfig->pAdc, &adcChannel) == HAL_OK)
     {
         (void)HAL_ADC_Start_IT(pHalWrappersConfig->pAdc);

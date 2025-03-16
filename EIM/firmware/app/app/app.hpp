@@ -17,6 +17,7 @@
 #include "txModule.hpp"
 
 // Message modules
+#include "adcMessageModule.hpp"
 #include "klineMessageModule.hpp"
 #include "rxMessageModule.hpp"
 #include "servoMessageModule.hpp"
@@ -102,6 +103,9 @@ class App final
         // 100Hz objects
         //------------------------------------------------------------------------------------------
         // TX/RX modules
+        Tx100HzModule m_tx100HzModule {
+            m_adcMessageModule100Hz
+        };
 
         // Inputs
 
@@ -164,6 +168,12 @@ class App final
         //------------------------------------------------------------------------------------------
         // Data channels
         //------------------------------------------------------------------------------------------
+        // 100Hz source
+        DataChannel< AdcData_S
+                   , Task100Hz  // source task
+                          >m_adcDataChannel{ m_adcModule.GetOutputDataReference() };
+        AdcMessageModule m_adcMessageModule100Hz { m_adcDataChannel.GetBuffer(Task100Hz_t) };
+
         // 10Hz source
         DataChannel< Rx10HzData_S
                    , Task10Hz   // source task
@@ -181,10 +191,11 @@ class App final
                           >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
         KlineMessageModule m_klineMessageModule1Hz { m_klineDataChannel.GetBuffer(Task1Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 3U;
+        static constexpr size_t m_numberOfDataChannels = 4U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
             // 10Hz source
+            &m_adcDataChannel,
             &m_rx10HzDataChannel,
             &m_servoDataChannel,
             // 1Hz source
@@ -210,7 +221,7 @@ class App final
                         , m_dataChannelList
                         , m_numberOfDataChannels
                         , m_rxNoneModule
-                        , m_txNoneModule
+                        , m_tx100HzModule
                     };
         TaskBase    m_task10Hz{
                           Task10Hz_t

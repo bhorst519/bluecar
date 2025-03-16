@@ -26,6 +26,11 @@ class AdcMessageModule final : public AdcOutputInterface
         {}
 
         NOCOPY_NOMOVE(AdcMessageModule);
+
+        virtual float_q GetAdcFilt10Hz(const HalWrappers_Analog_E adc) const override
+        {
+            return m_dataRef.adcFilt10Hz[adc];
+        }
 };
 
 } // namespace Eim

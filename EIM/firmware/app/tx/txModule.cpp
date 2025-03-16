@@ -43,6 +43,13 @@ void TxNoneModule::Transmit(void)
     // Nothing to do
 }
 
+void Tx100HzModule::Transmit(void)
+{
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_DieTemp(m_adcRef.GetAdcFilt10Hz(ANALOG_DIE_TEMP).Convert(int32_t()));
+    taskEXIT_CRITICAL();
+}
+
 void Tx10HzModule::Transmit(void)
 {
     taskENTER_CRITICAL();
@@ -53,10 +60,6 @@ void Tx10HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_Servo_Position(m_servoRef.GetPositionDegrees());
     CANTX_EIM_SetS_EIM_Servo_Temp(m_servoRef.GetTemperature().Convert(int32_t()));
     CANTX_EIM_SetS_EIM_Servo_Voltage(m_servoRef.GetVoltage());
-    taskEXIT_CRITICAL();
-
-    taskENTER_CRITICAL();
-    CANTX_EIM_SetS_EIM_PCBA_DieTemp(HalWrappersAdcGetValue(ANALOG_DIE_TEMP).Convert(int32_t()));
     taskEXIT_CRITICAL();
 }
 
