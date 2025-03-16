@@ -47,6 +47,7 @@ uint32_t gEIM_CpuStats_MuxFromIdx[] = {
     2U,
     3U,
     4U,
+    5U,
 };
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_CpuStats(const uint32_t muxIdx)
 {
@@ -102,6 +103,118 @@ void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted)
     CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(converted, pData);
 }
 
+// EIM_100Hz_MinPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MinPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+    pData[5] &= (uint8_t)(~0x0F);
+    pData[5] |= (uint8_t)((((rawVal) >> 16) & 0x0F));
+}
+void CANTX_EIM_SetSRaw_EIM_100Hz_MinPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MinPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_MinPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MinPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_100Hz_MinPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_100Hz_MinPeriod(converted, pData);
+}
+
+// EIM_100Hz_MaxPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MaxPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[5] &= (uint8_t)(~0xF0);
+    pData[5] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[6] = (uint8_t)((((rawVal) >> 4) & 0xFF));
+    pData[7] = (uint8_t)((((rawVal) >> 12) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_100Hz_MaxPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MaxPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_MaxPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MaxPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_100Hz_MaxPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_100Hz_MaxPeriod(converted, pData);
+}
+
+// EIM_100Hz_Load
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_Load(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] &= (uint8_t)(~0xF0);
+    pData[3] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[4] &= (uint8_t)(~0x3F);
+    pData[4] |= (uint8_t)((((rawVal) >> 4) & 0x3F));
+}
+void CANTX_EIM_SetSRaw_EIM_100Hz_Load(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_Load(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_Load(const float converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    {
+        const float convertedSat = (converted > 102.3F ? 102.3F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.1F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_Load((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_100Hz_Load(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_100Hz_Load(converted, pData);
+}
+
+// EIM_100Hz_AvgPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_AvgPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[0] &= (uint8_t)(~0xF0);
+    pData[0] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[1] = (uint8_t)((((rawVal) >> 4) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 12) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_100Hz_AvgPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_AvgPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_AvgPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_100Hz_AvgPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_100Hz_AvgPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_100Hz_AvgPeriod(converted, pData);
+}
+
 // EIM_ADC_MinPeriod
 void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(const uint32_t rawVal, uint8_t * const pData)
 {
@@ -112,7 +225,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_ADC_MinPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(const float converted, uint8_t * const pData)
@@ -126,7 +239,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_ADC_MinPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(converted, pData);
 }
 
@@ -140,7 +253,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_ADC_MaxPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(const float converted, uint8_t * const pData)
@@ -154,7 +267,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_ADC_MaxPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(converted, pData);
 }
 
@@ -168,7 +281,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_ADC_AvgPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(const float converted, uint8_t * const pData)
@@ -182,7 +295,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_ADC_AvgPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(converted, pData);
 }
 
@@ -216,9 +329,9 @@ void CANTX_EIM_SetS_EIM_CPU_Load(const float converted)
 // EIM_1Hz_Load
 void CANTX_EIM_SetSRawFromFrame_EIM_1Hz_Load(const uint16_t rawVal, uint8_t * const pData)
 {
-    pData[4] &= (uint8_t)(~0xC0);
-    pData[4] |= (uint8_t)((((rawVal) << 6) & 0xC0));
-    pData[5] = (uint8_t)((((rawVal) >> 2) & 0xFF));
+    pData[6] = (uint8_t)(((rawVal) & 0xFF));
+    pData[7] &= (uint8_t)(~0x03);
+    pData[7] |= (uint8_t)((((rawVal) >> 8) & 0x03));
 }
 void CANTX_EIM_SetSRaw_EIM_1Hz_Load(const uint16_t rawVal)
 {
@@ -243,10 +356,9 @@ void CANTX_EIM_SetS_EIM_1Hz_Load(const float converted)
 // EIM_10Hz_Load
 void CANTX_EIM_SetSRawFromFrame_EIM_10Hz_Load(const uint16_t rawVal, uint8_t * const pData)
 {
-    pData[3] &= (uint8_t)(~0xF0);
-    pData[3] |= (uint8_t)((((rawVal) << 4) & 0xF0));
-    pData[4] &= (uint8_t)(~0x3F);
-    pData[4] |= (uint8_t)((((rawVal) >> 4) & 0x3F));
+    pData[4] &= (uint8_t)(~0xC0);
+    pData[4] |= (uint8_t)((((rawVal) << 6) & 0xC0));
+    pData[5] = (uint8_t)((((rawVal) >> 2) & 0xFF));
 }
 void CANTX_EIM_SetSRaw_EIM_10Hz_Load(const uint16_t rawVal)
 {
@@ -306,7 +418,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_1Hz_MaxPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_1Hz_MaxPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_1Hz_MaxPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_1Hz_MaxPeriod(const float converted, uint8_t * const pData)
@@ -320,7 +432,7 @@ void CANTX_EIM_SetSFromFrame_EIM_1Hz_MaxPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_1Hz_MaxPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_1Hz_MaxPeriod(converted, pData);
 }
 
@@ -334,7 +446,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_1Hz_MinPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_1Hz_MinPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_1Hz_MinPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_1Hz_MinPeriod(const float converted, uint8_t * const pData)
@@ -348,7 +460,7 @@ void CANTX_EIM_SetSFromFrame_EIM_1Hz_MinPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_1Hz_MinPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_1Hz_MinPeriod(converted, pData);
 }
 
@@ -362,7 +474,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_1Hz_AvgPeriod(const uint32_t rawVal, uint8_t
 }
 void CANTX_EIM_SetSRaw_EIM_1Hz_AvgPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_1Hz_AvgPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_1Hz_AvgPeriod(const float converted, uint8_t * const pData)
@@ -376,7 +488,7 @@ void CANTX_EIM_SetSFromFrame_EIM_1Hz_AvgPeriod(const float converted, uint8_t * 
 }
 void CANTX_EIM_SetS_EIM_1Hz_AvgPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_1Hz_AvgPeriod(converted, pData);
 }
 
@@ -390,7 +502,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_10Hz_MaxPeriod(const uint32_t rawVal, uint8_
 }
 void CANTX_EIM_SetSRaw_EIM_10Hz_MaxPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_10Hz_MaxPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_10Hz_MaxPeriod(const float converted, uint8_t * const pData)
@@ -404,7 +516,7 @@ void CANTX_EIM_SetSFromFrame_EIM_10Hz_MaxPeriod(const float converted, uint8_t *
 }
 void CANTX_EIM_SetS_EIM_10Hz_MaxPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_10Hz_MaxPeriod(converted, pData);
 }
 
@@ -418,7 +530,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_10Hz_MinPeriod(const uint32_t rawVal, uint8_
 }
 void CANTX_EIM_SetSRaw_EIM_10Hz_MinPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_10Hz_MinPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_10Hz_MinPeriod(const float converted, uint8_t * const pData)
@@ -432,7 +544,7 @@ void CANTX_EIM_SetSFromFrame_EIM_10Hz_MinPeriod(const float converted, uint8_t *
 }
 void CANTX_EIM_SetS_EIM_10Hz_MinPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_10Hz_MinPeriod(converted, pData);
 }
 
@@ -446,7 +558,7 @@ void CANTX_EIM_SetSRawFromFrame_EIM_10Hz_AvgPeriod(const uint32_t rawVal, uint8_
 }
 void CANTX_EIM_SetSRaw_EIM_10Hz_AvgPeriod(const uint32_t rawVal)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_10Hz_AvgPeriod(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_10Hz_AvgPeriod(const float converted, uint8_t * const pData)
@@ -460,7 +572,7 @@ void CANTX_EIM_SetSFromFrame_EIM_10Hz_AvgPeriod(const float converted, uint8_t *
 }
 void CANTX_EIM_SetS_EIM_10Hz_AvgPeriod(const float converted)
 {
-    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M2_ARR_IDX][0U];
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_10Hz_AvgPeriod(converted, pData);
 }
 
@@ -1170,6 +1282,10 @@ bool CANTX_EIM_Init(void)
     CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(
         4U,
         &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(
+        5U,
+        &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M5_ARR_IDX][0U]
     );
 
     // EIM_ServoStatus

@@ -47,19 +47,23 @@ BO_ 1280 TESTER_request: 2 TESTER
  SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM
- SG_ EIM_ADC_MinPeriod m4 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_ADC_MaxPeriod m4 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_ADC_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_MinPeriod m2 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_MaxPeriod m2 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_100Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_MinPeriod m5 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_MaxPeriod m5 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_AvgPeriod m5 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_1Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_10Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1Hz_Load m0 : 48|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_10Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
  SG_ EIM_1kHz_Load m0 : 18|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_1Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_MaxPeriod m2 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_MinPeriod m2 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_MaxPeriod m4 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_MinPeriod m4 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_1kHz_MaxPeriod m1 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_1kHz_MinPeriod m1 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_1kHz_AvgPeriod m1 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX

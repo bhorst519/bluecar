@@ -122,7 +122,7 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
     /* ANALOG_HORN_ISENSE        */ {.ch = ADC_CHANNEL_11,         .scale = 1.0F, .offset = 0.0F},
 
 };
-static HalWrappers_Analog_E gAdcToPoll;
+static HalWrappers_Analog_E gAdcToPoll = MAX_NUM_ANALOG;
 
 static constexpr HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
     /* SERIAL_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},

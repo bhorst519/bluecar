@@ -34,6 +34,30 @@ void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted);
 
+// EIM_100Hz_MinPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MinPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_100Hz_MinPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_MinPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_100Hz_MinPeriod(const float converted);
+
+// EIM_100Hz_MaxPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_MaxPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_100Hz_MaxPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_MaxPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_100Hz_MaxPeriod(const float converted);
+
+// EIM_100Hz_Load
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_Load(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_100Hz_Load(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_Load(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_100Hz_Load(const float converted);
+
+// EIM_100Hz_AvgPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_100Hz_AvgPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_100Hz_AvgPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_100Hz_AvgPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_100Hz_AvgPeriod(const float converted);
+
 // EIM_ADC_MinPeriod
 void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(const uint32_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_EIM_ADC_MinPeriod(const uint32_t rawVal);

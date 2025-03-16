@@ -14,6 +14,7 @@ extern "C" {
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
 #define TASK_1KHZ_MS_TO_DELAY   (1U)
+#define TASK_100HZ_MS_TO_DELAY  (10U)
 #define TASK_10HZ_MS_TO_DELAY   (100U)
 #define TASK_1HZ_MS_TO_DELAY    (1000U)
 
@@ -22,6 +23,7 @@ extern "C" {
 **************************************************************************************************/
 void RtosInit(HalWrappers_Config_S * const pHalWrappersConfig);
 void RtosRunTask1kHz(void);
+void RtosRunTask100Hz(void);
 void RtosRunTask10Hz(void);
 void RtosRunTask1Hz(void);
 

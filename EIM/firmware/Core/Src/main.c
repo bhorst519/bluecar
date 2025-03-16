@@ -72,6 +72,9 @@ osStaticThreadDef_t Task10HzControlBlock;
 osThreadId Task1HzHandle;
 uint32_t Task1HzBuffer[ 256 ];
 osStaticThreadDef_t Task1HzControlBlock;
+osThreadId Task100HzHandle;
+uint32_t Task100HzBuffer[ 256 ];
+osStaticThreadDef_t Task100HzControlBlock;
 /* USER CODE BEGIN PV */
 
 static HalWrappers_Config_S halWrappersConfig =
@@ -84,6 +87,7 @@ static HalWrappers_Config_S halWrappersConfig =
 };
 
 static Profiler_Data_S g1kHzProfilerData;
+static Profiler_Data_S g100HzProfilerData;
 static Profiler_Data_S g10HzProfilerData;
 static Profiler_Data_S g1HzProfilerData;
 
@@ -107,6 +111,7 @@ void StartDefaultTask(void const * argument);
 void StartTask1kHz(void const * argument);
 void StartTask10Hz(void const * argument);
 void StartTask1Hz(void const * argument);
+void StartTask100Hz(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -194,11 +199,19 @@ int main(void)
   osThreadStaticDef(Task1Hz, StartTask1Hz, osPriorityNormal, 0, 256, Task1HzBuffer, &Task1HzControlBlock);
   Task1HzHandle = osThreadCreate(osThread(Task1Hz), NULL);
 
+  /* definition and creation of Task100Hz */
+  osThreadStaticDef(Task100Hz, StartTask100Hz, osPriorityHigh, 0, 256, Task100HzBuffer, &Task100HzControlBlock);
+  Task100HzHandle = osThreadCreate(osThread(Task100Hz), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
   vTaskSetThreadLocalStoragePointer(Task1kHzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1kHzProfilerData);
   ProfilerScheduledTaskRegister(PROFILER_TASK_1KHZ, (void *)Task1kHzHandle);
+
+  g100HzProfilerData.configWindowNumPeriods = 100U; // 100Hz
+  vTaskSetThreadLocalStoragePointer(Task100HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g100HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_100HZ, (void *)Task100HzHandle);
 
   g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
   vTaskSetThreadLocalStoragePointer(Task10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
@@ -916,6 +929,21 @@ void StartTask1Hz(void const * argument)
   (void)argument;
   RtosRunTask1Hz();
   /* USER CODE END StartTask1Hz */
+}
+
+/* USER CODE BEGIN Header_StartTask100Hz */
+/**
+* @brief Function implementing the Task100Hz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask100Hz */
+void StartTask100Hz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask100Hz */
+  (void)argument;
+  RtosRunTask100Hz();
+  /* USER CODE END StartTask100Hz */
 }
 
 /**

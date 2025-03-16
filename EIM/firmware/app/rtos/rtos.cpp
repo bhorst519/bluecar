@@ -58,6 +58,21 @@ void RtosRunTask1kHz(void)
     }
 }
 
+void RtosRunTask100Hz(void)
+{
+    uint32_t currentTick = osKernelSysTick();
+
+    for(;;)
+    {
+        (void)osDelayUntil(&currentTick, TASK_100HZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
+        m_app.RunTask100Hz();
+
+        ProfilerScheduledTaskCheckOut();
+    }
+}
+
 void RtosRunTask10Hz(void)
 {
     uint32_t currentTick = osKernelSysTick();
@@ -70,7 +85,6 @@ void RtosRunTask10Hz(void)
         ProfilerScheduledTaskCheckIn();
 
         m_app.RunTask10Hz();
-        Eim::HalWrappersAdcTriggerStart();
 
         Eim::HalWrappersSetPwm(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;

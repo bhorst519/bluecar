@@ -9,6 +9,7 @@
 #include "taskBase.hpp"
 
 // Modules
+#include "adcModule.hpp"
 #include "canModule.hpp"
 #include "klineModule.hpp"
 #include "rxModule.hpp"
@@ -40,6 +41,7 @@ class App final
         void Init(void)
         {
             m_task1kHz.Init();
+            m_task100Hz.Init();
             m_task10Hz.Init();
             m_task1Hz.Init();
         }
@@ -47,6 +49,11 @@ class App final
         void RunTask1kHz(void)
         {
             m_task1kHz.Run();
+        }
+
+        void RunTask100Hz(void)
+        {
+            m_task100Hz.Run();
         }
 
         void RunTask10Hz(void)
@@ -67,6 +74,7 @@ class App final
         using TaskBase          = Shared::TaskBase;
 
         Task1kHz     Task1kHz_t{};
+        Task100Hz    Task100Hz_t{};
         Task10Hz     Task10Hz_t{};
         Task1Hz      Task1Hz_t{};
 
@@ -88,6 +96,23 @@ class App final
         ModuleBase * const m_moduleList1kHz[m_numberOfModules1kHz] =
         {
             &m_canModule,
+        };
+
+        //------------------------------------------------------------------------------------------
+        // 100Hz objects
+        //------------------------------------------------------------------------------------------
+        // TX/RX modules
+
+        // Inputs
+
+        // Modules
+        AdcModule m_adcModule {};
+
+        // Module list
+        static constexpr size_t m_numberOfModules100Hz = 1U;
+        ModuleBase * const m_moduleList100Hz[m_numberOfModules100Hz] =
+        {
+            &m_adcModule,
         };
 
         //------------------------------------------------------------------------------------------
@@ -173,6 +198,15 @@ class App final
                           Task1kHz_t
                         , m_moduleList1kHz
                         , m_numberOfModules1kHz
+                        , m_dataChannelList
+                        , m_numberOfDataChannels
+                        , m_rxNoneModule
+                        , m_txNoneModule
+                    };
+        TaskBase    m_task100Hz{
+                          Task100Hz_t
+                        , m_moduleList100Hz
+                        , m_numberOfModules100Hz
                         , m_dataChannelList
                         , m_numberOfDataChannels
                         , m_rxNoneModule

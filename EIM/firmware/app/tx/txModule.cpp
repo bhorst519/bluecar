@@ -66,6 +66,7 @@ void Tx1HzModule::Transmit(void)
     taskENTER_CRITICAL();
     CANTX_EIM_SetS_EIM_CPU_Load(ProfilerGetTotalLoad() * 100.0F);
     CANTX_EIM_SetS_EIM_1kHz_Load(ProfilerGetLoad(PROFILER_TASK_1KHZ) * 100.0F);
+    CANTX_EIM_SetS_EIM_100Hz_Load(ProfilerGetLoad(PROFILER_TASK_100HZ) * 100.0F);
     CANTX_EIM_SetS_EIM_10Hz_Load(ProfilerGetLoad(PROFILER_TASK_10HZ) * 100.0F);
     CANTX_EIM_SetS_EIM_1Hz_Load(ProfilerGetLoad(PROFILER_TASK_1HZ) * 100.0F);
     taskEXIT_CRITICAL();
@@ -75,6 +76,13 @@ void Tx1HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_1kHz_AvgPeriod(ProfilerGetAvgPeriodMs(PROFILER_TASK_1KHZ));
     CANTX_EIM_SetS_EIM_1kHz_MinPeriod(ProfilerGetMinPeriodMs(PROFILER_TASK_1KHZ));
     CANTX_EIM_SetS_EIM_1kHz_MaxPeriod(ProfilerGetMaxPeriodMs(PROFILER_TASK_1KHZ));
+    taskEXIT_CRITICAL();
+
+    // 100Hz task data
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_100Hz_AvgPeriod(ProfilerGetAvgPeriodMs(PROFILER_TASK_100HZ));
+    CANTX_EIM_SetS_EIM_100Hz_MinPeriod(ProfilerGetMinPeriodMs(PROFILER_TASK_100HZ));
+    CANTX_EIM_SetS_EIM_100Hz_MaxPeriod(ProfilerGetMaxPeriodMs(PROFILER_TASK_100HZ));
     taskEXIT_CRITICAL();
 
     // 10Hz task data

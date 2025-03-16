@@ -74,6 +74,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 set(TARGET_SOURCES
     ${TARGET_SOURCES_CANGEN}
+    app/adc/adcModule.cpp
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
     app/hal/halWrappers.cpp
@@ -100,6 +101,7 @@ set_source_files_properties(
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     ${TARGET_DIR_CANGEN}
+    app/adc
     app/app
     app/can
     app/dataChannel
