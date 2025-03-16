@@ -42,7 +42,7 @@ void ProfilerScheduledTaskRegister(const Profiler_E profiler, void * taskHandle)
 void ProfilerScheduledTaskCheckIn(void);
 void ProfilerScheduledTaskCheckOut(void);
 void ProfilerCheckIn(const Profiler_E profiler);
-void ProfilerCheckOut(const Profiler_E profiler);
+void ProfilerCheckOut(const Profiler_E profiler, const bool fromIsr);
 
 // Profiler load checks
 void ProfilerUpdateLoad(void);

@@ -18,6 +18,7 @@ typedef enum
     // Non-scheduled profilers
     PROFILER_CAN_TX_ISR,
     PROFILER_CAN_RX_ISR,
+    PROFILER_ADC_CONV,
     PROFILER_NON_SCHEDULED_MAX_NUM,
 
     // Scheduled tasks
@@ -31,9 +32,9 @@ typedef enum
 #define PROFILER_SCHEDULED_IDX(p)       (p - PROFILER_SCHEDULED_FIRST)
 #define PROFILER_SCHEDULED_MAX_NUM      PROFILER_SCHEDULED_IDX(PROFILER_MAX_NUM)
 
-UTIL_ASSERT((size_t)PROFILER_NON_SCHEDULED_MAX_NUM == 2U,   "Number of profilers incorrectly deduced");
+UTIL_ASSERT((size_t)PROFILER_NON_SCHEDULED_MAX_NUM == 3U,   "Number of profilers incorrectly deduced");
 UTIL_ASSERT((size_t)PROFILER_SCHEDULED_MAX_NUM == 3U,       "Number of profilers incorrectly deduced");
-UTIL_ASSERT((size_t)PROFILER_MAX_NUM == 5U,                 "Number of profilers incorrectly deduced");
+UTIL_ASSERT((size_t)PROFILER_MAX_NUM == 6U,                 "Number of profilers incorrectly deduced");
 
 #ifdef __cplusplus
 }

@@ -9,6 +9,7 @@ namespace CanGen
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage
 //--------------------------------------------------------------------------------------------------
+static uint8_t gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_ARR_LEN][CAN_EIM_EIM_PcbaVitals_DLC];
 static uint8_t gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_ARR_LEN][CAN_EIM_EIM_CpuStats_DLC];
 static uint8_t gEIM_ServoStatus_TX_ARR[CANTX_EIM_EIM_ServoStatus_ARR_LEN][CAN_EIM_EIM_ServoStatus_DLC];
 static uint8_t gEIM_EngineStatus_TX_ARR[CANTX_EIM_EIM_EngineStatus_ARR_LEN][CAN_EIM_EIM_EngineStatus_DLC];
@@ -16,6 +17,12 @@ static uint8_t gEIM_EngineStatus_TX_ARR[CANTX_EIM_EIM_EngineStatus_ARR_LEN][CAN_
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
 //--------------------------------------------------------------------------------------------------
+uint8_t * CANTX_EIM_GetTxStorage_EIM_PcbaVitals(const uint32_t muxIdx)
+{
+    (void)muxIdx;
+    return &gEIM_PcbaVitals_TX_ARR[0U][0U];
+}
+
 uint8_t * CANTX_EIM_GetTxStorage_EIM_CpuStats(const uint32_t muxIdx)
 {
     return &gEIM_CpuStats_TX_ARR[muxIdx][0U];
@@ -39,6 +46,7 @@ uint32_t gEIM_CpuStats_MuxFromIdx[] = {
     1U,
     2U,
     3U,
+    4U,
 };
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_CpuStats(const uint32_t muxIdx)
 {
@@ -64,6 +72,120 @@ uint32_t CANTX_EIM_GetMuxFromIdx_EIM_EngineStatus(const uint32_t muxIdx)
 //--------------------------------------------------------------------------------------------------
 // Signal transmit setter functions
 //--------------------------------------------------------------------------------------------------
+// EIM_PCBA_DieTemp
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[0] = (uint8_t)(((rawVal) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[0U][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 255U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 205 ? 205 : (converted < -50 ? -50 : converted));
+        rawVal = (uint8_t)((convertedSat - -50) / 1);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[0U][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(converted, pData);
+}
+
+// EIM_ADC_MinPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+    pData[5] &= (uint8_t)(~0x0F);
+    pData[5] |= (uint8_t)((((rawVal) >> 16) & 0x0F));
+}
+void CANTX_EIM_SetSRaw_EIM_ADC_MinPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_ADC_MinPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(converted, pData);
+}
+
+// EIM_ADC_MaxPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[5] &= (uint8_t)(~0xF0);
+    pData[5] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[6] = (uint8_t)((((rawVal) >> 4) & 0xFF));
+    pData[7] = (uint8_t)((((rawVal) >> 12) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_ADC_MaxPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_ADC_MaxPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(converted, pData);
+}
+
+// EIM_ADC_AvgPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod(const uint32_t rawVal, uint8_t * const pData)
+{
+    pData[0] &= (uint8_t)(~0xF0);
+    pData[0] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[1] = (uint8_t)((((rawVal) >> 4) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 12) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_ADC_AvgPeriod(const uint32_t rawVal)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(const float converted, uint8_t * const pData)
+{
+    uint32_t rawVal;
+    {
+        const float convertedSat = (converted > 1048.575F ? 1048.575F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint32_t)((convertedSat - 0.0F) / 0.001F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod((uint32_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_ADC_AvgPeriod(const float converted)
+{
+    uint8_t * const pData = &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(converted, pData);
+}
+
 // EIM_CPU_Load
 void CANTX_EIM_SetSRawFromFrame_EIM_CPU_Load(const uint16_t rawVal, uint8_t * const pData)
 {
@@ -1027,6 +1149,7 @@ void CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(const float_q converted)
 //--------------------------------------------------------------------------------------------------
 bool CANTX_EIM_Init(void)
 {
+
     // EIM_CpuStats
     CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(
         0U,
@@ -1043,6 +1166,10 @@ bool CANTX_EIM_Init(void)
     CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(
         3U,
         &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M3_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(
+        4U,
+        &gEIM_CpuStats_TX_ARR[CANTX_EIM_EIM_CpuStats_M4_ARR_IDX][0U]
     );
 
     // EIM_ServoStatus

@@ -70,6 +70,7 @@ void RtosRunTask10Hz(void)
         ProfilerScheduledTaskCheckIn();
 
         m_app.RunTask10Hz();
+        Eim::HalWrappersAdcTriggerStart();
 
         Eim::HalWrappersSetPwm(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
         blink = !blink;

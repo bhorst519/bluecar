@@ -2,8 +2,9 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.hpp"
 #include "EIM_canReceiverHook.h"
+#include "halWrappers.hpp"
+#include "profiler.h"
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
@@ -48,8 +49,8 @@ struct HalWrappers_Can_PendingRxFilter_S
 /***************************************************************************************************
 *                    P R I V A T E   F U N C T I O N   D E C L A R A T I O N S                     *
 ***************************************************************************************************/
-void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
-void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
+static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
+static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
@@ -111,7 +112,7 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
     /* ANALOG_FUEL_LEVEL         */ {.ch = ADC_CHANNEL_4,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -5.4F}, // 2.5mV / degC, .076V @ 25degC
+    /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -279.0F}, // 2.5mV / degC, .76V @ 25degC
     /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_BRAKE_LIGHT_ISENSE */ {.ch = ADC_CHANNEL_1,          .scale = 1.0F, .offset = 0.0F},
@@ -132,7 +133,7 @@ static osThreadId gSerialTaskToNotify[MAX_NUM_SERIAL];
 /***************************************************************************************************
 *                                P R I V A T E   F U N C T I O N S                                 *
 ***************************************************************************************************/
-void HalWrappersAdcStartConversion(const HalWrappers_Analog_E adc)
+static void HalWrappersAdcStartConversion(const HalWrappers_Analog_E adc)
 {
     ADC_ChannelConfTypeDef adcChannel{};
     adcChannel.Channel = gAdcInfo[adc].ch;
@@ -144,7 +145,7 @@ void HalWrappersAdcStartConversion(const HalWrappers_Analog_E adc)
     }
 }
 
-void HalWrappersAdcProcessConversion(const HalWrappers_Analog_E adc)
+static void HalWrappersAdcProcessConversion(const HalWrappers_Analog_E adc)
 {
     uint32_t resMax;
     switch (ADC_GET_RESOLUTION(pHalWrappersConfig->pAdc))
@@ -170,7 +171,7 @@ void HalWrappersAdcProcessConversion(const HalWrappers_Analog_E adc)
     gAdcValues[adc] = SignalStatus_E::VALID;
 }
 
-void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
+static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
 {
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
@@ -186,7 +187,7 @@ void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
+static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
 {
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
@@ -251,6 +252,7 @@ void HalWrappersSetPwm(const HalWrappers_Pwm_E pwm, const float dutyCycle)
 //--------------------------------------------------------------------------------------------------
 void HalWrappersAdcTriggerStart(void)
 {
+    ProfilerCheckIn(PROFILER_ADC_CONV);
     for (uint8_t i = 0U; i < static_cast<uint8_t>(MAX_NUM_ANALOG); ++i)
     {
         gAdcValues[i] = SignalStatus_E::SNA;
@@ -487,6 +489,10 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     if (Eim::gAdcToPoll < MAX_NUM_ANALOG)
     {
         Eim::HalWrappersAdcStartConversion(Eim::gAdcToPoll);
+    }
+    else
+    {
+        ProfilerCheckOut(PROFILER_ADC_CONV, true);
     }
 }
 

@@ -39,11 +39,17 @@ VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
 
 
+BO_ 1027 EIM_PcbaVitals: 1 EIM
+ SG_ EIM_PCBA_DieTemp : 0|8@1+ (1,-50) [-50|205] "C" Vector__XXX
+
 BO_ 1280 TESTER_request: 2 TESTER
  SG_ TESTER_Relay_Enable : 14|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM
+ SG_ EIM_ADC_MinPeriod m4 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_MaxPeriod m4 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
  SG_ EIM_1Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
  SG_ EIM_10Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
@@ -101,6 +107,7 @@ BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
 BA_ "DBName" "EIM";
 BA_ "NmStationAddress" BU_ TESTER 1;
+VAL_ 1027 EIM_PCBA_DieTemp 255 "SNA" ;
 VAL_ 1280 TESTER_Servo_Position 8192 "SNA" ;
 VAL_ 1025 EIM_Servo_Voltage 255 "SNA" ;
 VAL_ 1025 EIM_Servo_Temp 255 "SNA" ;

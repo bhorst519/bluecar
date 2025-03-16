@@ -13,6 +13,7 @@ using namespace ::QualifiedVal;
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
 //--------------------------------------------------------------------------------------------------
+uint8_t * CANTX_EIM_GetTxStorage_EIM_PcbaVitals(const uint32_t muxIdx);
 uint8_t * CANTX_EIM_GetTxStorage_EIM_CpuStats(const uint32_t muxIdx);
 uint8_t * CANTX_EIM_GetTxStorage_EIM_ServoStatus(const uint32_t muxIdx);
 uint8_t * CANTX_EIM_GetTxStorage_EIM_EngineStatus(const uint32_t muxIdx);
@@ -27,6 +28,30 @@ uint32_t CANTX_EIM_GetMuxFromIdx_EIM_EngineStatus(const uint32_t muxIdx);
 //--------------------------------------------------------------------------------------------------
 // Signal transmit setter functions
 //--------------------------------------------------------------------------------------------------
+// EIM_PCBA_DieTemp
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted);
+
+// EIM_ADC_MinPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MinPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_ADC_MinPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_ADC_MinPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_ADC_MinPeriod(const float converted);
+
+// EIM_ADC_MaxPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_MaxPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_ADC_MaxPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_ADC_MaxPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_ADC_MaxPeriod(const float converted);
+
+// EIM_ADC_AvgPeriod
+void CANTX_EIM_SetSRawFromFrame_EIM_ADC_AvgPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_ADC_AvgPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_ADC_AvgPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_ADC_AvgPeriod(const float converted);
+
 // EIM_CPU_Load
 void CANTX_EIM_SetSRawFromFrame_EIM_CPU_Load(const uint16_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_EIM_CPU_Load(const uint16_t rawVal);

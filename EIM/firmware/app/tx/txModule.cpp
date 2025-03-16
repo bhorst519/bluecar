@@ -3,6 +3,7 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "EIM_canTransmitter.hpp"
+#include "halWrappers.hpp"
 #include "profiler.h"
 #include "txModule.hpp"
 
@@ -53,6 +54,10 @@ void Tx10HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_Servo_Temp(m_servoRef.GetTemperature().Convert(int32_t()));
     CANTX_EIM_SetS_EIM_Servo_Voltage(m_servoRef.GetVoltage());
     taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_DieTemp(HalWrappersAdcGetValue(ANALOG_DIE_TEMP).Convert(int32_t()));
+    taskEXIT_CRITICAL();
 }
 
 void Tx1HzModule::Transmit(void)
@@ -84,6 +89,13 @@ void Tx1HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_1Hz_AvgPeriod(ProfilerGetAvgPeriodMs(PROFILER_TASK_1HZ));
     CANTX_EIM_SetS_EIM_1Hz_MinPeriod(ProfilerGetMinPeriodMs(PROFILER_TASK_1HZ));
     CANTX_EIM_SetS_EIM_1Hz_MaxPeriod(ProfilerGetMaxPeriodMs(PROFILER_TASK_1HZ));
+    taskEXIT_CRITICAL();
+
+    // ADC conversion data
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_ADC_AvgPeriod(ProfilerGetAvgPeriodMs(PROFILER_ADC_CONV));
+    CANTX_EIM_SetS_EIM_ADC_MinPeriod(ProfilerGetMinPeriodMs(PROFILER_ADC_CONV));
+    CANTX_EIM_SetS_EIM_ADC_MaxPeriod(ProfilerGetMaxPeriodMs(PROFILER_ADC_CONV));
     taskEXIT_CRITICAL();
 
     // K-line data
