@@ -101,6 +101,11 @@ typedef struct
     UART_HandleTypeDef * pSerial[MAX_NUM_SERIAL];
 } HalWrappers_Config_S;
 
+/***************************************************************************************************
+*                          P U B L I C   D A T A   D E F I N I T I O N S                           *
+***************************************************************************************************/
+extern HalWrappers_Config_S gHalWrappersConfig;
+
 #ifdef __cplusplus
 }
 #endif

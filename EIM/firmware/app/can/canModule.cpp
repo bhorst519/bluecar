@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "canModule.hpp"
-#include "halWrappers.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "EIM_canReceiver.hpp"
 #include "EIM_canTransmitter.hpp"
 #include "EIM_messageInfo.hpp"
@@ -13,7 +13,7 @@
 namespace Eim
 {
 
-UTIL_ASSERT(CANRX_EIM_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
+UTIL_ASSERT(CANRX_EIM_NUM_MESSAGES <= Shared::HAL_WRAPPERS_FILTERS_PER_BUS,
     "CAN bus with too many messages for filter config");
 
 /***************************************************************************************************
@@ -29,10 +29,10 @@ void CanModule::Init(void)
     for (uint32_t i = 0U; i < CANRX_EIM_NUM_MESSAGES; ++i)
     {
         const uint32_t mid = CANRX_EIM_GetMidFromIdx(i);
-        HalWrappersCanRegisterRxFilter(CAN_1, mid);
+        gHalWrappers.CanRegisterRxFilter(CAN_1, mid);
     }
-    HalWrappersCanSetRxFilters(CAN_1);
-    HalWrappersCanStart(CAN_1);
+    gHalWrappers.CanSetRxFilters(CAN_1);
+    gHalWrappers.CanStart(CAN_1);
 
     // Transmit manager initialization
     m_muxTransmit_EIM_CpuStats.periodMs = 1000U;
@@ -59,25 +59,25 @@ void CanModule::Run(void)
     if (ShouldTransmitMuxNow(m_muxTransmit_EIM_CpuStats, muxIdx))
     {
         uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_CpuStats(muxIdx);
-        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_CpuStats_MID, CAN_EIM_EIM_CpuStats_DLC, pCanData);
+        gHalWrappers.CanTransmit(CAN_1, CAN_EIM_EIM_CpuStats_MID, CAN_EIM_EIM_CpuStats_DLC, pCanData);
     }
 
     if (ShouldTransmitMuxNow(m_muxTransmit_EIM_EngineStatus, muxIdx))
     {
         uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_EngineStatus(muxIdx);
-        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_EngineStatus_MID, CAN_EIM_EIM_EngineStatus_DLC, pCanData);
+        gHalWrappers.CanTransmit(CAN_1, CAN_EIM_EIM_EngineStatus_MID, CAN_EIM_EIM_EngineStatus_DLC, pCanData);
     }
 
     if (ShouldTransmitMuxNow(m_muxTransmit_EIM_ServoStatus, muxIdx))
     {
         const uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_ServoStatus(muxIdx);
-        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_ServoStatus_MID, CAN_EIM_EIM_ServoStatus_DLC, pCanData);
+        gHalWrappers.CanTransmit(CAN_1, CAN_EIM_EIM_ServoStatus_MID, CAN_EIM_EIM_ServoStatus_DLC, pCanData);
     }
 
     if (ShouldTransmitMuxNow(m_muxTransmit_EIM_PcbaVitals, muxIdx))
     {
         const uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_PcbaVitals(muxIdx);
-        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_PcbaVitals_MID, CAN_EIM_EIM_PcbaVitals_DLC, pCanData);
+        gHalWrappers.CanTransmit(CAN_1, CAN_EIM_EIM_PcbaVitals_MID, CAN_EIM_EIM_PcbaVitals_DLC, pCanData);
     }
 }
 

@@ -1,7 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "halWrappers.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
 
 /***************************************************************************************************
@@ -11,12 +11,12 @@ extern "C" {
 
 void ProfilerSpecificClearTimerUs(void)
 {
-    Eim::HalWrappersClearTimerUs();
+    Eim::gHalWrappers.TimerClearUs();
 }
 
 uint32_t ProfilerSpecificGetTimerUs(void)
 {
-    return Eim::HalWrappersGetTimerUs();
+    return Eim::gHalWrappers.TimerGetUs();
 }
 
 } // extern "C"

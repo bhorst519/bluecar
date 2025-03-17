@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "klineCommTypes.hpp"
 #include "klineModule.hpp"
 #include "string.h"
@@ -89,20 +89,20 @@ Kline_State_E KlineModule::RunInitPendState(void) const
 {
     // Idle state for TX pin to sit high
     // Change TX to GPIO output
-    HalWrappersSetUartGpio(SERIAL_KLINE, true);
-    HalWrappersGpioSet(GPIO_KLINE_TX, true);
+    gHalWrappers.UartSetGpio(SERIAL_KLINE, true);
+    gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
 
     return Kline_State_E::INIT;
 }
 
 Kline_State_E KlineModule::RunInitState(void)
 {
-    HalWrappersGpioSet(GPIO_KLINE_TX, false);
+    gHalWrappers.GpioSet(GPIO_KLINE_TX, false);
     (void)osDelay(KLINE_INIT_LOW_TIME_MS);
-    HalWrappersGpioSet(GPIO_KLINE_TX, true);
+    gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
     (void)osDelay(KLINE_INIT_HIGH_TIME_MS);
     // Restore UART pins
-    HalWrappersSetUartGpio(SERIAL_KLINE, false);
+    gHalWrappers.UartSetGpio(SERIAL_KLINE, false);
 
     bool success = true;
 
@@ -235,19 +235,19 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
     if (success)
     {
         const uint8_t numRxBytes = gRequestResponseLength[static_cast<size_t>(request)] + numTxBytes;
-        success = HalWrappersUartReceive(SERIAL_KLINE, &gSerialBytesRx[0U], numRxBytes);
+        success = gHalWrappers.UartReceive(SERIAL_KLINE, &gSerialBytesRx[0U], numRxBytes);
     }
 
     // Initiate transmit
     if (success)
     {
-        success = HalWrappersUartTransmit(SERIAL_KLINE, &gSerialBytesTx[0U], numTxBytes, false);
+        success = gHalWrappers.UartTransmit(SERIAL_KLINE, &gSerialBytesTx[0U], numTxBytes, false);
     }
 
     // Wait for receive data
     if (success)
     {
-        success = HalWrappersUartWait(SERIAL_KLINE, KLINE_RESPONSE_TIMEOUT_MS);
+        success = gHalWrappers.UartWait(SERIAL_KLINE, KLINE_RESPONSE_TIMEOUT_MS);
     }
 
     if (success)

@@ -3,7 +3,6 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "EIM_canTransmitter.hpp"
-#include "halWrappers.hpp"
 #include "profiler.h"
 #include "txModule.hpp"
 
