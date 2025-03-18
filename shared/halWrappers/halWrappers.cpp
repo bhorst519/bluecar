@@ -12,6 +12,7 @@ namespace Shared
 //--------------------------------------------------------------------------------------------------
 // GPIO
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_GPIO == 1)
 void HalWrappersGpio::GpioSet(const HalWrappers_Gpio_E gpio, const bool set)
 {
     const GPIO_PinState state = set ? GPIO_PIN_SET : GPIO_PIN_RESET;
@@ -37,10 +38,12 @@ void HalWrappersGpio::GpioDeinitConfigPin(const HalWrappers_Gpio_E gpio)
 {
     HAL_GPIO_DeInit(m_gpioInfo[gpio].periph, m_gpioInfo[gpio].id);
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // PWM
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_PWM == 1)
 void HalWrappersPwm::PwmSet(const HalWrappers_Pwm_E pwm, const float dutyCycle)
 {
     // Timer is configured to reload at 45000 counts.
@@ -55,10 +58,12 @@ void HalWrappersPwm::PwmSet(const HalWrappers_Pwm_E pwm, const float dutyCycle)
     pwmChannel.Pulse = pulse;
     (void)HAL_TIM_PWM_ConfigChannel(m_pPwmTim, &pwmChannel, m_pwmInfo[pwm].ch);
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // ADC
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_ADC == 1)
 void HalWrappersAdc::AdcTriggerStart(void)
 {
     for (uint8_t i = 0U; i < static_cast<uint8_t>(MAX_NUM_ANALOG); ++i)
@@ -125,10 +130,12 @@ void HalWrappersAdc::AdcStartConversion(const HalWrappers_Analog_E adc)
         (void)HAL_ADC_Start_IT(m_pAdc);
     }
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // CAN
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_CAN == 1)
 void HalWrappersCan::CanRegisterRxFilter(const HalWrappers_Can_E can, const uint32_t mid)
 {
     const uint8_t currentFiltIdx = m_pendingRxFilter[can].currentFiltIdx;
@@ -182,10 +189,12 @@ void HalWrappersCan::CanTransmit(const HalWrappers_Can_E can, const uint32_t mid
     uint32_t txMailboxStorage;
     (void)HAL_CAN_AddTxMessage(m_pCan[can], &txHeader, pData, &txMailboxStorage);
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Serial
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_UART == 1)
 void HalWrappersUart::UartSetGpio(const HalWrappers_Serial_E serial, const bool setToGpio, HalWrappersGpio& halGpio)
 {
     const HalWrappers_Gpio_E rxPin = m_serialInfo[serial].rxPin;
@@ -275,10 +284,12 @@ void HalWrappersUart::UartAbort(const HalWrappers_Serial_E serial)
     (void)HAL_UART_UnRegisterCallback(m_pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
     (void)HAL_UART_UnRegisterCallback(m_pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Timer
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_TIMER == 1)
 void HalWrappersTimer::TimerClearUs(void)
 {
     __HAL_TIM_SET_COUNTER(m_pUsTim, 0U);
@@ -288,5 +299,6 @@ uint32_t HalWrappersTimer::TimerGetUs(void)
 {
     return __HAL_TIM_GET_COUNTER(m_pUsTim);
 }
+#endif
 
 } // namespace Eim

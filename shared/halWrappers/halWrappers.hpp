@@ -14,6 +14,30 @@
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
+#ifndef FEATURE_HAL_WRAPPERS_GPIO
+# define FEATURE_HAL_WRAPPERS_GPIO (0)
+#endif
+
+#ifndef FEATURE_HAL_WRAPPERS_PWM
+# define FEATURE_HAL_WRAPPERS_PWM (0)
+#endif
+
+#ifndef FEATURE_HAL_WRAPPERS_ADC
+# define FEATURE_HAL_WRAPPERS_ADC (0)
+#endif
+
+#ifndef FEATURE_HAL_WRAPPERS_CAN
+# define FEATURE_HAL_WRAPPERS_CAN (0)
+#endif
+
+#ifndef FEATURE_HAL_WRAPPERS_UART
+# define FEATURE_HAL_WRAPPERS_UART (0)
+#endif
+
+#ifndef FEATURE_HAL_WRAPPERS_TIMER
+# define FEATURE_HAL_WRAPPERS_TIMER (0)
+#endif
+
 namespace Shared
 {
 
@@ -72,6 +96,7 @@ struct HalWrappers_Serial_Info_S
 //--------------------------------------------------------------------------------------------------
 // GPIO
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_GPIO == 1)
 class HalWrappersGpio
 {
     public:
@@ -91,10 +116,12 @@ class HalWrappersGpio
     private:
         const HalWrappers_Gpio_Info_S (&m_gpioInfo)[MAX_NUM_GPIO];
 };
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // PWM
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_PWM == 1)
 class HalWrappersPwm
 {
     public:
@@ -114,10 +141,12 @@ class HalWrappersPwm
         TIM_HandleTypeDef * m_pPwmTim;
         const HalWrappers_Pwm_Info_S (&m_pwmInfo)[MAX_NUM_PWM];
 };
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // ADC
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_ADC == 1)
 class HalWrappersAdc
 {
     public:
@@ -145,10 +174,12 @@ class HalWrappersAdc
 
         void AdcStartConversion(const HalWrappers_Analog_E adc);
 };
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // CAN
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_CAN == 1)
 class HalWrappersCan
 {
     public:
@@ -178,10 +209,12 @@ class HalWrappersCan
         uint32_t m_filterBankIdx[MAX_NUM_CAN] {};
         bool m_useFifo1[MAX_NUM_CAN] {};
 };
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Serial
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_UART == 1)
 class HalWrappersUart
 {
     public:
@@ -209,10 +242,12 @@ class HalWrappersUart
 
         osThreadId m_taskToNotify[MAX_NUM_SERIAL] {};
 };
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Timer
 //--------------------------------------------------------------------------------------------------
+#if (FEATURE_HAL_WRAPPERS_TIMER == 1)
 class HalWrappersTimer
 {
     public:
@@ -230,6 +265,7 @@ class HalWrappersTimer
     private:
         TIM_HandleTypeDef * m_pUsTim;
 };
+#endif
 
 } // namespace Shared
 

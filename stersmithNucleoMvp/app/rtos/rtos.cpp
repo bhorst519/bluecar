@@ -3,7 +3,7 @@
 ***************************************************************************************************/
 #include "app.hpp"
 #include "cmsis_os.h"
-#include "halWrappers.h"
+#include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -15,9 +15,9 @@ static Eim::App m_app {};
 /***************************************************************************************************
 *                                 P U B L I C   F U N C T I O N S                                  *
 ***************************************************************************************************/
-void RtosInit(HalWrappers_Config_S * const pHalWrappersConfig)
+void RtosInit(void)
 {
-    HalWrappersInit(pHalWrappersConfig);
+    Eim::gHalWrappers.Init();
     m_app.Init();
 }
 
@@ -29,7 +29,7 @@ void RtosRunTask1kHz(void)
         (void)osDelayUntil(&currentTick, TASK_1KHZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        HalWrappersGpioToggle(GPIO_DEBUG_2);
+        Eim::gHalWrappers.GpioToggle(GPIO_DEBUG_2);
         m_app.RunTask1kHz();
 
         ProfilerScheduledTaskCheckOut();
@@ -48,10 +48,10 @@ void RtosRunTask10Hz(void)
         (void)osDelayUntil(&currentTick, TASK_10HZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        HalWrappersGpioToggle(GPIO_LED_1);
+        Eim::gHalWrappers.GpioToggle(GPIO_LED_1);
         m_app.RunTask10Hz();
 
-        HalWrappersSetPwm(pulse);
+        Eim::gHalWrappers.PwmSet(PWM_LED_1, pulse);
         pulse += pulseInc;
         if ((pulse > 1.01F) || (pulse < 0.0F))
         {
@@ -71,7 +71,7 @@ void RtosRunTask1Hz(void)
         (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
         ProfilerScheduledTaskCheckIn();
 
-        HalWrappersGpioToggle(GPIO_LED_2);
+        Eim::gHalWrappers.GpioToggle(GPIO_LED_2);
         m_app.RunTask1Hz();
 
         ProfilerUpdateLoad();
