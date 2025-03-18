@@ -83,7 +83,7 @@ struct HalWrappers_Pwm_Info_S
     Pwm_Ch ch;
 };
 
-struct HalWrappers_Serial_Info_S
+struct HalWrappers_Uart_Info_S
 {
     HalWrappers_Gpio_E rxPin;
     HalWrappers_Gpio_E txPin;
@@ -212,35 +212,35 @@ class HalWrappersCan
 #endif
 
 //--------------------------------------------------------------------------------------------------
-// Serial
+// UART
 //--------------------------------------------------------------------------------------------------
 #if (FEATURE_HAL_WRAPPERS_UART == 1)
 class HalWrappersUart
 {
     public:
         constexpr HalWrappersUart(
-                UART_HandleTypeDef * (&pSerial)[MAX_NUM_SERIAL],
-                const HalWrappers_Serial_Info_S (&serialInfo)[MAX_NUM_SERIAL]
+                UART_HandleTypeDef * (&pUart)[MAX_NUM_UART],
+                const HalWrappers_Uart_Info_S (&uartInfo)[MAX_NUM_UART]
             ) :
-                m_pSerial(pSerial),
-                m_serialInfo(serialInfo)
+                m_pUart(pUart),
+                m_uartInfo(uartInfo)
         {}
 
         NODEFAULT_NOCOPY_NOMOVE(HalWrappersUart);
 
-        void UartSetGpio(const HalWrappers_Serial_E serial, const bool setToGpio, HalWrappersGpio& halGpio);
-        bool UartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes, const bool notify);
-        bool UartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes);
-        bool UartWait(const HalWrappers_Serial_E serial, const uint32_t waitMs);
-        void UartAbort(const HalWrappers_Serial_E serial);
+        void UartSetGpio(const HalWrappers_Uart_E uart, const bool setToGpio, HalWrappersGpio& halGpio);
+        bool UartTransmit(const HalWrappers_Uart_E uart, const uint8_t * const pTx, const uint32_t numBytes, const bool notify);
+        bool UartReceive(const HalWrappers_Uart_E uart, uint8_t * const pRx, const uint32_t numBytes);
+        bool UartWait(const HalWrappers_Uart_E uart, const uint32_t waitMs);
+        void UartAbort(const HalWrappers_Uart_E uart);
 
-        osThreadId UartGetTaskToNotify(const HalWrappers_Serial_E serial) { return m_taskToNotify[serial]; }
+        osThreadId UartGetTaskToNotify(const HalWrappers_Uart_E uart) { return m_taskToNotify[uart]; }
 
     private:
-        UART_HandleTypeDef * (&m_pSerial)[MAX_NUM_SERIAL];
-        const HalWrappers_Serial_Info_S (&m_serialInfo)[MAX_NUM_SERIAL];
+        UART_HandleTypeDef * (&m_pUart)[MAX_NUM_UART];
+        const HalWrappers_Uart_Info_S (&m_uartInfo)[MAX_NUM_UART];
 
-        osThreadId m_taskToNotify[MAX_NUM_SERIAL] {};
+        osThreadId m_taskToNotify[MAX_NUM_UART] {};
 };
 #endif
 

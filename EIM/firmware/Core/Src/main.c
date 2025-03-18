@@ -84,7 +84,7 @@ HalWrappers_Config_S gHalWrappersConfig =
   .pPwmTim = &htim4,
   .pUsTim = &htim5,
   .pCan = {&hcan1, &hcan2},
-  .pSerial = {&huart1, &huart2},
+  .pUart = {&huart1, &huart2},
 };
 
 static Profiler_Data_S g1kHzProfilerData;

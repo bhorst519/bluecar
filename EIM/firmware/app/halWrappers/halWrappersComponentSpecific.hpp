@@ -24,7 +24,7 @@ using HalWrappersTimer = Shared::HalWrappersTimer;
 using HalWrappers_Gpio_Info_S = Shared::HalWrappers_Gpio_Info_S;
 using HalWrappers_Pwm_Info_S = Shared::HalWrappers_Pwm_Info_S;
 using HalWrappers_Adc_Info_S = Shared::HalWrappers_Adc_Info_S;
-using HalWrappers_Serial_Info_S = Shared::HalWrappers_Serial_Info_S;
+using HalWrappers_Uart_Info_S = Shared::HalWrappers_Uart_Info_S;
 
 class HalWrappers :   public HalWrappersGpio
                     , public HalWrappersPwm
@@ -39,13 +39,13 @@ class HalWrappers :   public HalWrappersGpio
                 , const HalWrappers_Gpio_Info_S (&gpioInfo)[MAX_NUM_GPIO]
                 , const HalWrappers_Pwm_Info_S (&pwmInfo)[MAX_NUM_PWM]
                 , const HalWrappers_Adc_Info_S (&adcInfo)[MAX_NUM_ANALOG]
-                , const HalWrappers_Serial_Info_S (&serialInfo)[MAX_NUM_SERIAL]
+                , const HalWrappers_Uart_Info_S (&uartInfo)[MAX_NUM_UART]
             ) :
                   HalWrappersGpio(gpioInfo)
                 , HalWrappersPwm(config.pPwmTim, pwmInfo)
                 , HalWrappersAdc(config.pAdc, adcInfo)
                 , HalWrappersCan(config.pCan)
-                , HalWrappersUart(config.pSerial, serialInfo)
+                , HalWrappersUart(config.pUart, uartInfo)
                 , HalWrappersTimer(config.pUsTim)
         {}
 
@@ -59,9 +59,9 @@ class HalWrappers :   public HalWrappersGpio
             Shared::HalWrappersAdc::AdcTriggerStart();
         }
 
-        void UartSetGpio(const HalWrappers_Serial_E serial, const bool setToGpio)
+        void UartSetGpio(const HalWrappers_Uart_E uart, const bool setToGpio)
         {
-            Shared::HalWrappersUart::UartSetGpio(serial, setToGpio, *this);
+            Shared::HalWrappersUart::UartSetGpio(uart, setToGpio, *this);
         }
 };
 

@@ -192,97 +192,97 @@ void HalWrappersCan::CanTransmit(const HalWrappers_Can_E can, const uint32_t mid
 #endif
 
 //--------------------------------------------------------------------------------------------------
-// Serial
+// UART
 //--------------------------------------------------------------------------------------------------
 #if (FEATURE_HAL_WRAPPERS_UART == 1)
-void HalWrappersUart::UartSetGpio(const HalWrappers_Serial_E serial, const bool setToGpio, HalWrappersGpio& halGpio)
+void HalWrappersUart::UartSetGpio(const HalWrappers_Uart_E uart, const bool setToGpio, HalWrappersGpio& halGpio)
 {
-    const HalWrappers_Gpio_E rxPin = m_serialInfo[serial].rxPin;
-    const HalWrappers_Gpio_E txPin = m_serialInfo[serial].txPin;
+    const HalWrappers_Gpio_E rxPin = m_uartInfo[uart].rxPin;
+    const HalWrappers_Gpio_E txPin = m_uartInfo[uart].txPin;
 
     if (setToGpio)
     {
-        HAL_UART_MspDeInit(m_pSerial[serial]);
+        HAL_UART_MspDeInit(m_pUart[uart]);
         halGpio.GpioInitConfigPin(txPin);
     }
     else
     {
         halGpio.GpioDeinitConfigPin(rxPin);
         halGpio.GpioDeinitConfigPin(txPin);
-        HAL_UART_MspInit(m_pSerial[serial]);
+        HAL_UART_MspInit(m_pUart[uart]);
     }
 }
 
-bool HalWrappersUart::UartTransmit(const HalWrappers_Serial_E serial, const uint8_t * const pTx, const uint32_t numBytes, const bool notify)
+bool HalWrappersUart::UartTransmit(const HalWrappers_Uart_E uart, const uint8_t * const pTx, const uint32_t numBytes, const bool notify)
 {
     HAL_StatusTypeDef status = HAL_OK;
 
     // Start receive
     if ((status == HAL_OK) && notify)
     {
-        status = HAL_UART_RegisterCallback(m_pSerial[serial],
+        status = HAL_UART_RegisterCallback(m_pUart[uart],
                                            HAL_UART_TX_COMPLETE_CB_ID,
-                                           m_serialInfo[serial].rxTxCompleteCallback);
+                                           m_uartInfo[uart].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Transmit_IT(m_pSerial[serial], pTx, numBytes);
+        status = HAL_UART_Transmit_IT(m_pUart[uart], pTx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
     if (!success)
     {
-        UartAbort(serial);
+        UartAbort(uart);
     }
     return success;
 }
 
-bool HalWrappersUart::UartReceive(const HalWrappers_Serial_E serial, uint8_t * const pRx, const uint32_t numBytes)
+bool HalWrappersUart::UartReceive(const HalWrappers_Uart_E uart, uint8_t * const pRx, const uint32_t numBytes)
 {
     HAL_StatusTypeDef status = HAL_OK;
 
     // Start receive
     if (status == HAL_OK)
     {
-        status = HAL_UART_RegisterCallback(m_pSerial[serial],
+        status = HAL_UART_RegisterCallback(m_pUart[uart],
                                            HAL_UART_RX_COMPLETE_CB_ID,
-                                           m_serialInfo[serial].rxTxCompleteCallback);
+                                           m_uartInfo[uart].rxTxCompleteCallback);
     }
 
     if (status == HAL_OK)
     {
-        status = HAL_UART_Receive_IT(m_pSerial[serial], pRx, numBytes);
+        status = HAL_UART_Receive_IT(m_pUart[uart], pRx, numBytes);
     }
 
     const bool success = (status == HAL_OK);
     if (!success)
     {
-        UartAbort(serial);
+        UartAbort(uart);
     }
     return success;
 }
 
-bool HalWrappersUart::UartWait(const HalWrappers_Serial_E serial, const uint32_t waitMs)
+bool HalWrappersUart::UartWait(const HalWrappers_Uart_E uart, const uint32_t waitMs)
 {
     // Wait for notification
-    m_taskToNotify[serial] = osThreadGetId();
+    m_taskToNotify[uart] = osThreadGetId();
     const osEvent result = osSignalWait(0, waitMs);
-    m_taskToNotify[serial] = NULL;
+    m_taskToNotify[uart] = NULL;
 
     const bool success = ((result.status == osOK) || (result.status == osEventSignal));
     if (!success)
     {
-        UartAbort(serial);
+        UartAbort(uart);
     }
     return success;
 }
 
-void HalWrappersUart::UartAbort(const HalWrappers_Serial_E serial)
+void HalWrappersUart::UartAbort(const HalWrappers_Uart_E uart)
 {
-    (void)HAL_UART_Abort_IT(m_pSerial[serial]);
-    (void)HAL_UART_UnRegisterCallback(m_pSerial[serial], HAL_UART_TX_COMPLETE_CB_ID);
-    (void)HAL_UART_UnRegisterCallback(m_pSerial[serial], HAL_UART_RX_COMPLETE_CB_ID);
+    (void)HAL_UART_Abort_IT(m_pUart[uart]);
+    (void)HAL_UART_UnRegisterCallback(m_pUart[uart], HAL_UART_TX_COMPLETE_CB_ID);
+    (void)HAL_UART_UnRegisterCallback(m_pUart[uart], HAL_UART_RX_COMPLETE_CB_ID);
 }
 #endif
 

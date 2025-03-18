@@ -52,17 +52,17 @@ typedef enum
 
 typedef enum
 {
-    SERIAL_KLINE,
-    SERIAL_SERVO,
-    MAX_NUM_SERIAL
-} HalWrappers_Serial_E;
+    UART_KLINE,
+    UART_SERVO,
+    MAX_NUM_UART
+} HalWrappers_Uart_E;
 
 typedef struct
 {
     TIM_HandleTypeDef * pPwmTim;
     TIM_HandleTypeDef * pUsTim;
     CAN_HandleTypeDef * pCan[MAX_NUM_CAN];
-    UART_HandleTypeDef * pSerial[MAX_NUM_SERIAL];
+    UART_HandleTypeDef * pUart[MAX_NUM_UART];
 } HalWrappers_Config_S;
 
 /***************************************************************************************************

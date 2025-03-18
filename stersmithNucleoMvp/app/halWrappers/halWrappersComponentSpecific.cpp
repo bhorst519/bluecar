@@ -34,16 +34,16 @@ static constexpr HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
     /* PWM_LED_1 */ {.ch = TIM_CHANNEL_1},
 };
 
-static constexpr HalWrappers_Serial_Info_S gSerialInfo[MAX_NUM_SERIAL] = {
-    /* SERIAL_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* SERIAL_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+static constexpr HalWrappers_Uart_Info_S gUartInfo[MAX_NUM_UART] = {
+    /* UART_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
+    /* UART_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
 };
 
 HalWrappers gHalWrappers {
       gHalWrappersConfig
     , gGpioInfo
     , gPwmInfo
-    , gSerialInfo
+    , gUartInfo
 };
 
 /***************************************************************************************************
@@ -55,7 +55,7 @@ static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart)
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
 
     // Task notify
-    osThreadId taskToNotify = gHalWrappers.UartGetTaskToNotify(SERIAL_KLINE);
+    osThreadId taskToNotify = gHalWrappers.UartGetTaskToNotify(UART_KLINE);
     if (NULL != taskToNotify)
     {
         (void)osSignalSet(taskToNotify, 0);
@@ -72,7 +72,7 @@ static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
     (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_RX_COMPLETE_CB_ID);
 
     // Task notify
-    osThreadId taskToNotify = gHalWrappers.UartGetTaskToNotify(SERIAL_SERVO);
+    osThreadId taskToNotify = gHalWrappers.UartGetTaskToNotify(UART_SERVO);
     if (NULL != taskToNotify)
     {
         (void)osSignalSet(taskToNotify, 0);

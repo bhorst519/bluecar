@@ -30,8 +30,8 @@ static constexpr uint8_t gRequestResponseLength[KLINE_MAX_NUM_REQUEST] = {
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
 ***************************************************************************************************/
-static uint8_t gSerialBytesTx[KLINE_MAX_TX_BYTES];
-static uint8_t gSerialBytesRx[KLINE_MAX_RX_BYTES];
+static uint8_t gUartBytesTx[KLINE_MAX_TX_BYTES];
+static uint8_t gUartBytesRx[KLINE_MAX_RX_BYTES];
 
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
@@ -89,7 +89,7 @@ Kline_State_E KlineModule::RunInitPendState(void) const
 {
     // Idle state for TX pin to sit high
     // Change TX to GPIO output
-    gHalWrappers.UartSetGpio(SERIAL_KLINE, true);
+    gHalWrappers.UartSetGpio(UART_KLINE, true);
     gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
 
     return Kline_State_E::INIT;
@@ -102,7 +102,7 @@ Kline_State_E KlineModule::RunInitState(void)
     gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
     (void)osDelay(KLINE_INIT_HIGH_TIME_MS);
     // Restore UART pins
-    gHalWrappers.UartSetGpio(SERIAL_KLINE, false);
+    gHalWrappers.UartSetGpio(UART_KLINE, false);
 
     bool success = true;
 
@@ -185,7 +185,7 @@ bool KlineModule::VerifyResponse(const Kline_Comm_Request_U * const pRequest, co
 bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_U * pResponse) const
 {
     bool success = true;
-    Kline_Comm_Request_U * pRequest = (Kline_Comm_Request_U *)(&gSerialBytesTx[0U]);
+    Kline_Comm_Request_U * pRequest = (Kline_Comm_Request_U *)(&gUartBytesTx[0U]);
     uint8_t * pCrc = NULL;
 
     switch (request)
@@ -235,24 +235,24 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
     if (success)
     {
         const uint8_t numRxBytes = gRequestResponseLength[static_cast<size_t>(request)] + numTxBytes;
-        success = gHalWrappers.UartReceive(SERIAL_KLINE, &gSerialBytesRx[0U], numRxBytes);
+        success = gHalWrappers.UartReceive(UART_KLINE, &gUartBytesRx[0U], numRxBytes);
     }
 
     // Initiate transmit
     if (success)
     {
-        success = gHalWrappers.UartTransmit(SERIAL_KLINE, &gSerialBytesTx[0U], numTxBytes, false);
+        success = gHalWrappers.UartTransmit(UART_KLINE, &gUartBytesTx[0U], numTxBytes, false);
     }
 
     // Wait for receive data
     if (success)
     {
-        success = gHalWrappers.UartWait(SERIAL_KLINE, KLINE_RESPONSE_TIMEOUT_MS);
+        success = gHalWrappers.UartWait(UART_KLINE, KLINE_RESPONSE_TIMEOUT_MS);
     }
 
     if (success)
     {
-        pResponse = (Kline_Comm_Response_U *)(&gSerialBytesRx[numTxBytes]);
+        pResponse = (Kline_Comm_Response_U *)(&gUartBytesRx[numTxBytes]);
         success = VerifyResponse(pRequest, pResponse);
     }
 
