@@ -1,7 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "halWrappers.h"
+#include "halWrappersComponentSpecific.hpp"
 #include "mathUtil.hpp"
 #include "servoModule.hpp"
 #include "util.h"
@@ -213,20 +213,20 @@ bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequ
     // Set up for receive, if needed
     if (success && checkRequest)
     {
-        success = HalWrappersUartReceive(SERIAL_SERVO, &gResponseFrame.raw.data[0U], SERVO_FRAME_SIZE);
+        success = gHalWrappers.UartReceive(UART_SERVO, &gResponseFrame.raw.data[0U], SERVO_FRAME_SIZE);
     }
 
     // Initiate transmit
     if (success)
     {
         const bool txCompleteNotify = (!checkRequest);
-        success = HalWrappersUartTransmit(SERIAL_SERVO, &gRequestFrame.raw.data[0U], SERVO_FRAME_SIZE, txCompleteNotify);
+        success = gHalWrappers.UartTransmit(UART_SERVO, &gRequestFrame.raw.data[0U], SERVO_FRAME_SIZE, txCompleteNotify);
     }
 
     // Wait for receive data, if needed. Otherwise wait for transmit to finish
     if (success)
     {
-        success = HalWrappersUartWait(SERIAL_SERVO, SERVO_RESPONSE_TIMEOUT_MS);
+        success = gHalWrappers.UartWait(UART_SERVO, SERVO_RESPONSE_TIMEOUT_MS);
     }
 
     if (success && checkRequest)

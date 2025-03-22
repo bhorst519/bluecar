@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "halWrappersConfig.h"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -77,13 +78,13 @@ uint32_t Task100HzBuffer[ 256 ];
 osStaticThreadDef_t Task100HzControlBlock;
 /* USER CODE BEGIN PV */
 
-static HalWrappers_Config_S halWrappersConfig =
+HalWrappers_Config_S gHalWrappersConfig =
 {
   .pAdc = &hadc1,
   .pPwmTim = &htim4,
   .pUsTim = &htim5,
   .pCan = {&hcan1, &hcan2},
-  .pSerial = {&huart1, &huart2},
+  .pUart = {&huart1, &huart2},
 };
 
 static Profiler_Data_S g1kHzProfilerData;
@@ -163,7 +164,7 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  RtosInit(&halWrappersConfig);
+  RtosInit();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

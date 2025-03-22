@@ -77,13 +77,14 @@ set(TARGET_SOURCES
     app/adc/adcModule.cpp
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
-    app/hal/halWrappers.cpp
+    app/halWrappers/halWrappersComponentSpecific.cpp
     app/kline/klineModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/servo/servoModule.cpp
     app/tx/txModule.cpp
+    ../../shared/halWrappers/halWrappers.cpp
     ../../shared/profiler/profiler.c
     ../../shared/taskBase/taskBase.cpp
 )
@@ -105,7 +106,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/app
     app/can
     app/dataChannel
-    app/hal
+    app/halWrappers
     app/kline
     app/profiler
     app/rtos
@@ -114,6 +115,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS
+    ../../shared/halWrappers
     ../../shared/moduleBase
     ../../shared/profiler
     ../../shared/taskBase

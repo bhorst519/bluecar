@@ -1,4 +1,4 @@
-# Sterling's Nucleo Minimal Viable Product Project
+# Engine Interface Module Project
 ## Directory structure
 - 'app' - developer-written code. Directories created for each module/function. Group sources and includes in the same directory.
     - 'app' - containts top-level app object with task/module object definitions
