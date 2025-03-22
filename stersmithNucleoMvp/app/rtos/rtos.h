@@ -20,7 +20,7 @@ extern "C" {
 /**************************************************************************************************
 *                     P U B L I C   F U N C T I O N   D E C L A R A T I O N S                     *
 **************************************************************************************************/
-void RtosInit(HalWrappers_Init_S * const pHalWrappersInitArg);
+void RtosInit(HalWrappers_Config_S * const pHalWrappersConfig);
 void RtosRunTask1kHz(void);
 void RtosRunTask10Hz(void);
 void RtosRunTask1Hz(void);

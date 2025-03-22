@@ -42,7 +42,7 @@ void ProfilerScheduledTaskRegister(const Profiler_E profiler, void * taskHandle)
 void ProfilerScheduledTaskCheckIn(void);
 void ProfilerScheduledTaskCheckOut(void);
 void ProfilerCheckIn(const Profiler_E profiler);
-void ProfilerCheckOut(const Profiler_E profiler);
+void ProfilerCheckOut(const Profiler_E profiler, const bool fromIsr);
 
 // Profiler load checks
 void ProfilerUpdateLoad(void);
@@ -53,6 +53,10 @@ float ProfilerGetLoad(const Profiler_E profiler);
 uint32_t ProfilerGetAvgPeriodUs(const Profiler_E profiler);
 uint32_t ProfilerGetMinPeriodUs(const Profiler_E profiler);
 uint32_t ProfilerGetMaxPeriodUs(const Profiler_E profiler);
+
+// To be implemented by component
+void ProfilerSpecificClearTimerUs(void);
+uint32_t ProfilerSpecificGetTimerUs(void);
 
 #ifdef __cplusplus
 }

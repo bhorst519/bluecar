@@ -1,10 +1,8 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "cmsis_os.h"
-#include "EIM_canReceiver.hpp"
+#include "adcModule.hpp"
 #include "halWrappers.hpp"
-#include "rxModule.hpp"
 
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
@@ -12,19 +10,24 @@
 namespace Eim
 {
 
-using namespace CanGen;
-
-void RxNoneModule::Receive(void)
+void AdcModule::Init(void)
 {
-    // Nothing to do
 }
 
-void Rx10HzModule::Receive(void)
+void AdcModule::Run(void)
 {
-    m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
+    for (size_t idx = 0U; idx < m_adcFilt10Hz.Size(); ++idx)
+    {
+        const float_q val = HalWrappersAdcGetValue(static_cast<HalWrappers_Analog_E>(idx));
+        const float valFilt = m_adcFilt10Hz.RunIfValidAndGetOutput(idx, val.Val(), val.Valid());
+        m_outputData.adcFilt10Hz[idx] = valFilt;
+        m_outputData.adcFilt10Hz[idx] = val.Status();
+    }
 
-    const uint32_t relayEn = CANRX_EIM_GetS_TESTER_Relay_Enable();
-    HalWrappersGpioSet(GPIO_MAIN_RELAY_EN, static_cast<bool>(relayEn));
+    if (HalWrappersAdcGetFinished())
+    {
+        HalWrappersAdcTriggerStart();
+    }
 }
 
 } // namespace Eim

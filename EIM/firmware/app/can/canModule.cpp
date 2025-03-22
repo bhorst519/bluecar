@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "canModule.hpp"
-#include "halWrappers.h"
+#include "halWrappers.hpp"
 #include "EIM_canReceiver.hpp"
 #include "EIM_canTransmitter.hpp"
 #include "EIM_messageInfo.hpp"
@@ -10,15 +10,15 @@
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
+namespace Eim
+{
+
 UTIL_ASSERT(CANRX_EIM_NUM_MESSAGES <= HAL_WRAPPERS_FILTERS_PER_BUS,
     "CAN bus with too many messages for filter config");
 
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
-namespace Eim
-{
-
 using namespace CanGen;
 
 void CanModule::Init(void)
@@ -46,6 +46,10 @@ void CanModule::Init(void)
     m_muxTransmit_EIM_ServoStatus.periodMs = 100U;
     m_muxTransmit_EIM_ServoStatus.numMuxes = (CAN_EIM_EIM_ServoStatus_MAX_MUX_IDX + 1U);
     m_muxTransmit_EIM_ServoStatus.counter = 0U;
+
+    m_muxTransmit_EIM_PcbaVitals.periodMs = 100U;
+    m_muxTransmit_EIM_PcbaVitals.numMuxes = (CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX + 1U);
+    m_muxTransmit_EIM_PcbaVitals.counter = 0U;
 }
 
 void CanModule::Run(void)
@@ -68,6 +72,12 @@ void CanModule::Run(void)
     {
         const uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_ServoStatus(muxIdx);
         HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_ServoStatus_MID, CAN_EIM_EIM_ServoStatus_DLC, pCanData);
+    }
+
+    if (ShouldTransmitMuxNow(m_muxTransmit_EIM_PcbaVitals, muxIdx))
+    {
+        const uint8_t * const pCanData = CANTX_EIM_GetTxStorage_EIM_PcbaVitals(muxIdx);
+        HalWrappersCanTransmit(CAN_1, CAN_EIM_EIM_PcbaVitals_MID, CAN_EIM_EIM_PcbaVitals_DLC, pCanData);
     }
 }
 

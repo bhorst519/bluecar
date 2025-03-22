@@ -2,7 +2,6 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappers.h"
 #include "profiler.h"
 
 #define FREERTOS_TASK_ADDITIONS_AS_HEADER (1)
@@ -57,6 +56,21 @@ static Profiler_Data_S * ProfilerGetDataPointer(const Profiler_E profiler)
     return pData;
 }
 
+static void ProfilerLatchData(Profiler_Data_S * const pData)
+{
+    if (NULL != pData)
+    {
+        pData->latchedAvgPeriod = (pData->sumPeriods / pData->numPeriods);
+        pData->latchedMinPeriod = pData->minPeriod;
+        pData->latchedMaxPeriod = pData->maxPeriod;
+
+        pData->numPeriods = 0U;
+        pData->sumPeriods = 0U;
+        pData->minPeriod = UINT_MAX;
+        pData->maxPeriod = 0U;
+    }
+}
+
 static void ProfilerCollectPeriodStats(Profiler_Data_S * const pData, const uint32_t period)
 {
     if (NULL != pData)
@@ -72,14 +86,7 @@ static void ProfilerCollectPeriodStats(Profiler_Data_S * const pData, const uint
         if (   (pData->configWindowNumPeriods != 0U)
             && (pData->numPeriods >= pData->configWindowNumPeriods))
         {
-            pData->latchedAvgPeriod = (pData->sumPeriods / pData->numPeriods);
-            pData->latchedMinPeriod = pData->minPeriod;
-            pData->latchedMaxPeriod = pData->maxPeriod;
-
-            pData->numPeriods = 0U;
-            pData->sumPeriods = 0U;
-            pData->minPeriod = UINT_MAX;
-            pData->maxPeriod = 0U;
+            ProfilerLatchData(pData);
         }
     }
 }
@@ -92,12 +99,12 @@ static void ProfilerCollectPeriodStats(Profiler_Data_S * const pData, const uint
 //--------------------------------------------------------------------------------------------------
 void configureTimerForRunTimeStats(void)
 {
-    HalWrappersClearTimerUs();
+    ProfilerSpecificClearTimerUs();
 }
 
 unsigned long getRunTimeCounterValue(void)
 {
-    return HalWrappersGetTimerUs();
+    return ProfilerSpecificGetTimerUs();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,7 +133,7 @@ void ProfilerScheduledTaskCheckIn(void)
     if (NULL != tlsPointer)
     {
         Profiler_Data_S * const pData = (Profiler_Data_S * const)tlsPointer;
-        pData->checkInTime = HalWrappersGetTimerUs();
+        pData->checkInTime = ProfilerSpecificGetTimerUs();
     }
 }
 
@@ -143,7 +150,7 @@ void ProfilerScheduledTaskCheckOut(void)
     {
         Profiler_Data_S * const pData = (Profiler_Data_S * const)tlsPointer;
         taskENTER_CRITICAL();
-        const uint32_t period = HalWrappersGetTimerUs() - pData->checkInTime;
+        const uint32_t period = ProfilerSpecificGetTimerUs() - pData->checkInTime;
         ProfilerCollectPeriodStats(pData, period);
         taskEXIT_CRITICAL();
     }
@@ -155,20 +162,37 @@ void ProfilerCheckIn(const Profiler_E profiler)
 
     if (NULL != pData)
     {
-        pData->checkInTime = HalWrappersGetTimerUs();
+        pData->checkInTime = ProfilerSpecificGetTimerUs();
     }
 }
 
-void ProfilerCheckOut(const Profiler_E profiler)
+void ProfilerCheckOut(const Profiler_E profiler, const bool fromIsr)
 {
     Profiler_Data_S * const pData = ProfilerGetDataPointer(profiler);
 
     if (NULL != pData)
     {
-        taskENTER_CRITICAL();
-        const uint32_t period = HalWrappersGetTimerUs() - pData->checkInTime;
+        UBaseType_t criticalSectionStatus;
+        if (fromIsr)
+        {
+            criticalSectionStatus = taskENTER_CRITICAL_FROM_ISR();
+        }
+        else
+        {
+            taskENTER_CRITICAL();
+        }
+
+        const uint32_t period = ProfilerSpecificGetTimerUs() - pData->checkInTime;
         ProfilerCollectPeriodStats(pData, period);
-        taskEXIT_CRITICAL();
+
+        if (fromIsr)
+        {
+            taskEXIT_CRITICAL_FROM_ISR(criticalSectionStatus);
+        }
+        else
+        {
+            taskEXIT_CRITICAL();
+        }
     }
 }
 
@@ -179,7 +203,7 @@ void ProfilerUpdateLoad(void)
 {
     // Take a snapshot of CPU counts
     taskENTER_CRITICAL();
-    const uint32_t cpuTicksNow = HalWrappersGetTimerUs();
+    const uint32_t cpuTicksNow = ProfilerSpecificGetTimerUs();
     const uint32_t idleTicksNow = ulTaskGetIdleRunTimeCounter();
 
     for (size_t i = 0U; i < (size_t)PROFILER_MAX_NUM; ++i)
@@ -197,6 +221,7 @@ void ProfilerUpdateLoad(void)
             if (NULL != pData)
             {
                 gProfilerLoadEndCounts[i] = pData->runTimeCounts;
+                ProfilerLatchData(pData);
             }
         }
     }

@@ -79,6 +79,7 @@ set(TARGET_SOURCES
     app/dataChannel/dataChannel.cpp
     app/hal/halWrappers.c
     app/kline/klineModule.cpp
+    app/profiler/profilerComponentSpecific.c
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/servo/servoModule.cpp
@@ -105,6 +106,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/dataChannel
     app/hal
     app/kline
+    app/profiler
     app/rtos
     app/rx
     app/servo

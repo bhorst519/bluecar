@@ -4,15 +4,23 @@
 //--------------------------------------------------------------------------------------------------
 // Transmit message info macros
 //--------------------------------------------------------------------------------------------------
+// EIM_PcbaVitals
+#define CAN_EIM_EIM_PcbaVitals_MID (1027U)
+#define CAN_EIM_EIM_PcbaVitals_DLC (1U)
+#define CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX (0U)
+#define CANTX_EIM_EIM_PcbaVitals_ARR_LEN (1U)
+
 // EIM_CpuStats
 #define CAN_EIM_EIM_CpuStats_MID (1026U)
 #define CAN_EIM_EIM_CpuStats_DLC (8U)
-#define CAN_EIM_EIM_CpuStats_MAX_MUX_IDX (3U)
+#define CAN_EIM_EIM_CpuStats_MAX_MUX_IDX (5U)
 #define CANTX_EIM_EIM_CpuStats_M0_ARR_IDX (0U)
 #define CANTX_EIM_EIM_CpuStats_M1_ARR_IDX (1U)
 #define CANTX_EIM_EIM_CpuStats_M2_ARR_IDX (2U)
 #define CANTX_EIM_EIM_CpuStats_M3_ARR_IDX (3U)
-#define CANTX_EIM_EIM_CpuStats_ARR_LEN (4U)
+#define CANTX_EIM_EIM_CpuStats_M4_ARR_IDX (4U)
+#define CANTX_EIM_EIM_CpuStats_M5_ARR_IDX (5U)
+#define CANTX_EIM_EIM_CpuStats_ARR_LEN (6U)
 
 // EIM_ServoStatus
 #define CAN_EIM_EIM_ServoStatus_MID (1025U)

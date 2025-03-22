@@ -40,6 +40,7 @@ class CanModule final : public Shared::ModuleBase
         CanModule_Mux_Transmitter_S m_muxTransmit_EIM_CpuStats {};
         CanModule_Mux_Transmitter_S m_muxTransmit_EIM_EngineStatus {};
         CanModule_Mux_Transmitter_S m_muxTransmit_EIM_ServoStatus {};
+        CanModule_Mux_Transmitter_S m_muxTransmit_EIM_PcbaVitals {};
 
         bool ShouldTransmitMuxNow(CanModule_Mux_Transmitter_S& mux, uint32_t& muxIdx) const;
 };
