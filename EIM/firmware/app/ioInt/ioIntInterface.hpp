@@ -1,11 +1,11 @@
-#ifndef RX_INTERFACE_HPP
-#define RX_INTERFACE_HPP
+#ifndef IO_INT_INTERFACE_HPP
+#define IO_INT_INTERFACE_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "ioIntData.hpp"
 #include "nocopy.hpp"
-#include "rxData.hpp"
 #include "util.h"
 
 /**************************************************************************************************
@@ -14,34 +14,32 @@
 namespace Eim
 {
 
-class Rx100HzOutputInterface
+class IoIntInputInterface
 {
     public:
-        constexpr Rx100HzOutputInterface()
+        constexpr IoIntInputInterface()
         {}
 
-        NOCOPY_NOMOVE(Rx100HzOutputInterface);
+        NOCOPY_NOMOVE(IoIntInputInterface);
 
         virtual uint8_q GetBrakeLightEn(void) const = 0;
         virtual uint8_q GetHeadlightEn(void) const = 0;
         virtual uint8_q GetHighBeamEn(void) const = 0;
-        virtual uint8_q GetMainRelayEn(void) const = 0;
         virtual uint8_q GetHornEn(void) const = 0;
+        virtual uint8_q GetMainRelayEn(void) const = 0;
         virtual uint8_q GetTurnLeftEn(void) const = 0;
         virtual uint8_q GetTurnRightEn(void) const = 0;
 };
 
-class Rx10HzOutputInterface
+class IoIntOutputInterface
 {
     public:
-        constexpr Rx10HzOutputInterface()
+        constexpr IoIntOutputInterface()
         {}
 
-        NOCOPY_NOMOVE(Rx10HzOutputInterface);
-
-        virtual float_q GetServoPositionRequest(void) const = 0;
+        NOCOPY_NOMOVE(IoIntOutputInterface);
 };
 
 } // namespace Eim
 
-#endif // RX_INTERFACE_HPP
+#endif // IO_INT_INTERFACE_HPP

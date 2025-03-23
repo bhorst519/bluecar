@@ -1,5 +1,5 @@
-#ifndef RX_DATA_HPP
-#define RX_DATA_HPP
+#ifndef IO_INT_DATA_HPP
+#define IO_INT_DATA_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
@@ -13,22 +13,10 @@
 namespace Eim
 {
 
-struct Rx100HzData_S
+struct IoIntData_S
 {
-    uint8_q brakeLightEn;
-    uint8_q headlightEn;
-    uint8_q highBeamEn;
-    uint8_q hornEn;
-    uint8_q mainRelayEn;
-    uint8_q turnLeftEn;
-    uint8_q turnRightEn;
-};
-
-struct Rx10HzData_S
-{
-    float_q servoPositionRequest;
 };
 
 } // namespace Eim
 
-#endif // RX_DATA_HPP
+#endif // IO_INT_DATA_HPP
