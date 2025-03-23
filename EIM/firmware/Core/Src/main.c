@@ -830,19 +830,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SIXTH_Pin FIFTH_Pin FOURTH_Pin SECOND_Pin
-                           FIRST_Pin */
-  GPIO_InitStruct.Pin = SIXTH_Pin|FIFTH_Pin|FOURTH_Pin|SECOND_Pin
-                          |FIRST_Pin;
+  /*Configure GPIO pins : SIXTH_Pin FIFTH_Pin FOURTH_Pin THIRD_Pin
+                           SECOND_Pin FIRST_Pin */
+  GPIO_InitStruct.Pin = SIXTH_Pin|FIFTH_Pin|FOURTH_Pin|THIRD_Pin
+                          |SECOND_Pin|FIRST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : THIRD_Pin */
-  GPIO_InitStruct.Pin = THIRD_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(THIRD_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : HL_RLY_EN_Pin LAP_RLY_EN_Pin */
   GPIO_InitStruct.Pin = HL_RLY_EN_Pin|LAP_RLY_EN_Pin;
