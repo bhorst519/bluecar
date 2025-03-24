@@ -26,6 +26,46 @@ class IoIntMessageModule final : public IoIntOutputInterface
         {}
 
         NOCOPY_NOMOVE(IoIntMessageModule);
+
+        virtual bool GetGearN(void) const override
+        {
+            return m_dataRef.gearN;
+        }
+
+        virtual bool GetGear1(void) const override
+        {
+            return m_dataRef.gear1;
+        }
+
+        virtual bool GetGear2(void) const override
+        {
+            return m_dataRef.gear2;
+        }
+
+        virtual bool GetGear3(void) const override
+        {
+            return m_dataRef.gear3;
+        }
+
+        virtual bool GetGear4(void) const override
+        {
+            return m_dataRef.gear4;
+        }
+
+        virtual bool GetGear5(void) const override
+        {
+            return m_dataRef.gear5;
+        }
+
+        virtual bool GetGear6(void) const override
+        {
+            return m_dataRef.gear6;
+        }
+
+        virtual GearSelect_E GetGearSelect(void) const override
+        {
+            return m_dataRef.gearSelect;
+        }
 };
 
 } // namespace Eim

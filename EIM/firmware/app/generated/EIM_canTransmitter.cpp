@@ -19,8 +19,7 @@ static uint8_t gEIM_EngineStatus_TX_ARR[CANTX_EIM_EIM_EngineStatus_ARR_LEN][CAN_
 //--------------------------------------------------------------------------------------------------
 uint8_t * CANTX_EIM_GetTxStorage_EIM_PcbaVitals(const uint32_t muxIdx)
 {
-    (void)muxIdx;
-    return &gEIM_PcbaVitals_TX_ARR[0U][0U];
+    return &gEIM_PcbaVitals_TX_ARR[muxIdx][0U];
 }
 
 uint8_t * CANTX_EIM_GetTxStorage_EIM_CpuStats(const uint32_t muxIdx)
@@ -41,6 +40,14 @@ uint8_t * CANTX_EIM_GetTxStorage_EIM_EngineStatus(const uint32_t muxIdx)
 //--------------------------------------------------------------------------------------------------
 // Mux index getters for iteration
 //--------------------------------------------------------------------------------------------------
+uint32_t gEIM_PcbaVitals_MuxFromIdx[] = {
+    0U,
+    1U,
+};
+uint32_t CANTX_EIM_GetMuxFromIdx_EIM_PcbaVitals(const uint32_t muxIdx)
+{
+    return gEIM_PcbaVitals_MuxFromIdx[muxIdx];
+}
 uint32_t gEIM_CpuStats_MuxFromIdx[] = {
     0U,
     1U,
@@ -73,14 +80,247 @@ uint32_t CANTX_EIM_GetMuxFromIdx_EIM_EngineStatus(const uint32_t muxIdx)
 //--------------------------------------------------------------------------------------------------
 // Signal transmit setter functions
 //--------------------------------------------------------------------------------------------------
+// EIM_PCBA_GearSelect
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearSelect(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[2] &= (uint8_t)(~0x07);
+    pData[2] |= (uint8_t)(((rawVal) & 0x07));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_GearSelect(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearSelect(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_GearSelect(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 7U ? 7U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearSelect((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_GearSelect(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_GearSelect(converted, pData);
+}
+
+// EIM_PCBA_GearN
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearN(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x01);
+    pData[1] |= (uint8_t)(((rawVal) & 0x01));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_GearN(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearN(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_GearN(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearN((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_GearN(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_GearN(converted, pData);
+}
+
+// EIM_PCBA_Gear6
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear6(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x40);
+    pData[1] |= (uint8_t)((((rawVal) << 6) & 0x40));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear6(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear6(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear6(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear6((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear6(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear6(converted, pData);
+}
+
+// EIM_PCBA_Gear5
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear5(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x20);
+    pData[1] |= (uint8_t)((((rawVal) << 5) & 0x20));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear5(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear5(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear5(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear5((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear5(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear5(converted, pData);
+}
+
+// EIM_PCBA_Gear4
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear4(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x10);
+    pData[1] |= (uint8_t)((((rawVal) << 4) & 0x10));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear4(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear4(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear4(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear4((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear4(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear4(converted, pData);
+}
+
+// EIM_PCBA_Gear3
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear3(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x08);
+    pData[1] |= (uint8_t)((((rawVal) << 3) & 0x08));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear3(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear3(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear3(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear3((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear3(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear3(converted, pData);
+}
+
+// EIM_PCBA_Gear2
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear2(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x04);
+    pData[1] |= (uint8_t)((((rawVal) << 2) & 0x04));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear2(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear2(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear2(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear2((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear2(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear2(converted, pData);
+}
+
+// EIM_PCBA_Gear1
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear1(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[1] &= (uint8_t)(~0x02);
+    pData[1] |= (uint8_t)((((rawVal) << 1) & 0x02));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear1(const uint8_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear1(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear1(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 1U ? 1U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear1((uint8_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Gear1(const uint32_t converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear1(converted, pData);
+}
+
+// EIM_PcbaVitalsMux
+void CANTX_EIM_SetSRawFromFrame_EIM_PcbaVitalsMux(const uint8_t rawVal, uint8_t * const pData)
+{
+    pData[0] &= (uint8_t)(~0x0F);
+    pData[0] |= (uint8_t)(((rawVal) & 0x0F));
+}
+void CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(const uint32_t converted, uint8_t * const pData)
+{
+    uint8_t rawVal;
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const uint32_t convertedSat = (converted > 15U ? 15U : converted);
+        rawVal = (uint8_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PcbaVitalsMux((uint8_t)rawVal, pData);
+}
+
 // EIM_PCBA_DieTemp
 void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData)
 {
-    pData[0] = (uint8_t)(((rawVal) & 0xFF));
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
 }
 void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal)
 {
-    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[0U][0U];
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(rawVal, pData);
 }
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t * const pData)
@@ -99,7 +339,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t *
 }
 void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted)
 {
-    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[0U][0U];
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(converted, pData);
 }
 
@@ -1261,6 +1501,15 @@ void CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(const float_q converted)
 //--------------------------------------------------------------------------------------------------
 bool CANTX_EIM_Init(void)
 {
+    // EIM_PcbaVitals
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        0U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        1U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U]
+    );
 
     // EIM_CpuStats
     CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(

@@ -24,6 +24,12 @@ void HalWrappersGpio::GpioToggle(const HalWrappers_Gpio_E gpio)
     HAL_GPIO_TogglePin(m_gpioInfo[gpio].periph, m_gpioInfo[gpio].id);
 }
 
+bool HalWrappersGpio::GpioRead(const HalWrappers_Gpio_E gpio)
+{
+    const GPIO_PinState pinState = HAL_GPIO_ReadPin(m_gpioInfo[gpio].periph, m_gpioInfo[gpio].id);
+    return (pinState == GPIO_PIN_SET ? true : false);
+}
+
 void HalWrappersGpio::GpioInitConfigPin(const HalWrappers_Gpio_E gpio)
 {
     GPIO_InitTypeDef GPIO_InitStruct{};

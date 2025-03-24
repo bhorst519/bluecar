@@ -19,6 +19,7 @@
 
 // Message modules
 #include "adcMessageModule.hpp"
+#include "ioIntMessageModule.hpp"
 #include "klineMessageModule.hpp"
 #include "rxMessageModule.hpp"
 #include "servoMessageModule.hpp"
@@ -107,7 +108,8 @@ class App final
         // TX/RX modules
         Rx100HzModule m_rx100HzModule {};
         Tx100HzModule m_tx100HzModule {
-            m_adcMessageModule100Hz
+            m_adcMessageModule100Hz,
+            m_ioIntMessageModule100Hz
         };
 
         // Inputs
@@ -184,6 +186,11 @@ class App final
                           >m_adcDataChannel{ m_adcModule.GetOutputDataReference() };
         AdcMessageModule m_adcMessageModule100Hz { m_adcDataChannel.GetBuffer(Task100Hz_t) };
 
+        DataChannel< IoIntData_S
+                   , Task100Hz  // source task
+                          >m_ioIntDataChannel{ m_ioIntModule.GetOutputDataReference() };
+        IoIntMessageModule m_ioIntMessageModule100Hz { m_ioIntDataChannel.GetBuffer(Task100Hz_t) };
+
         DataChannel< Rx100HzData_S
                    , Task100Hz  // source task
                            >m_rx100HzDataChannel{ m_rx100HzModule.GetOutputDataReference() };
@@ -206,13 +213,14 @@ class App final
                           >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
         KlineMessageModule m_klineMessageModule1Hz { m_klineDataChannel.GetBuffer(Task1Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 5U;
+        static constexpr size_t m_numberOfDataChannels = 6U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
             // 100Hz source
+            &m_adcDataChannel,
+            &m_ioIntDataChannel,
             &m_rx100HzDataChannel,
             // 10Hz source
-            &m_adcDataChannel,
             &m_rx10HzDataChannel,
             &m_servoDataChannel,
             // 1Hz source

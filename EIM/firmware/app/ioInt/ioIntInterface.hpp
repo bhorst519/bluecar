@@ -38,6 +38,15 @@ class IoIntOutputInterface
         {}
 
         NOCOPY_NOMOVE(IoIntOutputInterface);
+
+        virtual bool GetGearN(void) const = 0;
+        virtual bool GetGear1(void) const = 0;
+        virtual bool GetGear2(void) const = 0;
+        virtual bool GetGear3(void) const = 0;
+        virtual bool GetGear4(void) const = 0;
+        virtual bool GetGear5(void) const = 0;
+        virtual bool GetGear6(void) const = 0;
+        virtual GearSelect_E GetGearSelect(void) const = 0;
 };
 
 } // namespace Eim
