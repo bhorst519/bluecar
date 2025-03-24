@@ -61,9 +61,9 @@ static constexpr HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
 };
 
 static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
-    /* ANALOG_12V                */ {.ch = ADC_CHANNEL_9,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_SERVO_12V          */ {.ch = ADC_CHANNEL_7,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_ENG_12V            */ {.ch = ADC_CHANNEL_3,          .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_12V                */ {.ch = ADC_CHANNEL_9,          .scale = 4.6F, .offset = 0.0F}, // Vout = Vin * (1 / 4.6)
+    /* ANALOG_SERVO_12V          */ {.ch = ADC_CHANNEL_7,          .scale = 4.6F, .offset = 0.0F}, // Vout = Vin * (1 / 4.6)
+    /* ANALOG_ENG_12V            */ {.ch = ADC_CHANNEL_3,          .scale = 4.6F, .offset = 0.0F}, // Vout = Vin * (1 / 4.6)
     /* ANALOG_ENG_TEMP           */ {.ch = ADC_CHANNEL_6,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LEVEL         */ {.ch = ADC_CHANNEL_4,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},

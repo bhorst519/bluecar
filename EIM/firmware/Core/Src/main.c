@@ -774,7 +774,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOF, KLINE_EN_Pin|MAIN_RLY_EN_Pin|ENG_ON_EN_Pin|ENG_START_EN_Pin
-                          |HIGHBEAM_EN_Pin|L_TURN_SIG_EN_Pin|R_TURN_SIG_EN_Pin|HORN_EN_Pin, GPIO_PIN_RESET);
+                          |BRAKE_LIGHT_EN_Pin|HIGHBEAM_EN_Pin|L_TURN_SIG_EN_Pin|R_TURN_SIG_EN_Pin
+                          |HORN_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, HL_RLY_EN_Pin|LAP_RLY_EN_Pin, GPIO_PIN_RESET);
@@ -783,18 +784,14 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(RS485_DIR_GPIO_Port, RS485_DIR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : KLINE_EN_Pin MAIN_RLY_EN_Pin ENG_ON_EN_Pin ENG_START_EN_Pin
-                           HIGHBEAM_EN_Pin L_TURN_SIG_EN_Pin R_TURN_SIG_EN_Pin HORN_EN_Pin */
+                           BRAKE_LIGHT_EN_Pin HIGHBEAM_EN_Pin L_TURN_SIG_EN_Pin R_TURN_SIG_EN_Pin
+                           HORN_EN_Pin */
   GPIO_InitStruct.Pin = KLINE_EN_Pin|MAIN_RLY_EN_Pin|ENG_ON_EN_Pin|ENG_START_EN_Pin
-                          |HIGHBEAM_EN_Pin|L_TURN_SIG_EN_Pin|R_TURN_SIG_EN_Pin|HORN_EN_Pin;
+                          |BRAKE_LIGHT_EN_Pin|HIGHBEAM_EN_Pin|L_TURN_SIG_EN_Pin|R_TURN_SIG_EN_Pin
+                          |HORN_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : BRAKE_LIGHT_EN_Pin TACH_Pin */
-  GPIO_InitStruct.Pin = BRAKE_LIGHT_EN_Pin|TACH_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pin : VSS_Pin */
@@ -821,25 +818,25 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : TACH_Pin */
+  GPIO_InitStruct.Pin = TACH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(TACH_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : TURN_L_Pin TURN_R_Pin */
   GPIO_InitStruct.Pin = TURN_L_Pin|TURN_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SIXTH_Pin FIFTH_Pin FOURTH_Pin SECOND_Pin
-                           FIRST_Pin */
-  GPIO_InitStruct.Pin = SIXTH_Pin|FIFTH_Pin|FOURTH_Pin|SECOND_Pin
-                          |FIRST_Pin;
+  /*Configure GPIO pins : SIXTH_Pin FIFTH_Pin FOURTH_Pin THIRD_Pin
+                           SECOND_Pin FIRST_Pin */
+  GPIO_InitStruct.Pin = SIXTH_Pin|FIFTH_Pin|FOURTH_Pin|THIRD_Pin
+                          |SECOND_Pin|FIRST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : THIRD_Pin */
-  GPIO_InitStruct.Pin = THIRD_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(THIRD_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : HL_RLY_EN_Pin LAP_RLY_EN_Pin */
   GPIO_InitStruct.Pin = HL_RLY_EN_Pin|LAP_RLY_EN_Pin;

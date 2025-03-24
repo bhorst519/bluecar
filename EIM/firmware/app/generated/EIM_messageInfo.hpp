@@ -6,9 +6,11 @@
 //--------------------------------------------------------------------------------------------------
 // EIM_PcbaVitals
 #define CAN_EIM_EIM_PcbaVitals_MID (1027U)
-#define CAN_EIM_EIM_PcbaVitals_DLC (1U)
-#define CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX (0U)
-#define CANTX_EIM_EIM_PcbaVitals_ARR_LEN (1U)
+#define CAN_EIM_EIM_PcbaVitals_DLC (3U)
+#define CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX (1U)
+#define CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX (0U)
+#define CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX (1U)
+#define CANTX_EIM_EIM_PcbaVitals_ARR_LEN (2U)
 
 // EIM_CpuStats
 #define CAN_EIM_EIM_CpuStats_MID (1026U)
@@ -45,7 +47,7 @@
 
 // TESTER_request
 #define CAN_EIM_TESTER_request_MID (1280U)
-#define CAN_EIM_TESTER_request_DLC (2U)
+#define CAN_EIM_TESTER_request_DLC (4U)
 #define CAN_EIM_TESTER_request_MAX_MUX_IDX (0U)
 #define CANRX_EIM_TESTER_request_ARR_LEN (1U)
 

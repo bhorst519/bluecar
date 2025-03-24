@@ -21,6 +21,7 @@ uint8_t * CANTX_EIM_GetTxStorage_EIM_EngineStatus(const uint32_t muxIdx);
 //--------------------------------------------------------------------------------------------------
 // Mux index getters for iteration
 //--------------------------------------------------------------------------------------------------
+uint32_t CANTX_EIM_GetMuxFromIdx_EIM_PcbaVitals(const uint32_t muxIdx);
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_CpuStats(const uint32_t muxIdx);
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_ServoStatus(const uint32_t muxIdx);
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_EngineStatus(const uint32_t muxIdx);
@@ -28,6 +29,58 @@ uint32_t CANTX_EIM_GetMuxFromIdx_EIM_EngineStatus(const uint32_t muxIdx);
 //--------------------------------------------------------------------------------------------------
 // Signal transmit setter functions
 //--------------------------------------------------------------------------------------------------
+// EIM_PCBA_GearSelect
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearSelect(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_GearSelect(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_GearSelect(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_GearSelect(const uint32_t converted);
+
+// EIM_PCBA_GearN
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_GearN(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_GearN(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_GearN(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_GearN(const uint32_t converted);
+
+// EIM_PCBA_Gear6
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear6(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear6(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear6(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear6(const uint32_t converted);
+
+// EIM_PCBA_Gear5
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear5(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear5(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear5(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear5(const uint32_t converted);
+
+// EIM_PCBA_Gear4
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear4(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear4(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear4(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear4(const uint32_t converted);
+
+// EIM_PCBA_Gear3
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear3(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear3(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear3(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear3(const uint32_t converted);
+
+// EIM_PCBA_Gear2
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear2(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear2(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear2(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear2(const uint32_t converted);
+
+// EIM_PCBA_Gear1
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Gear1(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Gear1(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear1(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Gear1(const uint32_t converted);
+
+// EIM_PcbaVitalsMux
+void CANTX_EIM_SetSRawFromFrame_EIM_PcbaVitalsMux(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(const uint32_t converted, uint8_t * const pData);
+
 // EIM_PCBA_DieTemp
 void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal);

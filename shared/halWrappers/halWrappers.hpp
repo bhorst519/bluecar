@@ -110,6 +110,7 @@ class HalWrappersGpio
 
         void GpioSet(const HalWrappers_Gpio_E gpio, const bool level);
         void GpioToggle(const HalWrappers_Gpio_E gpio);
+        bool GpioRead(const HalWrappers_Gpio_E gpio);
         void GpioInitConfigPin(const HalWrappers_Gpio_E gpio);
         void GpioDeinitConfigPin(const HalWrappers_Gpio_E gpio);
 

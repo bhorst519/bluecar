@@ -5,6 +5,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "adcInterface.hpp"
+#include "ioIntInterface.hpp"
 #include "klineInterface.hpp"
 #include "moduleBase.hpp"
 #include "servoInterface.hpp"
@@ -33,10 +34,12 @@ class Tx100HzModule final : public Shared::TxModuleBase
 {
     public:
         constexpr Tx100HzModule(
-                const AdcOutputInterface& adcRef
+                const AdcOutputInterface& adcRef,
+                const IoIntOutputInterface& ioIntRef
             ) :
                 TxModuleBase(),
-                m_adcRef(adcRef)
+                m_adcRef(adcRef),
+                m_ioIntRef(ioIntRef)
         {}
 
         NOCOPY_NOMOVE(Tx100HzModule);
@@ -45,6 +48,7 @@ class Tx100HzModule final : public Shared::TxModuleBase
 
     private:
         const AdcOutputInterface& m_adcRef;
+        const IoIntOutputInterface& m_ioIntRef;
 };
 
 class Tx10HzModule final : public Shared::TxModuleBase

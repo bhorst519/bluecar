@@ -19,12 +19,20 @@ void RxNoneModule::Receive(void)
     // Nothing to do
 }
 
+void Rx100HzModule::Receive(void)
+{
+    m_outputData.brakeLightEn = CANRX_EIM_GetS_TESTER_BrakeLightEnable().Convert(uint8_t());
+    m_outputData.headlightEn = CANRX_EIM_GetS_TESTER_HeadlightEnable().Convert(uint8_t());
+    m_outputData.highBeamEn = CANRX_EIM_GetS_TESTER_HighBeamEnable().Convert(uint8_t());
+    m_outputData.hornEn = CANRX_EIM_GetS_TESTER_HornEnable().Convert(uint8_t());
+    m_outputData.mainRelayEn = CANRX_EIM_GetS_TESTER_MainRelayEnable().Convert(uint8_t());
+    m_outputData.turnLeftEn = CANRX_EIM_GetS_TESTER_TurnLeftEnable().Convert(uint8_t());
+    m_outputData.turnRightEn = CANRX_EIM_GetS_TESTER_TurnRightEnable().Convert(uint8_t());
+}
+
 void Rx10HzModule::Receive(void)
 {
     m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
-
-    const uint32_t relayEn = CANRX_EIM_GetS_TESTER_Relay_Enable();
-    gHalWrappers.GpioSet(GPIO_MAIN_RELAY_EN, static_cast<bool>(relayEn));
 }
 
 } // namespace Eim

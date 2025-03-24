@@ -27,6 +27,23 @@ class RxNoneModule final : public Shared::RxModuleBase
         virtual void Receive(void) override;
 };
 
+class Rx100HzModule final : public Shared::RxModuleBase
+{
+    public:
+        constexpr Rx100HzModule(
+            ) :
+                RxModuleBase()
+        {}
+
+        NOCOPY_NOMOVE(Rx100HzModule);
+
+        virtual void Receive(void) override;
+        constexpr const Rx100HzData_S& GetOutputDataReference(void) const { return m_outputData; };
+
+    private:
+        Rx100HzData_S m_outputData {};
+};
+
 class Rx10HzModule final : public Shared::RxModuleBase
 {
     public:

@@ -1,5 +1,5 @@
-#ifndef RX_DATA_HPP
-#define RX_DATA_HPP
+#ifndef IO_INT_DATA_HPP
+#define IO_INT_DATA_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
@@ -13,22 +13,32 @@
 namespace Eim
 {
 
-struct Rx100HzData_S
+enum class GearSelect_E
 {
-    uint8_q brakeLightEn;
-    uint8_q headlightEn;
-    uint8_q highBeamEn;
-    uint8_q hornEn;
-    uint8_q mainRelayEn;
-    uint8_q turnLeftEn;
-    uint8_q turnRightEn;
+    NEUTRAL     = 0U,
+    FIRST       = 1U,
+    SECOND      = 2U,
+    THIRD       = 3U,
+    FOURTH      = 4U,
+    FIFTH       = 5U,
+    SIXTH       = 6U,
+    MAX,
+    ERROR       = GearSelect_E::MAX
 };
+static constexpr uint8_t MAX_NUM_GEAR_SELECT {static_cast<uint8_t>(GearSelect_E::MAX)};
 
-struct Rx10HzData_S
+struct IoIntData_S
 {
-    float_q servoPositionRequest;
+    bool gearN;
+    bool gear1;
+    bool gear2;
+    bool gear3;
+    bool gear4;
+    bool gear5;
+    bool gear6;
+    GearSelect_E gearSelect;
 };
 
 } // namespace Eim
 
-#endif // RX_DATA_HPP
+#endif // IO_INT_DATA_HPP

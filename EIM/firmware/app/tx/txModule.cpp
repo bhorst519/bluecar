@@ -47,6 +47,17 @@ void Tx100HzModule::Transmit(void)
     taskENTER_CRITICAL();
     CANTX_EIM_SetS_EIM_PCBA_DieTemp(m_adcRef.GetAdcFilt10Hz(ANALOG_DIE_TEMP).Convert(int32_t()));
     taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_GearN(static_cast<uint32_t>(m_ioIntRef.GetGearN()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear1(static_cast<uint32_t>(m_ioIntRef.GetGear1()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear2(static_cast<uint32_t>(m_ioIntRef.GetGear2()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear3(static_cast<uint32_t>(m_ioIntRef.GetGear3()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear4(static_cast<uint32_t>(m_ioIntRef.GetGear4()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear5(static_cast<uint32_t>(m_ioIntRef.GetGear5()));
+    CANTX_EIM_SetS_EIM_PCBA_Gear6(static_cast<uint32_t>(m_ioIntRef.GetGear6()));
+    CANTX_EIM_SetS_EIM_PCBA_GearSelect(static_cast<uint32_t>(m_ioIntRef.GetGearSelect()));
+    taskEXIT_CRITICAL();
 }
 
 void Tx10HzModule::Transmit(void)

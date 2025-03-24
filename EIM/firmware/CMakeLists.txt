@@ -78,6 +78,7 @@ set(TARGET_SOURCES
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
     app/halWrappers/halWrappersComponentSpecific.cpp
+    app/ioInt/ioIntModule.cpp
     app/kline/klineModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
@@ -107,6 +108,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/can
     app/dataChannel
     app/halWrappers
+    app/ioInt
     app/kline
     app/profiler
     app/rtos
