@@ -21,6 +21,7 @@ using HalWrappersCan = Shared::HalWrappersCan;
 using HalWrappersUart = Shared::HalWrappersUart;
 using HalWrappersTimer = Shared::HalWrappersTimer;
 
+using HalWrappers_Tim_Int_E = Shared::HalWrappers_Tim_Int_E;
 using HalWrappers_Gpio_Info_S = Shared::HalWrappers_Gpio_Info_S;
 using HalWrappers_Pwm_Info_S = Shared::HalWrappers_Pwm_Info_S;
 using HalWrappers_Adc_Info_S = Shared::HalWrappers_Adc_Info_S;
@@ -62,6 +63,11 @@ class HalWrappers :   public HalWrappersGpio
         void UartSetGpio(const HalWrappers_Uart_E uart, const bool setToGpio)
         {
             Shared::HalWrappersUart::UartSetGpio(uart, setToGpio, *this);
+        }
+
+        void UartSetServoTransmit(void)
+        {
+            GpioSet(GPIO_SERVO_COMM_DIR, true);
         }
 };
 
