@@ -220,6 +220,7 @@ bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequ
     if (success)
     {
         const bool txCompleteNotify = (!checkRequest);
+        gHalWrappers.UartSetServoTransmit();
         success = gHalWrappers.UartTransmit(UART_SERVO, &gRequestFrame.raw.data[0U], SERVO_FRAME_SIZE, txCompleteNotify);
     }
 

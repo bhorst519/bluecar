@@ -14,6 +14,7 @@ namespace Eim
 
 static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
 static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart);
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
@@ -80,8 +81,16 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
 };
 
 static constexpr HalWrappers_Uart_Info_S gUartInfo[MAX_NUM_UART] = {
-    /* UART_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* UART_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+    /* UART_KLINE */  { .rxPin = GPIO_KLINE_RX,
+                        .txPin = GPIO_KLINE_TX,
+                        .txCompleteCallback = nullptr,
+                        .notifyCallback = HalWrappersKlineUartCallback
+                      },
+    /* UART_SERVO */  { .rxPin = GPIO_SERVO_RX,
+                        .txPin = GPIO_SERVO_TX,
+                        .txCompleteCallback = HalWrappersServoUartTxComplete,
+                        .notifyCallback = HalWrappersServoUartCallback
+                      },
 };
 
 HalWrappers gHalWrappers {
@@ -129,6 +138,19 @@ static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
+static void HalWrappersServoUartTxCompleteDelayed(void)
+{
+    gHalWrappers.GpioSet(GPIO_SERVO_COMM_DIR, false);
+}
+
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart)
+{
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+
+    // Enable servo UART for receive
+    gHalWrappers.TimerScheduleInt(Shared::TIM_INT_CH_1, 500U, HalWrappersServoUartTxCompleteDelayed);
+}
+
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
@@ -144,9 +166,6 @@ void HalWrappers::Init(void)
 
 } // namespace Eim
 
-/***************************************************************************************************
-*                                 P U B L I C   F U N C T I O N S                                  *
-***************************************************************************************************/
 //--------------------------------------------------------------------------------------------------
 // ISR callbacks
 //--------------------------------------------------------------------------------------------------
@@ -193,6 +212,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     {
         ProfilerCheckOut(PROFILER_ADC_CONV, true);
     }
+}
+
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    Eim::gHalWrappers.TimerIrq(htim);
 }
 
 } // extern "C"
