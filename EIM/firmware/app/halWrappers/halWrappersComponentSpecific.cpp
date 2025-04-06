@@ -36,6 +36,7 @@ static constexpr HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
     /* GPIO_SERVO_COMM_DIR */       {.id = GPIO_PIN_4,  .periph = GPIOD},
     /* GPIO_SERVO_TX */             {.id = GPIO_PIN_5,  .periph = GPIOD},
     /* GPIO_SERVO_RX */             {.id = GPIO_PIN_6,  .periph = GPIOD},
+    /* ANALOG_EXTRA              */ {.id = GPIO_PIN_0,  .periph = GPIOB},
 
     // Inputs
     /* GPIO_TACH */                 {.id = GPIO_PIN_12, .periph = GPIOF},
@@ -68,7 +69,7 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
     /* ANALOG_ENG_TEMP           */ {.ch = ADC_CHANNEL_6,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LEVEL         */ {.ch = ADC_CHANNEL_4,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
+    // /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -279.0F}, // 2.5mV / degC, .76V @ 25degC
     /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 1.0F, .offset = 0.0F},
@@ -141,6 +142,7 @@ static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
 static void HalWrappersServoUartTxCompleteDelayed(void)
 {
     gHalWrappers.GpioSet(GPIO_SERVO_COMM_DIR, false);
+    gHalWrappers.GpioSet(ANALOG_EXTRA, false);
 }
 
 static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart)

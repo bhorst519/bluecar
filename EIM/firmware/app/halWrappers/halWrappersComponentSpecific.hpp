@@ -70,8 +70,18 @@ class HalWrappers :   public HalWrappersGpio
             Shared::HalWrappersUart::UartSetGpio(uart, setToGpio, *this);
         }
 
+        bool UartTransmit(const HalWrappers_Uart_E uart, const uint8_t * const pTx, const uint32_t numBytes, const bool notify)
+        {
+            // if (uart == UART_SERVO)
+            // {
+            //     GpioSet(ANALOG_EXTRA, false);
+            // }
+            return Shared::HalWrappersUart::UartTransmit(uart, pTx, numBytes, notify);
+        }
+
         void UartSetServoTransmit(void)
         {
+            GpioSet(ANALOG_EXTRA, true);
             GpioSet(GPIO_SERVO_COMM_DIR, true);
             osDelay(1);
         }
