@@ -69,13 +69,13 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
     /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -279.0F}, // 2.5mV / degC, .76V @ 25degC
-    /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_BRAKE_LIGHT_ISENSE */ {.ch = ADC_CHANNEL_1,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_TURN_R_ISENSE      */ {.ch = ADC_CHANNEL_12,         .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_TURN_L_ISENSE      */ {.ch = ADC_CHANNEL_13,         .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_HIGH_BEAM_ISENSE   */ {.ch = ADC_CHANNEL_0,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_HORN_ISENSE        */ {.ch = ADC_CHANNEL_11,         .scale = 1.0F, .offset = 0.0F},
+    /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_BRAKE_LIGHT_ISENSE */ {.ch = ADC_CHANNEL_1,          .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_TURN_R_ISENSE      */ {.ch = ADC_CHANNEL_12,         .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_TURN_L_ISENSE      */ {.ch = ADC_CHANNEL_13,         .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_HIGH_BEAM_ISENSE   */ {.ch = ADC_CHANNEL_0,          .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
+    /* ANALOG_HORN_ISENSE        */ {.ch = ADC_CHANNEL_11,         .scale = 21.2766F, .offset = 0.0F}, // I scaled down by 10000, over 470Ohm resistor
 
 };
 

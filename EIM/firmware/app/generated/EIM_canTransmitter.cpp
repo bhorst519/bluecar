@@ -43,6 +43,9 @@ uint8_t * CANTX_EIM_GetTxStorage_EIM_EngineStatus(const uint32_t muxIdx)
 uint32_t gEIM_PcbaVitals_MuxFromIdx[] = {
     0U,
     1U,
+    2U,
+    3U,
+    4U,
 };
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_PcbaVitals(const uint32_t muxIdx)
 {
@@ -341,6 +344,319 @@ void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted)
 {
     uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(converted, pData);
+}
+
+// EIM_PCBA_12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_12V(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[2] = (uint8_t)(((rawVal) & 0xFF));
+    pData[3] &= (uint8_t)(~0x0F);
+    pData[3] |= (uint8_t)((((rawVal) >> 8) & 0x0F));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_12V(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_12V(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_12V(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 4095U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_12V((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_12V(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_12V(converted, pData);
+}
+
+// EIM_PCBA_Servo12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Servo12V(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] &= (uint8_t)(~0xF0);
+    pData[3] |= (uint8_t)((((rawVal) << 4) & 0xF0));
+    pData[4] = (uint8_t)((((rawVal) >> 4) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Servo12V(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Servo12V(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Servo12V(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 4095U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Servo12V((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Servo12V(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Servo12V(converted, pData);
+}
+
+// EIM_PCBA_Eng12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[5] = (uint8_t)(((rawVal) & 0xFF));
+    pData[6] &= (uint8_t)(~0x0F);
+    pData[6] |= (uint8_t)((((rawVal) >> 8) & 0x0F));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_Eng12V(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Eng12V(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 4095U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_Eng12V(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_Eng12V(converted, pData);
+}
+
+// EIM_PCBA_EngOnCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_EngOnCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngOnCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_EngOnCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_EngOnCurrent(converted, pData);
+}
+
+// EIM_PCBA_EngStartCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngStartCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_EngStartCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngStartCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngStartCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngStartCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_EngStartCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_EngStartCurrent(converted, pData);
+}
+
+// EIM_PCBA_BrakeLightCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_BrakeLightCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_BrakeLightCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_BrakeLightCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_BrakeLightCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_BrakeLightCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_BrakeLightCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_BrakeLightCurrent(converted, pData);
+}
+
+// EIM_PCBA_TurnRCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnRCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnRCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_TurnRCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnRCurrent(converted, pData);
+}
+
+// EIM_PCBA_TurnLCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[5] = (uint8_t)(((rawVal) & 0xFF));
+    pData[6] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnLCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnLCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_TurnLCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnLCurrent(converted, pData);
+}
+
+// EIM_PCBA_HighBeamCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeamCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_HighBeamCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeamCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_HighBeamCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeamCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_HighBeamCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_HighBeamCurrent(converted, pData);
+}
+
+// EIM_PCBA_HornCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HornCurrent(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_HornCurrent(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HornCurrent(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HornCurrent((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_HornCurrent(const float_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(converted, pData);
 }
 
 // EIM_CpuStatsMux
@@ -1509,6 +1825,18 @@ bool CANTX_EIM_Init(void)
     CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
         1U,
         &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        2U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        3U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        4U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U]
     );
 
     // EIM_CpuStats

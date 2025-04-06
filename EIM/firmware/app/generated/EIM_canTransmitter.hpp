@@ -87,6 +87,66 @@ void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_DieTemp(const int32_q converted);
 
+// EIM_PCBA_12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_12V(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_12V(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_12V(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_12V(const float_q converted);
+
+// EIM_PCBA_Servo12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Servo12V(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Servo12V(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Servo12V(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Servo12V(const float_q converted);
+
+// EIM_PCBA_Eng12V
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_Eng12V(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_Eng12V(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_Eng12V(const float_q converted);
+
+// EIM_PCBA_EngOnCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_EngOnCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngOnCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_EngOnCurrent(const float_q converted);
+
+// EIM_PCBA_EngStartCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngStartCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_EngStartCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngStartCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_EngStartCurrent(const float_q converted);
+
+// EIM_PCBA_BrakeLightCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_BrakeLightCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_BrakeLightCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_BrakeLightCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_BrakeLightCurrent(const float_q converted);
+
+// EIM_PCBA_TurnRCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnRCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnRCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TurnRCurrent(const float_q converted);
+
+// EIM_PCBA_TurnLCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnLCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnLCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TurnLCurrent(const float_q converted);
+
+// EIM_PCBA_HighBeamCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeamCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_HighBeamCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_HighBeamCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_HighBeamCurrent(const float_q converted);
+
+// EIM_PCBA_HornCurrent
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HornCurrent(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_HornCurrent(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_HornCurrent(const float_q converted);
+
 // EIM_CpuStatsMux
 void CANTX_EIM_SetSRawFromFrame_EIM_CpuStatsMux(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(const uint32_t converted, uint8_t * const pData);

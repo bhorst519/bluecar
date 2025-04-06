@@ -35,13 +35,14 @@ BS_:
 
 BU_: TESTER EIM
 VAL_TABLE_ Gear_Select 7 "ERROR" 6 "SIXTH" 5 "FIFTH" 4 "FOURTH" 3 "THIRD" 2 "SECOND" 1 "FIRST" 0 "NEUTRAL" ;
-VAL_TABLE_ SNA_Unsigned_2 3 "SNA" ;
 VAL_TABLE_ SNA_Signed_14 8192 "SNA" ;
-VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_2 3 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_12 4095 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
 
 
-BO_ 1027 EIM_PcbaVitals: 3 EIM
+BO_ 1027 EIM_PcbaVitals: 8 EIM
  SG_ EIM_PcbaVitalsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
  SG_ EIM_PCBA_GearSelect m0 : 16|3@1+ (1,0) [0|7] "" Vector__XXX
  SG_ EIM_PCBA_GearN m0 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -52,6 +53,16 @@ BO_ 1027 EIM_PcbaVitals: 3 EIM
  SG_ EIM_PCBA_Gear5 m0 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear6 m0 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_DieTemp m1 : 8|8@1+ (1,-50) [-50|205] "C" Vector__XXX
+ SG_ EIM_PCBA_12V m1 : 16|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_Servo12V m1 : 28|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_Eng12V m1 : 40|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_EngOnCurrent m2 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_EngStartCurrent m2 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_BrakeLightCurrent m3 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_TurnRCurrent m3 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_TurnLCurrent m3 : 40|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_HighBeamCurrent m4 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_HornCurrent m4 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
 
 BO_ 1280 TESTER_request: 4 TESTER
  SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
@@ -128,8 +139,18 @@ BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
 BA_ "DBName" "EIM";
 BA_ "NmStationAddress" BU_ TESTER 1;
+VAL_ 1027 EIM_PCBA_TurnRCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_TurnLCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_Servo12V 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_HornCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_HighBeamCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_GearSelect 7 "ERROR" 6 "SIXTH" 5 "FIFTH" 4 "FOURTH" 3 "THIRD" 2 "SECOND" 1 "FIRST" 0 "NEUTRAL" ;
+VAL_ 1027 EIM_PCBA_EngStartCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_EngOnCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_Eng12V 4095 "SNA" ;
 VAL_ 1027 EIM_PCBA_DieTemp 255 "SNA" ;
+VAL_ 1027 EIM_PCBA_BrakeLightCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_12V 4095 "SNA" ;
 VAL_ 1280 TESTER_TurnRightEnable 3 "SNA" ;
 VAL_ 1280 TESTER_TurnLeftEnable 3 "SNA" ;
 VAL_ 1280 TESTER_HornEnable 3 "SNA" ;

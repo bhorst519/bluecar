@@ -46,6 +46,16 @@ void Tx100HzModule::Transmit(void)
 {
     taskENTER_CRITICAL();
     CANTX_EIM_SetS_EIM_PCBA_DieTemp(m_adcRef.GetAdcFilt10Hz(ANALOG_DIE_TEMP).Convert(int32_t()));
+    CANTX_EIM_SetS_EIM_PCBA_12V(m_adcRef.GetAdcFilt10Hz(ANALOG_12V));
+    CANTX_EIM_SetS_EIM_PCBA_Servo12V(m_adcRef.GetAdcFilt10Hz(ANALOG_SERVO_12V));
+    CANTX_EIM_SetS_EIM_PCBA_Eng12V(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_12V));
+    CANTX_EIM_SetS_EIM_PCBA_EngOnCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_ON_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_EngStartCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_START_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_BrakeLightCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_BRAKE_LIGHT_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_TurnRCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_TURN_R_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_TurnLCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_TURN_L_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_HighBeamCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_HIGH_BEAM_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_HornCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_HORN_ISENSE));
     taskEXIT_CRITICAL();
 
     taskENTER_CRITICAL();
