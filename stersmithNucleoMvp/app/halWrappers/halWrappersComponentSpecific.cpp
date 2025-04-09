@@ -35,8 +35,16 @@ static constexpr HalWrappers_Pwm_Info_S gPwmInfo[MAX_NUM_PWM] = {
 };
 
 static constexpr HalWrappers_Uart_Info_S gUartInfo[MAX_NUM_UART] = {
-    /* UART_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* UART_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+    /* UART_KLINE */  { .rxPin = GPIO_KLINE_RX,
+                        .txPin = GPIO_KLINE_TX,
+                        .txCompleteCallback = nullptr,
+                        .notifyCallback = HalWrappersKlineUartCallback
+                      },
+    /* UART_SERVO */  { .rxPin = GPIO_SERVO_RX,
+                        .txPin = GPIO_SERVO_TX,
+                        .txCompleteCallback = nullptr,
+                        .notifyCallback = HalWrappersServoUartCallback
+                      },
 };
 
 HalWrappers gHalWrappers {

@@ -41,6 +41,7 @@ typedef enum
     GPIO_SERVO_COMM_DIR,
     GPIO_SERVO_TX,
     GPIO_SERVO_RX,
+    ANALOG_EXTRA,
     // Inputs
     GPIO_TACH,                  // Needs PWM-in/timer to determine RPM
     GPIO_GEAR_N,
@@ -76,7 +77,7 @@ typedef enum
     ANALOG_ENG_TEMP,
     ANALOG_FUEL_LEVEL,
     ANALOG_FUEL_LOW,
-    ANALOG_EXTRA,
+    // ANALOG_EXTRA,
     ANALOG_DIE_TEMP,
     ANALOG_ENG_ON_ISENSE,
     ANALOG_ENG_START_ISENSE,

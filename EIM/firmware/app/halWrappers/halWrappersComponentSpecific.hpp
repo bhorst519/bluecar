@@ -9,11 +9,16 @@
 #include "profiler.h"
 
 /***************************************************************************************************
-*                              C L A S S   D E C L A R A T I O N S                                 *
+*                     P U B L I C   F U N C T I O N   D E C L A R A T I O N S                      *
 ***************************************************************************************************/
 namespace Eim
 {
 
+void HalWrappersUartServoDelayedTransmit(void);
+
+/***************************************************************************************************
+*                              C L A S S   D E C L A R A T I O N S                                 *
+***************************************************************************************************/
 using HalWrappersGpio = Shared::HalWrappersGpio;
 using HalWrappersPwm = Shared::HalWrappersPwm;
 using HalWrappersAdc = Shared::HalWrappersAdc;
@@ -21,6 +26,7 @@ using HalWrappersCan = Shared::HalWrappersCan;
 using HalWrappersUart = Shared::HalWrappersUart;
 using HalWrappersTimer = Shared::HalWrappersTimer;
 
+using HalWrappers_Tim_Int_E = Shared::HalWrappers_Tim_Int_E;
 using HalWrappers_Gpio_Info_S = Shared::HalWrappers_Gpio_Info_S;
 using HalWrappers_Pwm_Info_S = Shared::HalWrappers_Pwm_Info_S;
 using HalWrappers_Adc_Info_S = Shared::HalWrappers_Adc_Info_S;
@@ -62,6 +68,22 @@ class HalWrappers :   public HalWrappersGpio
         void UartSetGpio(const HalWrappers_Uart_E uart, const bool setToGpio)
         {
             Shared::HalWrappersUart::UartSetGpio(uart, setToGpio, *this);
+        }
+
+        bool UartTransmit(const HalWrappers_Uart_E uart, const uint8_t * const pTx, const uint32_t numBytes, const bool notify)
+        {
+            // if (uart == UART_SERVO)
+            // {
+            //     GpioSet(ANALOG_EXTRA, false);
+            // }
+            return Shared::HalWrappersUart::UartTransmit(uart, pTx, numBytes, notify);
+        }
+
+        void UartSetServoTransmit(void)
+        {
+            GpioSet(ANALOG_EXTRA, true);
+            GpioSet(GPIO_SERVO_COMM_DIR, true);
+            osDelay(1);
         }
 };
 

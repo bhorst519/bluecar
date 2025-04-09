@@ -14,6 +14,7 @@ namespace Eim
 
 static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
 static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart);
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
@@ -35,6 +36,7 @@ static constexpr HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
     /* GPIO_SERVO_COMM_DIR */       {.id = GPIO_PIN_4,  .periph = GPIOD},
     /* GPIO_SERVO_TX */             {.id = GPIO_PIN_5,  .periph = GPIOD},
     /* GPIO_SERVO_RX */             {.id = GPIO_PIN_6,  .periph = GPIOD},
+    /* ANALOG_EXTRA              */ {.id = GPIO_PIN_0,  .periph = GPIOB},
 
     // Inputs
     /* GPIO_TACH */                 {.id = GPIO_PIN_12, .periph = GPIOF},
@@ -67,7 +69,7 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
     /* ANALOG_ENG_TEMP           */ {.ch = ADC_CHANNEL_6,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LEVEL         */ {.ch = ADC_CHANNEL_4,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_FUEL_LOW           */ {.ch = ADC_CHANNEL_5,          .scale = 1.0F, .offset = 0.0F},
-    /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
+    // /* ANALOG_EXTRA              */ {.ch = ADC_CHANNEL_8,          .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_DIE_TEMP           */ {.ch = ADC_CHANNEL_TEMPSENSOR, .scale = 400.0F, .offset = -279.0F}, // 2.5mV / degC, .76V @ 25degC
     /* ANALOG_ENG_ON_ISENSE      */ {.ch = ADC_CHANNEL_10,         .scale = 1.0F, .offset = 0.0F},
     /* ANALOG_ENG_START_ISENSE   */ {.ch = ADC_CHANNEL_2,          .scale = 1.0F, .offset = 0.0F},
@@ -80,8 +82,16 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
 };
 
 static constexpr HalWrappers_Uart_Info_S gUartInfo[MAX_NUM_UART] = {
-    /* UART_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* UART_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+    /* UART_KLINE */  { .rxPin = GPIO_KLINE_RX,
+                        .txPin = GPIO_KLINE_TX,
+                        .txCompleteCallback = nullptr,
+                        .notifyCallback = HalWrappersKlineUartCallback
+                      },
+    /* UART_SERVO */  { .rxPin = GPIO_SERVO_RX,
+                        .txPin = GPIO_SERVO_TX,
+                        .txCompleteCallback = HalWrappersServoUartTxComplete,
+                        .notifyCallback = HalWrappersServoUartCallback
+                      },
 };
 
 HalWrappers gHalWrappers {
@@ -129,6 +139,20 @@ static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
+static void HalWrappersServoUartTxCompleteDelayed(void)
+{
+    gHalWrappers.GpioSet(GPIO_SERVO_COMM_DIR, false);
+    gHalWrappers.GpioSet(ANALOG_EXTRA, false);
+}
+
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart)
+{
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+
+    // Enable servo UART for receive
+    gHalWrappers.TimerScheduleInt(Shared::TIM_INT_CH_1, 500U, HalWrappersServoUartTxCompleteDelayed);
+}
+
 /***************************************************************************************************
 *                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
@@ -144,9 +168,6 @@ void HalWrappers::Init(void)
 
 } // namespace Eim
 
-/***************************************************************************************************
-*                                 P U B L I C   F U N C T I O N S                                  *
-***************************************************************************************************/
 //--------------------------------------------------------------------------------------------------
 // ISR callbacks
 //--------------------------------------------------------------------------------------------------
@@ -193,6 +214,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     {
         ProfilerCheckOut(PROFILER_ADC_CONV, true);
     }
+}
+
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    Eim::gHalWrappers.TimerIrq(htim);
 }
 
 } // extern "C"

@@ -224,11 +224,24 @@ bool HalWrappersUart::UartTransmit(const HalWrappers_Uart_E uart, const uint8_t 
     HAL_StatusTypeDef status = HAL_OK;
 
     // Start receive
-    if ((status == HAL_OK) && notify)
+    if (status == HAL_OK)
     {
-        status = HAL_UART_RegisterCallback(m_pUart[uart],
-                                           HAL_UART_TX_COMPLETE_CB_ID,
-                                           m_uartInfo[uart].rxTxCompleteCallback);
+        if (notify)
+        {
+            status = HAL_UART_RegisterCallback(m_pUart[uart],
+                                               HAL_UART_TX_COMPLETE_CB_ID,
+                                               m_uartInfo[uart].notifyCallback);
+        }
+        else if (m_uartInfo[uart].txCompleteCallback != nullptr)
+        {
+            status = HAL_UART_RegisterCallback(m_pUart[uart],
+                                               HAL_UART_TX_COMPLETE_CB_ID,
+                                               m_uartInfo[uart].txCompleteCallback);
+        }
+        else
+        {
+            // No callback
+        }
     }
 
     if (status == HAL_OK)
@@ -253,7 +266,7 @@ bool HalWrappersUart::UartReceive(const HalWrappers_Uart_E uart, uint8_t * const
     {
         status = HAL_UART_RegisterCallback(m_pUart[uart],
                                            HAL_UART_RX_COMPLETE_CB_ID,
-                                           m_uartInfo[uart].rxTxCompleteCallback);
+                                           m_uartInfo[uart].notifyCallback);
     }
 
     if (status == HAL_OK)
@@ -305,6 +318,94 @@ uint32_t HalWrappersTimer::TimerGetUs(void)
 {
     return __HAL_TIM_GET_COUNTER(m_pUsTim);
 }
-#endif
+
+void HalWrappersTimer::TimerScheduleInt(HalWrappers_Tim_Int_E timInt, const uint32_t timeUs, void (* callback)(void))
+{
+    m_callback[timInt] = callback;
+
+    uint32_t channel;
+    switch (timInt)
+    {
+        case TIM_INT_CH_1:
+            channel = TIM_CHANNEL_1;
+            break;
+        case TIM_INT_CH_2:
+            channel = TIM_CHANNEL_2;
+            break;
+        case TIM_INT_CH_3:
+            channel = TIM_CHANNEL_3;
+            break;
+        case TIM_INT_CH_4:
+            channel = TIM_CHANNEL_4;
+            break;
+        case MAX_NUM_TIM_INT_CH:
+        default:
+            // Invalid
+            channel = TIM_CHANNEL_ALL;
+            break;
+    }
+
+    TIM_OC_InitTypeDef timChannel{};
+    timChannel.OCMode = TIM_OCMODE_TIMING;
+    timChannel.OCPolarity = TIM_OCPOLARITY_HIGH;
+    timChannel.OCFastMode = TIM_OCFAST_DISABLE;
+    timChannel.Pulse = TimerGetUs() + timeUs;
+    (void)HAL_TIM_OC_ConfigChannel(m_pUsTim, &timChannel, channel);
+    (void)HAL_TIM_OC_Start_IT(m_pUsTim, channel);
+}
+
+void HalWrappersTimer::TimerIrq(TIM_HandleTypeDef * htim)
+{
+    bool valid = false;
+    if (htim == gHalWrappersConfig.pUsTim)
+    {
+        valid = true;
+    }
+    else
+    {
+        // Invalid pointer
+    }
+
+    uint32_t channel = TIM_CHANNEL_ALL;
+    HalWrappers_Tim_Int_E timInt = MAX_NUM_TIM_INT_CH;
+    if (valid)
+    {
+        switch (htim->Channel)
+        {
+            case HAL_TIM_ACTIVE_CHANNEL_1:
+                channel = TIM_CHANNEL_1;
+                timInt = TIM_INT_CH_1;
+                break;
+            case HAL_TIM_ACTIVE_CHANNEL_2:
+                channel = TIM_CHANNEL_2;
+                timInt = TIM_INT_CH_2;
+                break;
+            case HAL_TIM_ACTIVE_CHANNEL_3:
+                channel = TIM_CHANNEL_3;
+                timInt = TIM_INT_CH_3;
+                break;
+            case HAL_TIM_ACTIVE_CHANNEL_4:
+                channel = TIM_CHANNEL_4;
+                timInt = TIM_INT_CH_4;
+                break;
+            case HAL_TIM_ACTIVE_CHANNEL_CLEARED:
+            default:
+                valid = false;
+                break;
+        }
+    }
+
+    if (valid)
+    {
+        (void)HAL_TIM_OC_Stop_IT(htim, channel);
+        void (* callback)(void) = m_callback[timInt];
+        m_callback[timInt] = nullptr;
+        if (callback != nullptr)
+        {
+            callback();
+        }
+    }
+}
+#endif // FEATURE_HAL_WRAPPERS_TIMER
 
 } // namespace Eim
