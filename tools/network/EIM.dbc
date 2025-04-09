@@ -52,10 +52,13 @@ BO_ 1027 EIM_PcbaVitals: 8 EIM
  SG_ EIM_PCBA_Gear4 m0 : 12|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear5 m0 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear6 m0 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_FuelLevelV m0 : 24|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
+ SG_ EIM_PCBA_FuelLowV m0 : 40|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
  SG_ EIM_PCBA_DieTemp m1 : 8|8@1+ (1,-50) [-50|205] "C" Vector__XXX
  SG_ EIM_PCBA_12V m1 : 16|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
  SG_ EIM_PCBA_Servo12V m1 : 28|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
  SG_ EIM_PCBA_Eng12V m1 : 40|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_EngTempV m1 : 52|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
  SG_ EIM_PCBA_EngOnCurrent m2 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
  SG_ EIM_PCBA_EngStartCurrent m2 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
  SG_ EIM_PCBA_BrakeLightCurrent m3 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
@@ -145,6 +148,9 @@ VAL_ 1027 EIM_PCBA_Servo12V 4095 "SNA" ;
 VAL_ 1027 EIM_PCBA_HornCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_HighBeamCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_GearSelect 7 "ERROR" 6 "SIXTH" 5 "FIFTH" 4 "FOURTH" 3 "THIRD" 2 "SECOND" 1 "FIRST" 0 "NEUTRAL" ;
+VAL_ 1027 EIM_PCBA_FuelLowV 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_FuelLevelV 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_EngTempV 4095 "SNA" ;
 VAL_ 1027 EIM_PCBA_EngStartCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_EngOnCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_Eng12V 4095 "SNA" ;

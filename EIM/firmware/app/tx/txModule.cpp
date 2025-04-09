@@ -59,6 +59,12 @@ void Tx100HzModule::Transmit(void)
     taskEXIT_CRITICAL();
 
     taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_EngTempV(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_TEMP));
+    CANTX_EIM_SetS_EIM_PCBA_FuelLevelV(m_adcRef.GetAdcFilt10Hz(ANALOG_FUEL_LEVEL));
+    CANTX_EIM_SetS_EIM_PCBA_FuelLowV(m_adcRef.GetAdcFilt10Hz(ANALOG_FUEL_LOW));
+    taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
     CANTX_EIM_SetS_EIM_PCBA_GearN(static_cast<uint32_t>(m_ioIntRef.GetGearN()));
     CANTX_EIM_SetS_EIM_PCBA_Gear1(static_cast<uint32_t>(m_ioIntRef.GetGear1()));
     CANTX_EIM_SetS_EIM_PCBA_Gear2(static_cast<uint32_t>(m_ioIntRef.GetGear2()));

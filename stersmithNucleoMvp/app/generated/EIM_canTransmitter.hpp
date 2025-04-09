@@ -81,6 +81,18 @@ void CANTX_EIM_SetSRaw_EIM_PCBA_Gear6(const uint8_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear6(const uint32_t converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_Gear6(const uint32_t converted);
 
+// EIM_PCBA_FuelLevelV
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FuelLevelV(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_FuelLevelV(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_FuelLevelV(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_FuelLevelV(const float_q converted);
+
+// EIM_PCBA_FuelLowV
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FuelLowV(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_FuelLowV(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_FuelLowV(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_FuelLowV(const float_q converted);
+
 // EIM_PCBA_DieTemp
 void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_EIM_PCBA_DieTemp(const uint8_t rawVal);
@@ -104,6 +116,12 @@ void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V(const uint16_t rawVal, uint8_t *
 void CANTX_EIM_SetSRaw_EIM_PCBA_Eng12V(const uint16_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_Eng12V(const float_q converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_Eng12V(const float_q converted);
+
+// EIM_PCBA_EngTempV
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngTempV(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_EngTempV(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngTempV(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_EngTempV(const float_q converted);
 
 // EIM_PCBA_EngOnCurrent
 void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent(const uint16_t rawVal, uint8_t * const pData);
