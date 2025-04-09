@@ -39,6 +39,12 @@ class IoIntOutputInterface
 
         NOCOPY_NOMOVE(IoIntOutputInterface);
 
+        virtual bool GetTurnRight(void) const = 0;
+        virtual bool GetTurnLeft(void) const = 0;
+        virtual bool GetLowBeam(void) const = 0;
+        virtual bool GetHighBeam(void) const = 0;
+        virtual bool GetFaultIndicator(void) const = 0;
+        virtual bool GetOilPressureLow(void) const = 0;
         virtual bool GetGearN(void) const = 0;
         virtual bool GetGear1(void) const = 0;
         virtual bool GetGear2(void) const = 0;

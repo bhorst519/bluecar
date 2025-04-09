@@ -27,6 +27,36 @@ class IoIntMessageModule final : public IoIntOutputInterface
 
         NOCOPY_NOMOVE(IoIntMessageModule);
 
+        virtual bool GetTurnRight(void) const override
+        {
+            return m_dataRef.turnRight;
+        }
+
+        virtual bool GetTurnLeft(void) const override
+        {
+            return m_dataRef.turnLeft;
+        }
+
+        virtual bool GetLowBeam(void) const override
+        {
+            return m_dataRef.lowBeam;
+        }
+
+        virtual bool GetHighBeam(void) const override
+        {
+            return m_dataRef.highBeam;
+        }
+
+        virtual bool GetFaultIndicator(void) const override
+        {
+            return m_dataRef.faultIndicator;
+        }
+
+        virtual bool GetOilPressureLow(void) const override
+        {
+            return m_dataRef.oilPressureLow;
+        }
+
         virtual bool GetGearN(void) const override
         {
             return m_dataRef.gearN;

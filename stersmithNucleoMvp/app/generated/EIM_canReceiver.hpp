@@ -55,17 +55,17 @@ uint8_t CANRX_EIM_GetSRaw_TESTER_HornEnable(void);
 uint32_q CANRX_EIM_GetSFromFrame_TESTER_HornEnable(const uint8_t * const pData);
 uint32_q CANRX_EIM_GetS_TESTER_HornEnable(void);
 
-// TESTER_TurnLeftEnable
-uint8_t CANRX_EIM_GetSRawFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pData);
-uint8_t CANRX_EIM_GetSRaw_TESTER_TurnLeftEnable(void);
-uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pData);
-uint32_q CANRX_EIM_GetS_TESTER_TurnLeftEnable(void);
-
 // TESTER_TurnRightEnable
 uint8_t CANRX_EIM_GetSRawFromFrame_TESTER_TurnRightEnable(const uint8_t * const pData);
 uint8_t CANRX_EIM_GetSRaw_TESTER_TurnRightEnable(void);
 uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnRightEnable(const uint8_t * const pData);
 uint32_q CANRX_EIM_GetS_TESTER_TurnRightEnable(void);
+
+// TESTER_TurnLeftEnable
+uint8_t CANRX_EIM_GetSRawFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_TESTER_TurnLeftEnable(void);
+uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pData);
+uint32_q CANRX_EIM_GetS_TESTER_TurnLeftEnable(void);
 
 } // namespace CanGen
 

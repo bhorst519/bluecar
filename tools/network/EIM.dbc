@@ -52,8 +52,14 @@ BO_ 1027 EIM_PcbaVitals: 8 EIM
  SG_ EIM_PCBA_Gear4 m0 : 12|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear5 m0 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear6 m0 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_FuelLevelV m0 : 24|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
- SG_ EIM_PCBA_FuelLowV m0 : 40|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
+ SG_ EIM_PCBA_FaultIndicator m0 : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_OilPressureLow m0 : 25|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_LowBeam m0 : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_HighBeam m0 : 27|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_TurnRight m0 : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_TurnLeft m0 : 29|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_FuelLevelV m0 : 32|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
+ SG_ EIM_PCBA_FuelLowV m0 : 48|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
  SG_ EIM_PCBA_DieTemp m1 : 8|8@1+ (1,-50) [-50|205] "C" Vector__XXX
  SG_ EIM_PCBA_12V m1 : 16|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
  SG_ EIM_PCBA_Servo12V m1 : 28|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
@@ -74,8 +80,8 @@ BO_ 1280 TESTER_request: 4 TESTER
  SG_ TESTER_HeadlightEnable : 20|2@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_HighBeamEnable : 22|2@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_HornEnable : 24|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_TurnLeftEnable : 26|2@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_TurnRightEnable : 28|2@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TESTER_TurnLeftEnable : 26|2@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM
  SG_ EIM_CpuStatsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX

@@ -81,6 +81,42 @@ void CANTX_EIM_SetSRaw_EIM_PCBA_Gear6(const uint8_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_Gear6(const uint32_t converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_Gear6(const uint32_t converted);
 
+// EIM_PCBA_FaultIndicator
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FaultIndicator(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_FaultIndicator(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_FaultIndicator(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_FaultIndicator(const uint32_t converted);
+
+// EIM_PCBA_OilPressureLow
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_OilPressureLow(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_OilPressureLow(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_OilPressureLow(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_OilPressureLow(const uint32_t converted);
+
+// EIM_PCBA_LowBeam
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_LowBeam(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_LowBeam(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_LowBeam(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_LowBeam(const uint32_t converted);
+
+// EIM_PCBA_HighBeam
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeam(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_HighBeam(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_HighBeam(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_HighBeam(const uint32_t converted);
+
+// EIM_PCBA_TurnRight
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRight(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnRight(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnRight(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TurnRight(const uint32_t converted);
+
+// EIM_PCBA_TurnLeft
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLeft(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TurnLeft(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnLeft(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TurnLeft(const uint32_t converted);
+
 // EIM_PCBA_FuelLevelV
 void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FuelLevelV(const uint16_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_EIM_PCBA_FuelLevelV(const uint16_t rawVal);

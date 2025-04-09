@@ -20,8 +20,8 @@ struct Rx100HzData_S
     uint8_q highBeamEn;
     uint8_q hornEn;
     uint8_q mainRelayEn;
-    uint8_q turnLeftEn;
     uint8_q turnRightEn;
+    uint8_q turnLeftEn;
 };
 
 struct Rx10HzData_S

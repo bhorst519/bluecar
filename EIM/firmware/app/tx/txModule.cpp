@@ -74,6 +74,15 @@ void Tx100HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_PCBA_Gear6(static_cast<uint32_t>(m_ioIntRef.GetGear6()));
     CANTX_EIM_SetS_EIM_PCBA_GearSelect(static_cast<uint32_t>(m_ioIntRef.GetGearSelect()));
     taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_TurnRight(static_cast<uint32_t>(m_ioIntRef.GetTurnRight()));
+    CANTX_EIM_SetS_EIM_PCBA_TurnLeft(static_cast<uint32_t>(m_ioIntRef.GetTurnLeft()));
+    CANTX_EIM_SetS_EIM_PCBA_LowBeam(static_cast<uint32_t>(m_ioIntRef.GetLowBeam()));
+    CANTX_EIM_SetS_EIM_PCBA_HighBeam(static_cast<uint32_t>(m_ioIntRef.GetHighBeam()));
+    CANTX_EIM_SetS_EIM_PCBA_FaultIndicator(static_cast<uint32_t>(m_ioIntRef.GetFaultIndicator()));
+    CANTX_EIM_SetS_EIM_PCBA_OilPressureLow(static_cast<uint32_t>(m_ioIntRef.GetOilPressureLow()));
+    taskEXIT_CRITICAL();
 }
 
 void Tx10HzModule::Transmit(void)

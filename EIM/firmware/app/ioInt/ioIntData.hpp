@@ -29,6 +29,12 @@ static constexpr uint8_t MAX_NUM_GEAR_SELECT {static_cast<uint8_t>(GearSelect_E:
 
 struct IoIntData_S
 {
+    bool turnRight;
+    bool turnLeft;
+    bool lowBeam;
+    bool highBeam;
+    bool faultIndicator;
+    bool oilPressureLow;
     bool gearN;
     bool gear1;
     bool gear2;
