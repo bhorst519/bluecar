@@ -87,6 +87,7 @@ void Error_Handler(void);
 #define OIL_P_LOW_GPIO_Port GPIOF
 #define TACH_Pin GPIO_PIN_12
 #define TACH_GPIO_Port GPIOF
+#define TACH_EXTI_IRQn EXTI15_10_IRQn
 #define NEUTRAL_Pin GPIO_PIN_13
 #define NEUTRAL_GPIO_Port GPIOF
 #define LOWBEAM_Pin GPIO_PIN_14
