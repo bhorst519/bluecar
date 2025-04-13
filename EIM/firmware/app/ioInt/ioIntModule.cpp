@@ -78,6 +78,13 @@ void IoIntModule::ProcessIO(void)
         SetGpio(hornEn, GPIO_HORN_EN);
     }
 
+    m_outputData.turnRight      = !gHalWrappers.GpioRead(GPIO_TURN_R);
+    m_outputData.turnLeft       = !gHalWrappers.GpioRead(GPIO_TURN_L);
+    m_outputData.lowBeam        = !gHalWrappers.GpioRead(GPIO_LOW_BEAM);
+    m_outputData.highBeam       = !gHalWrappers.GpioRead(GPIO_HIGH_BEAM);
+    m_outputData.faultIndicator = !gHalWrappers.GpioRead(GPIO_FAULT_IND);
+    m_outputData.oilPressureLow = !gHalWrappers.GpioRead(GPIO_OIL_P_LOW);
+
     m_outputData.gearN = !gHalWrappers.GpioRead(GPIO_GEAR_N);
     m_outputData.gear1 = !gHalWrappers.GpioRead(GPIO_GEAR_1);
     m_outputData.gear2 = !gHalWrappers.GpioRead(GPIO_GEAR_2);

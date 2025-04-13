@@ -46,6 +46,22 @@ void Tx100HzModule::Transmit(void)
 {
     taskENTER_CRITICAL();
     CANTX_EIM_SetS_EIM_PCBA_DieTemp(m_adcRef.GetAdcFilt10Hz(ANALOG_DIE_TEMP).Convert(int32_t()));
+    CANTX_EIM_SetS_EIM_PCBA_12V(m_adcRef.GetAdcFilt10Hz(ANALOG_12V));
+    CANTX_EIM_SetS_EIM_PCBA_Servo12V(m_adcRef.GetAdcFilt10Hz(ANALOG_SERVO_12V));
+    CANTX_EIM_SetS_EIM_PCBA_Eng12V(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_12V));
+    CANTX_EIM_SetS_EIM_PCBA_EngOnCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_ON_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_EngStartCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_START_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_BrakeLightCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_BRAKE_LIGHT_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_TurnRCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_TURN_R_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_TurnLCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_TURN_L_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_HighBeamCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_HIGH_BEAM_ISENSE));
+    CANTX_EIM_SetS_EIM_PCBA_HornCurrent(m_adcRef.GetAdcFilt10Hz(ANALOG_HORN_ISENSE));
+    taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_EngTempV(m_adcRef.GetAdcFilt10Hz(ANALOG_ENG_TEMP));
+    CANTX_EIM_SetS_EIM_PCBA_FuelLevelV(m_adcRef.GetAdcFilt10Hz(ANALOG_FUEL_LEVEL));
+    CANTX_EIM_SetS_EIM_PCBA_FuelLowV(m_adcRef.GetAdcFilt10Hz(ANALOG_FUEL_LOW));
     taskEXIT_CRITICAL();
 
     taskENTER_CRITICAL();
@@ -57,6 +73,15 @@ void Tx100HzModule::Transmit(void)
     CANTX_EIM_SetS_EIM_PCBA_Gear5(static_cast<uint32_t>(m_ioIntRef.GetGear5()));
     CANTX_EIM_SetS_EIM_PCBA_Gear6(static_cast<uint32_t>(m_ioIntRef.GetGear6()));
     CANTX_EIM_SetS_EIM_PCBA_GearSelect(static_cast<uint32_t>(m_ioIntRef.GetGearSelect()));
+    taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_TurnRight(static_cast<uint32_t>(m_ioIntRef.GetTurnRight()));
+    CANTX_EIM_SetS_EIM_PCBA_TurnLeft(static_cast<uint32_t>(m_ioIntRef.GetTurnLeft()));
+    CANTX_EIM_SetS_EIM_PCBA_LowBeam(static_cast<uint32_t>(m_ioIntRef.GetLowBeam()));
+    CANTX_EIM_SetS_EIM_PCBA_HighBeam(static_cast<uint32_t>(m_ioIntRef.GetHighBeam()));
+    CANTX_EIM_SetS_EIM_PCBA_FaultIndicator(static_cast<uint32_t>(m_ioIntRef.GetFaultIndicator()));
+    CANTX_EIM_SetS_EIM_PCBA_OilPressureLow(static_cast<uint32_t>(m_ioIntRef.GetOilPressureLow()));
     taskEXIT_CRITICAL();
 }
 

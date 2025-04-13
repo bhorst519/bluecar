@@ -1,7 +1,7 @@
 VERSION ""
 
 
-NS_ : 
+NS_ :
 	NS_DESC_
 	CM_
 	BA_DEF_
@@ -35,80 +35,100 @@ BS_:
 
 BU_: TESTER EIM
 VAL_TABLE_ Gear_Select 7 "ERROR" 6 "SIXTH" 5 "FIFTH" 4 "FOURTH" 3 "THIRD" 2 "SECOND" 1 "FIRST" 0 "NEUTRAL" ;
-VAL_TABLE_ SNA_Unsigned_2 3 "SNA" ;
 VAL_TABLE_ SNA_Signed_14 8192 "SNA" ;
-VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_2 3 "SNA" ;
 VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_12 4095 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
 
 
-BO_ 1027 EIM_PcbaVitals: 3 EIM
+BO_ 1027 EIM_PcbaVitals: 8 EIM
+ SG_ EIM_PcbaVitalsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
  SG_ EIM_PCBA_GearSelect m0 : 16|3@1+ (1,0) [0|7] "" Vector__XXX
  SG_ EIM_PCBA_GearN m0 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_Gear6 m0 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_Gear5 m0 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_Gear4 m0 : 12|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_Gear3 m0 : 11|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PCBA_Gear2 m0 : 10|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ EIM_PCBA_Gear1 m0 : 9|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ EIM_PcbaVitalsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_PCBA_Gear2 m0 : 10|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_Gear3 m0 : 11|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_Gear4 m0 : 12|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_Gear5 m0 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_Gear6 m0 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_FaultIndicator m0 : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_OilPressureLow m0 : 25|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_LowBeam m0 : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_HighBeam m0 : 27|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_TurnRight m0 : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_TurnLeft m0 : 29|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EIM_PCBA_FuelLevelV m0 : 32|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
+ SG_ EIM_PCBA_FuelLowV m0 : 48|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
  SG_ EIM_PCBA_DieTemp m1 : 8|8@1+ (1,-50) [-50|205] "C" Vector__XXX
+ SG_ EIM_PCBA_12V m1 : 16|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_Servo12V m1 : 28|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_Eng12V m1 : 40|12@1+ (0.005,0) [0|20.475] "V" Vector__XXX
+ SG_ EIM_PCBA_EngTempV m1 : 52|12@1+ (0.001,0) [0|4.095] "V" Vector__XXX
+ SG_ EIM_PCBA_EngOnCurrent m2 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_EngStartCurrent m2 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_BrakeLightCurrent m3 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_TurnRCurrent m3 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_TurnLCurrent m3 : 40|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_HighBeamCurrent m4 : 8|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
+ SG_ EIM_PCBA_HornCurrent m4 : 24|16@1+ (0.005,0) [0|327.675] "A" Vector__XXX
 
 BO_ 1280 TESTER_request: 4 TESTER
+ SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
+ SG_ TESTER_MainRelayEnable : 16|2@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TESTER_BrakeLightEnable : 18|2@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TESTER_HeadlightEnable : 20|2@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TESTER_HighBeamEnable : 22|2@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TESTER_HornEnable : 24|2@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_TurnRightEnable : 28|2@1+ (1,0) [0|1] "" Vector__XXX
  SG_ TESTER_TurnLeftEnable : 26|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_HornEnable : 24|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_HighBeamEnable : 22|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_HeadlightEnable : 20|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_BrakeLightEnable : 18|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_MainRelayEnable : 16|2@1+ (1,0) [0|1] "" Vector__XXX
- SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
 
 BO_ 1026 EIM_CpuStats: 8 EIM
+ SG_ EIM_CpuStatsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1kHz_Load m0 : 18|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_100Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_10Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1Hz_Load m0 : 48|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1kHz_AvgPeriod m1 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MinPeriod m1 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MaxPeriod m1 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_100Hz_MinPeriod m2 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_100Hz_MaxPeriod m2 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_100Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_100Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_ADC_MinPeriod m5 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_ADC_MaxPeriod m5 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_ADC_AvgPeriod m5 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_1Hz_Load m0 : 48|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_10Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
- SG_ EIM_1kHz_Load m0 : 18|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_10Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_1Hz_MaxPeriod m4 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
  SG_ EIM_1Hz_MinPeriod m4 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1Hz_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_10Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1kHz_MaxPeriod m1 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1kHz_MinPeriod m1 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_1kHz_AvgPeriod m1 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
- SG_ EIM_CpuStatsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_ADC_AvgPeriod m5 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_MaxPeriod m5 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_ADC_MinPeriod m5 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
 
 BO_ 1025 EIM_ServoStatus: 8 EIM
  SG_ EIM_ServoStatusMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ EIM_Servo_Voltage m1 : 24|8@1+ (0.2,0) [0|51] "V" Vector__XXX
- SG_ EIM_Servo_Temp m1 : 16|8@1+ (1,-50) [-50|205] "C" Vector__XXX
- SG_ EIM_Servo_Position m0 : 16|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
- SG_ EIM_Servo_LossOfCommTimeout m0 : 48|8@1+ (1,0) [0|255] "sec" Vector__XXX
- SG_ EIM_Servo_LossOfCommPosition m0 : 32|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
  SG_ EIM_Servo_Id m0 : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ EIM_Servo_Position m0 : 16|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
+ SG_ EIM_Servo_LossOfCommPosition m0 : 32|14@1- (0.025,0) [-204.8|204.775] "deg" Vector__XXX
+ SG_ EIM_Servo_LossOfCommTimeout m0 : 48|8@1+ (1,0) [0|255] "sec" Vector__XXX
  SG_ EIM_Servo_Current m1 : 8|8@1+ (0.02,0) [0|5.1] "A" Vector__XXX
+ SG_ EIM_Servo_Temp m1 : 16|8@1+ (1,-50) [-50|205] "C" Vector__XXX
+ SG_ EIM_Servo_Voltage m1 : 24|8@1+ (0.2,0) [0|51] "V" Vector__XXX
 
 BO_ 1024 EIM_EngineStatus: 8 EIM
  SG_ EIM_EngineStatusMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ EIM_ECM_VehicleSpeed m0 : 24|8@1+ (1,0) [0|255] "kph" Vector__XXX
- SG_ EIM_ECM_TpsVoltage m1 : 40|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
- SG_ EIM_ECM_TpsAngle m1 : 48|8@1+ (0.5,0) [0|127.5] "deg" Vector__XXX
  SG_ EIM_ECM_Rpm m0 : 8|16@1+ (1,0) [0|65535] "RPM" Vector__XXX
- SG_ EIM_ECM_MapVoltage m1 : 24|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
- SG_ EIM_ECM_MapPressure m1 : 32|8@1+ (1,0) [0|255] "kPa" Vector__XXX
- SG_ EIM_ECM_IatVoltage m1 : 8|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
- SG_ EIM_ECM_IatTemp m1 : 16|8@1+ (1,-40) [-40|215] "C" Vector__XXX
+ SG_ EIM_ECM_VehicleSpeed m0 : 24|8@1+ (1,0) [0|255] "kph" Vector__XXX
+ SG_ EIM_ECM_BatteryVoltage m0 : 32|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
  SG_ EIM_ECM_EctVoltage m0 : 40|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
  SG_ EIM_ECM_EctTemp m0 : 48|8@1+ (1,-40) [-40|215] "C" Vector__XXX
- SG_ EIM_ECM_BatteryVoltage m0 : 32|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
+ SG_ EIM_ECM_IatVoltage m1 : 8|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
+ SG_ EIM_ECM_IatTemp m1 : 16|8@1+ (1,-40) [-40|215] "C" Vector__XXX
+ SG_ EIM_ECM_MapVoltage m1 : 24|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
+ SG_ EIM_ECM_MapPressure m1 : 32|8@1+ (1,0) [0|255] "kPa" Vector__XXX
+ SG_ EIM_ECM_TpsVoltage m1 : 40|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
+ SG_ EIM_ECM_TpsAngle m1 : 48|8@1+ (0.5,0) [0|127.5] "deg" Vector__XXX
 
 
 
@@ -128,8 +148,21 @@ BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
 BA_ "DBName" "EIM";
 BA_ "NmStationAddress" BU_ TESTER 1;
+VAL_ 1027 EIM_PCBA_TurnRCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_TurnLCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_Servo12V 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_HornCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_HighBeamCurrent 65535 "SNA" ;
 VAL_ 1027 EIM_PCBA_GearSelect 7 "ERROR" 6 "SIXTH" 5 "FIFTH" 4 "FOURTH" 3 "THIRD" 2 "SECOND" 1 "FIRST" 0 "NEUTRAL" ;
+VAL_ 1027 EIM_PCBA_FuelLowV 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_FuelLevelV 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_EngTempV 4095 "SNA" ;
+VAL_ 1027 EIM_PCBA_EngStartCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_EngOnCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_Eng12V 4095 "SNA" ;
 VAL_ 1027 EIM_PCBA_DieTemp 255 "SNA" ;
+VAL_ 1027 EIM_PCBA_BrakeLightCurrent 65535 "SNA" ;
+VAL_ 1027 EIM_PCBA_12V 4095 "SNA" ;
 VAL_ 1280 TESTER_TurnRightEnable 3 "SNA" ;
 VAL_ 1280 TESTER_TurnLeftEnable 3 "SNA" ;
 VAL_ 1280 TESTER_HornEnable 3 "SNA" ;
