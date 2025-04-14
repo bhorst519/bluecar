@@ -46,6 +46,7 @@ uint32_t gEIM_PcbaVitals_MuxFromIdx[] = {
     2U,
     3U,
     4U,
+    5U,
 };
 uint32_t CANTX_EIM_GetMuxFromIdx_EIM_PcbaVitals(const uint32_t muxIdx)
 {
@@ -499,7 +500,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_FuelLevelV(const float_q converted, uint8_
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 4.095F ? 4.095F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 4.094F ? 4.094F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.001F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FuelLevelV((uint16_t)rawVal, pData);
@@ -531,7 +532,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_FuelLowV(const float_q converted, uint8_t 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 4.095F ? 4.095F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 4.094F ? 4.094F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.001F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_FuelLowV((uint16_t)rawVal, pData);
@@ -561,7 +562,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_DieTemp(const int32_q converted, uint8_t *
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 205 ? 205 : (converted < -50 ? -50 : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 204 ? 204 : (converted < -50 ? -50 : converted));
         rawVal = (uint8_t)((convertedSat - -50) / 1);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_DieTemp((uint8_t)rawVal, pData);
@@ -593,7 +594,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_12V(const float_q converted, uint8_t * con
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 20.47F ? 20.47F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_12V((uint16_t)rawVal, pData);
@@ -625,7 +626,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_Servo12V(const float_q converted, uint8_t 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 20.47F ? 20.47F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Servo12V((uint16_t)rawVal, pData);
@@ -657,7 +658,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_Eng12V(const float_q converted, uint8_t * 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 20.475F ? 20.475F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 20.47F ? 20.47F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_Eng12V((uint16_t)rawVal, pData);
@@ -689,7 +690,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngTempV(const float_q converted, uint8_t 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 4.095F ? 4.095F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 4.094F ? 4.094F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.001F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngTempV((uint16_t)rawVal, pData);
@@ -720,7 +721,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngOnCurrent(const float_q converted, uint
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngOnCurrent((uint16_t)rawVal, pData);
@@ -751,7 +752,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_EngStartCurrent(const float_q converted, u
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_EngStartCurrent((uint16_t)rawVal, pData);
@@ -782,7 +783,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_BrakeLightCurrent(const float_q converted,
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_BrakeLightCurrent((uint16_t)rawVal, pData);
@@ -813,7 +814,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnRCurrent(const float_q converted, uint
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnRCurrent((uint16_t)rawVal, pData);
@@ -844,7 +845,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_TurnLCurrent(const float_q converted, uint
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TurnLCurrent((uint16_t)rawVal, pData);
@@ -875,7 +876,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_HighBeamCurrent(const float_q converted, u
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HighBeamCurrent((uint16_t)rawVal, pData);
@@ -906,7 +907,7 @@ void CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(const float_q converted, uint8
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 327.675F ? 327.675F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 327.67F ? 327.67F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint16_t)((convertedSat - 0.0F) / 0.005F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_PCBA_HornCurrent((uint16_t)rawVal, pData);
@@ -915,6 +916,70 @@ void CANTX_EIM_SetS_EIM_PCBA_HornCurrent(const float_q converted)
 {
     uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(converted, pData);
+}
+
+// EIM_PCBA_TachFreq
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachFreq(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
+    pData[2] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_TachFreq(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachFreq(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TachFreq(const uint32_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 65534U ? 65534U : converted);
+        rawVal = (uint16_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachFreq((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_TachFreq(const uint32_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_TachFreq(converted, pData);
+}
+
+// EIM_PCBA_TachRpm
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachRpm(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] = (uint8_t)((((rawVal) >> 8) & 0xFF));
+}
+void CANTX_EIM_SetSRaw_EIM_PCBA_TachRpm(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachRpm(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TachRpm(const uint32_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 65535U; // SNA value
+    }
+    else
+    {
+        // min = 0U and converted type is unsigned, so don't need to check
+        const decltype(converted.Val()) convertedSat = (converted > 65534U ? 65534U : converted);
+        rawVal = (uint16_t)((convertedSat - 0U) / 1U);
+    }
+    CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachRpm((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_EIM_PCBA_TachRpm(const uint32_q converted)
+{
+    uint8_t * const pData = &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_EIM_PCBA_TachRpm(converted, pData);
 }
 
 // EIM_CpuStatsMux
@@ -1555,7 +1620,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Position(const float_q converted, uint8_t
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.8F ? -204.8F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.775F ? -204.775F : converted));
         rawVal = (int16_t)((convertedSat - 0.0F) / 0.025F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_Position((uint16_t)rawVal, pData);
@@ -1587,7 +1652,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_LossOfCommPosition(const float_q converte
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.8F ? -204.8F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 204.775F ? 204.775F : (converted < -204.775F ? -204.775F : converted));
         rawVal = (int16_t)((convertedSat - 0.0F) / 0.025F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommPosition((uint16_t)rawVal, pData);
@@ -1618,7 +1683,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_LossOfCommTimeout(const uint32_q converte
     else
     {
         // min = 0U and converted type is unsigned, so don't need to check
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
+        const decltype(converted.Val()) convertedSat = (converted > 254U ? 254U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_LossOfCommTimeout((uint8_t)rawVal, pData);
@@ -1648,7 +1713,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Current(const float_q converted, uint8_t 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_Current((uint8_t)rawVal, pData);
@@ -1678,7 +1743,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Temp(const int32_q converted, uint8_t * c
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 205 ? 205 : (converted < -50 ? -50 : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 204 ? 204 : (converted < -50 ? -50 : converted));
         rawVal = (uint8_t)((convertedSat - -50) / 1);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_Temp((uint8_t)rawVal, pData);
@@ -1708,7 +1773,7 @@ void CANTX_EIM_SetSFromFrame_EIM_Servo_Voltage(const float_q converted, uint8_t 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 51.0F ? 51.0F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 50.8F ? 50.8F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.2F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_Servo_Voltage((uint8_t)rawVal, pData);
@@ -1757,7 +1822,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_Rpm(const uint32_q converted, uint8_t * con
     else
     {
         // min = 0U and converted type is unsigned, so don't need to check
-        const decltype(converted.Val()) convertedSat = (converted > 65535U ? 65535U : converted);
+        const decltype(converted.Val()) convertedSat = (converted > 65534U ? 65534U : converted);
         rawVal = (uint16_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_Rpm((uint16_t)rawVal, pData);
@@ -1788,7 +1853,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_VehicleSpeed(const uint32_q converted, uint
     else
     {
         // min = 0U and converted type is unsigned, so don't need to check
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
+        const decltype(converted.Val()) convertedSat = (converted > 254U ? 254U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_VehicleSpeed((uint8_t)rawVal, pData);
@@ -1818,7 +1883,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_BatteryVoltage(const float_q converted, uin
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_BatteryVoltage((uint8_t)rawVal, pData);
@@ -1848,7 +1913,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_EctVoltage(const float_q converted, uint8_t
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctVoltage((uint8_t)rawVal, pData);
@@ -1878,7 +1943,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_EctTemp(const int32_q converted, uint8_t * 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 215 ? 215 : (converted < -40 ? -40 : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 214 ? 214 : (converted < -40 ? -40 : converted));
         rawVal = (uint8_t)((convertedSat - -40) / 1);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_EctTemp((uint8_t)rawVal, pData);
@@ -1908,7 +1973,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_IatVoltage(const float_q converted, uint8_t
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatVoltage((uint8_t)rawVal, pData);
@@ -1938,7 +2003,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_IatTemp(const int32_q converted, uint8_t * 
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 215 ? 215 : (converted < -40 ? -40 : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 214 ? 214 : (converted < -40 ? -40 : converted));
         rawVal = (uint8_t)((convertedSat - -40) / 1);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_IatTemp((uint8_t)rawVal, pData);
@@ -1968,7 +2033,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_MapVoltage(const float_q converted, uint8_t
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapVoltage((uint8_t)rawVal, pData);
@@ -1999,7 +2064,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_MapPressure(const uint32_q converted, uint8
     else
     {
         // min = 0U and converted type is unsigned, so don't need to check
-        const decltype(converted.Val()) convertedSat = (converted > 255U ? 255U : converted);
+        const decltype(converted.Val()) convertedSat = (converted > 254U ? 254U : converted);
         rawVal = (uint8_t)((convertedSat - 0U) / 1U);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_MapPressure((uint8_t)rawVal, pData);
@@ -2029,7 +2094,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_TpsVoltage(const float_q converted, uint8_t
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 5.1F ? 5.1F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 5.08F ? 5.08F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.02F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsVoltage((uint8_t)rawVal, pData);
@@ -2059,7 +2124,7 @@ void CANTX_EIM_SetSFromFrame_EIM_ECM_TpsAngle(const float_q converted, uint8_t *
     }
     else
     {
-        const decltype(converted.Val()) convertedSat = (converted > 127.5F ? 127.5F : (converted < 0.0F ? 0.0F : converted));
+        const decltype(converted.Val()) convertedSat = (converted > 127.0F ? 127.0F : (converted < 0.0F ? 0.0F : converted));
         rawVal = (uint8_t)((convertedSat - 0.0F) / 0.5F);
     }
     CANTX_EIM_SetSRawFromFrame_EIM_ECM_TpsAngle((uint8_t)rawVal, pData);
@@ -2095,6 +2160,10 @@ bool CANTX_EIM_Init(void)
     CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
         4U,
         &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX][0U]
+    );
+    CANTX_EIM_SetSFromFrame_EIM_PcbaVitalsMux(
+        5U,
+        &gEIM_PcbaVitals_TX_ARR[CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX][0U]
     );
 
     // EIM_CpuStats

@@ -73,7 +73,7 @@ struct FiltCore
 
         T GetOutput(void) const { return m_data.GetOutput(); }
         void SetState(const T state) { m_data.SetState(state); }
-        void Run(const T input) { m_data.Run(input); }
+        void Run(const T input) { m_data.Run(input, m_coeffs); }
         void RunIfValid(const T input, const bool inputValid)
         {
             Filter::RunIfValid(m_coeffs, m_data, input, inputValid, m_valid);
@@ -118,7 +118,7 @@ struct Arr
 
         T GetOutput(const size_t idx) const { return m_data[idx].GetOutput(); }
         void SetState(const size_t idx, const T state) { m_data[idx].SetState(state); }
-        void Run(const size_t idx, const T input) { m_data[idx].Run(input); }
+        void Run(const size_t idx, const T input) { m_data[idx].Run(input, m_coeffs); }
         void RunIfValid(const size_t idx, const T input, const bool inputValid)
         {
             Filter::RunIfValid(m_coeffs, m_data[idx], input, inputValid, m_valid[idx]);

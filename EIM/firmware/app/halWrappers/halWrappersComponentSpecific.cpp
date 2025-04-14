@@ -5,6 +5,7 @@
 #include "EIM_canReceiverHook.h"
 #include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
+#include "tachComponent.h"
 
 /***************************************************************************************************
 *                    P R I V A T E   F U N C T I O N   D E C L A R A T I O N S                     *
@@ -192,6 +193,14 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     if (Eim::gHalWrappers.AdcGetFinished())
     {
         ProfilerCheckOut(PROFILER_ADC_CONV, true);
+    }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == Eim::gGpioInfo[GPIO_TACH].id)
+    {
+        TachComponentCheckIn();
     }
 }
 
