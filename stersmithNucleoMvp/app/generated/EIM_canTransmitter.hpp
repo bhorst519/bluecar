@@ -201,6 +201,18 @@ void CANTX_EIM_SetSRaw_EIM_PCBA_HornCurrent(const uint16_t rawVal);
 void CANTX_EIM_SetSFromFrame_EIM_PCBA_HornCurrent(const float_q converted, uint8_t * const pData);
 void CANTX_EIM_SetS_EIM_PCBA_HornCurrent(const float_q converted);
 
+// EIM_PCBA_TachFreq
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachFreq(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TachFreq(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TachFreq(const uint32_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TachFreq(const uint32_q converted);
+
+// EIM_PCBA_TachRpm
+void CANTX_EIM_SetSRawFromFrame_EIM_PCBA_TachRpm(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_EIM_PCBA_TachRpm(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_EIM_PCBA_TachRpm(const uint32_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_EIM_PCBA_TachRpm(const uint32_q converted);
+
 // EIM_CpuStatsMux
 void CANTX_EIM_SetSRawFromFrame_EIM_CpuStatsMux(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSFromFrame_EIM_CpuStatsMux(const uint32_t converted, uint8_t * const pData);

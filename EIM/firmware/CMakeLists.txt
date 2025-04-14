@@ -84,6 +84,7 @@ set(TARGET_SOURCES
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/servo/servoModule.cpp
+    app/tach/tachModule.cpp
     app/tx/txModule.cpp
     ../../shared/halWrappers/halWrappers.cpp
     ../../shared/profiler/profiler.c
@@ -114,6 +115,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/rtos
     app/rx
     app/servo
+    app/tach
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS
