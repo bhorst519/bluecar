@@ -42,6 +42,14 @@ void TxNoneModule::Transmit(void)
     // Nothing to do
 }
 
+void Tx1kHzModule::Transmit(void)
+{
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_EIM_PCBA_TachFreq(m_tachRef.GetFreq().Convert(uint32_t()));
+    CANTX_EIM_SetS_EIM_PCBA_TachRpm(m_tachRef.GetRpm().Convert(uint32_t()));
+    taskEXIT_CRITICAL();
+}
+
 void Tx100HzModule::Transmit(void)
 {
     taskENTER_CRITICAL();

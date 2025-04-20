@@ -15,6 +15,7 @@
 #include "klineModule.hpp"
 #include "rxModule.hpp"
 #include "servoModule.hpp"
+#include "tachModule.hpp"
 #include "txModule.hpp"
 
 // Message modules
@@ -23,6 +24,7 @@
 #include "klineMessageModule.hpp"
 #include "rxMessageModule.hpp"
 #include "servoMessageModule.hpp"
+#include "tachMessageModule.hpp"
 
 // Input message modules
 #include "ioIntInputMessageModule.hpp"
@@ -89,17 +91,22 @@ class App final
         // 1kHz objects
         //------------------------------------------------------------------------------------------
         // TX/RX modules
+        Tx1kHzModule m_tx1kHzModule {
+            m_tachMessageModule1kHz
+        };
 
         // Inputs
 
         // Modules
         CanModule m_canModule {};
+        TachModule m_tachModule {};
 
         // Module list
-        static constexpr size_t m_numberOfModules1kHz = 1U;
+        static constexpr size_t m_numberOfModules1kHz = 2U;
         ModuleBase * const m_moduleList1kHz[m_numberOfModules1kHz] =
         {
             &m_canModule,
+            &m_tachModule,
         };
 
         //------------------------------------------------------------------------------------------
@@ -180,6 +187,12 @@ class App final
         //------------------------------------------------------------------------------------------
         // Data channels
         //------------------------------------------------------------------------------------------
+        // 1kHz source
+        DataChannel< TachData_S
+                   , Task1kHz   // source task
+                          >m_tachDataChannel{ m_tachModule.GetOutputDataReference() };
+        TachMessageModule m_tachMessageModule1kHz { m_tachDataChannel.GetBuffer(Task1kHz_t) };
+
         // 100Hz source
         DataChannel< AdcData_S
                    , Task100Hz  // source task
@@ -213,9 +226,11 @@ class App final
                           >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
         KlineMessageModule m_klineMessageModule1Hz { m_klineDataChannel.GetBuffer(Task1Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 6U;
+        static constexpr size_t m_numberOfDataChannels = 7U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
+            // 1kHz source
+            &m_tachDataChannel,
             // 100Hz source
             &m_adcDataChannel,
             &m_ioIntDataChannel,
@@ -237,7 +252,7 @@ class App final
                         , m_dataChannelList
                         , m_numberOfDataChannels
                         , m_rxNoneModule
-                        , m_txNoneModule
+                        , m_tx1kHzModule
                     };
         TaskBase    m_task100Hz{
                           Task100Hz_t

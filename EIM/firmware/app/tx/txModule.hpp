@@ -9,6 +9,7 @@
 #include "klineInterface.hpp"
 #include "moduleBase.hpp"
 #include "servoInterface.hpp"
+#include "tachInterface.hpp"
 #include "util.h"
 
 /**************************************************************************************************
@@ -28,6 +29,24 @@ class TxNoneModule final : public Shared::TxModuleBase
         NOCOPY_NOMOVE(TxNoneModule);
 
         virtual void Transmit(void) override;
+};
+
+class Tx1kHzModule final : public Shared::TxModuleBase
+{
+    public:
+        constexpr Tx1kHzModule(
+                const TachOutputInterface& tachRef
+            ) :
+                TxModuleBase(),
+                m_tachRef(tachRef)
+        {}
+
+        NOCOPY_NOMOVE(Tx1kHzModule);
+
+        virtual void Transmit(void) override;
+
+    private:
+        const TachOutputInterface& m_tachRef;
 };
 
 class Tx100HzModule final : public Shared::TxModuleBase
