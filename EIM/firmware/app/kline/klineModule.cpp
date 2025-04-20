@@ -49,6 +49,7 @@ void KlineModule::Init(void)
 // Could have different runs at 1Hz (for init handling) and 10Hz (for polling) if desired.
 void KlineModule::Run(void)
 {
+    gHalWrappers.GpioSet(GPIO_KLINE_EN, true);
     const Kline_State_E nextState = RunStateMachine();
 
     if (nextState != m_state)
@@ -182,7 +183,7 @@ bool KlineModule::VerifyResponse(const Kline_Comm_Request_U * const pRequest, co
     return success;
 }
 
-bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_U * pResponse) const
+bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_U *& pResponse) const
 {
     bool success = true;
     Kline_Comm_Request_U * pRequest = (Kline_Comm_Request_U *)(&gUartBytesTx[0U]);
@@ -261,7 +262,7 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
 
 bool KlineModule::SendRequest(const Kline_Request_E request)
 {
-    Kline_Comm_Response_U * pResponse = NULL;
+    Kline_Comm_Response_U * pResponse = nullptr;
     const bool success = Transceive(request, pResponse);
 
     if (success)

@@ -15,6 +15,7 @@ namespace Eim
 
 static void HalWrappersKlineUartCallback(UART_HandleTypeDef *huart);
 static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart);
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart);
 
 /***************************************************************************************************
 *                         P R I V A T E   D A T A   D E F I N I T I O N S                          *
@@ -81,8 +82,16 @@ static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
 };
 
 static constexpr HalWrappers_Uart_Info_S gUartInfo[MAX_NUM_UART] = {
-    /* UART_KLINE */ {.rxPin = GPIO_KLINE_RX, .txPin = GPIO_KLINE_TX, .rxTxCompleteCallback = HalWrappersKlineUartCallback},
-    /* UART_SERVO */ {.rxPin = GPIO_SERVO_RX, .txPin = GPIO_SERVO_TX, .rxTxCompleteCallback = HalWrappersServoUartCallback},
+    /* UART_KLINE */  { .rxPin = GPIO_KLINE_RX,
+                        .txPin = GPIO_KLINE_TX,
+                        .txCompleteCallback = nullptr,
+                        .notifyCallback = HalWrappersKlineUartCallback
+                      },
+    /* UART_SERVO */  { .rxPin = GPIO_SERVO_RX,
+                        .txPin = GPIO_SERVO_TX,
+                        .txCompleteCallback = HalWrappersServoUartTxComplete,
+                        .notifyCallback = HalWrappersServoUartCallback
+                      },
 };
 
 HalWrappers gHalWrappers {
@@ -128,6 +137,14 @@ static void HalWrappersServoUartCallback(UART_HandleTypeDef *huart)
     // Yield if no task assigned
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+static void HalWrappersServoUartTxComplete(UART_HandleTypeDef *huart)
+{
+    (void)HAL_UART_UnRegisterCallback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+
+    // Enable servo UART for receive
+    gHalWrappers.GpioSet(GPIO_SERVO_COMM_DIR, false);
 }
 
 /***************************************************************************************************
@@ -202,6 +219,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {
         TachComponentCheckIn();
     }
+}
+
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    Eim::gHalWrappers.TimerIrq(htim);
 }
 
 } // extern "C"

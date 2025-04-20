@@ -65,6 +65,15 @@ static constexpr uint32_t HAL_WRAPPERS_FILTERS_PER_BUS {HAL_WRAPPERS_FILTERS_PER
 using Gpio_Id = uint16_t;
 using Pwm_Ch = uint32_t;
 
+enum HalWrappers_Tim_Int_E
+{
+    TIM_INT_CH_1,
+    TIM_INT_CH_2,
+    TIM_INT_CH_3,
+    TIM_INT_CH_4,
+    MAX_NUM_TIM_INT_CH
+};
+
 struct HalWrappers_Gpio_Info_S
 {
     Gpio_Id id;
@@ -87,7 +96,8 @@ struct HalWrappers_Uart_Info_S
 {
     HalWrappers_Gpio_E rxPin;
     HalWrappers_Gpio_E txPin;
-    void (* rxTxCompleteCallback)(UART_HandleTypeDef * huart);
+    void (* txCompleteCallback)(UART_HandleTypeDef * huart);
+    void (* notifyCallback)(UART_HandleTypeDef * huart);
 };
 
 /***************************************************************************************************
@@ -262,9 +272,12 @@ class HalWrappersTimer
 
         void TimerClearUs(void);
         uint32_t TimerGetUs(void);
+        void TimerScheduleInt(HalWrappers_Tim_Int_E timInt, const uint32_t timeUs, void (* callback)(void));
+        void TimerIrq(TIM_HandleTypeDef * htim);
 
     private:
         TIM_HandleTypeDef * m_pUsTim;
+        void (* m_callback[MAX_NUM_TIM_INT_CH])(void);
 };
 #endif
 

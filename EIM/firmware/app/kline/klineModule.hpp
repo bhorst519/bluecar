@@ -54,7 +54,7 @@ class KlineModule final : public Shared::ModuleBase
         uint8_t CalculateCrc(const uint8_t * const pData, const uint8_t numBytes) const;
         bool VerifyCrc(const Kline_Comm_Response_U * const pResponse) const;
         bool VerifyResponse(const Kline_Comm_Request_U * const pRequest, const Kline_Comm_Response_U * const pResponse) const;
-        bool Transceive(const Kline_Request_E request, Kline_Comm_Response_U * pResponse) const;
+        bool Transceive(const Kline_Request_E request, Kline_Comm_Response_U *& pResponse) const;
         bool SendRequest(const Kline_Request_E request);
 
         // Process data
