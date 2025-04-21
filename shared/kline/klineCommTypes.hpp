@@ -9,7 +9,7 @@
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 enum class Kline_Request_E
@@ -136,6 +136,6 @@ union Kline_Comm_Response_U
 } __attribute__((packed));
 #define KLINE_MAX_RESPONSE_LENGTH (sizeof(Kline_Comm_Response_U))
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // KLINE_COMM_TYPES_HPP

@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "halWrappers.hpp"
 #include "klineCommTypes.hpp"
 #include "klineData.hpp"
 #include "klineInterface.hpp"
@@ -12,7 +13,7 @@
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 enum class Kline_State_E
@@ -29,8 +30,12 @@ class KlineModule final : public Shared::ModuleBase
 {
     public:
         constexpr KlineModule(
+                HalWrappersUart& uartRef,
+                KlineIoInterface& ioRef
             ) :
-                ModuleBase()
+                ModuleBase(),
+                m_uartRef(uartRef),
+                m_ioRef(ioRef)
         {}
 
         NOCOPY_NOMOVE(KlineModule);
@@ -40,6 +45,9 @@ class KlineModule final : public Shared::ModuleBase
         constexpr const KlineData_S& GetOutputDataReference(void) const { return m_outputData; };
 
     private:
+        HalWrappersUart& m_uartRef;
+        KlineIoInterface& m_ioRef;
+
         KlineData_S m_outputData {};
         Kline_State_E m_state {Kline_State_E::INIT_PEND};
 
@@ -54,7 +62,7 @@ class KlineModule final : public Shared::ModuleBase
         uint8_t CalculateCrc(const uint8_t * const pData, const uint8_t numBytes) const;
         bool VerifyCrc(const Kline_Comm_Response_U * const pResponse) const;
         bool VerifyResponse(const Kline_Comm_Request_U * const pRequest, const Kline_Comm_Response_U * const pResponse) const;
-        bool Transceive(const Kline_Request_E request, Kline_Comm_Response_U * pResponse) const;
+        bool Transceive(const Kline_Request_E request, Kline_Comm_Response_U *& pResponse) const;
         bool SendRequest(const Kline_Request_E request);
 
         // Process data
@@ -62,6 +70,6 @@ class KlineModule final : public Shared::ModuleBase
         void InvalidateData(void);
 };
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // KLINE_MODULE_HPP

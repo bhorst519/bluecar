@@ -2,7 +2,6 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "halWrappersComponentSpecific.hpp"
 #include "klineCommTypes.hpp"
 #include "klineModule.hpp"
 #include "string.h"
@@ -10,7 +9,7 @@
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 #define KLINE_MAX_TX_BYTES          (KLINE_MAX_REQUEST_LENGTH)
@@ -49,7 +48,7 @@ void KlineModule::Init(void)
 // Could have different runs at 1Hz (for init handling) and 10Hz (for polling) if desired.
 void KlineModule::Run(void)
 {
-    gHalWrappers.GpioSet(GPIO_KLINE_EN, true);
+    m_ioRef.UartEnableKlineTransmit();
     const Kline_State_E nextState = RunStateMachine();
 
     if (nextState != m_state)
@@ -90,20 +89,20 @@ Kline_State_E KlineModule::RunInitPendState(void) const
 {
     // Idle state for TX pin to sit high
     // Change TX to GPIO output
-    gHalWrappers.UartSetGpio(UART_KLINE, true);
-    gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
+    m_ioRef.SetKlineUartGpio(true);
+    m_ioRef.SetKlineTxPin(true);
 
     return Kline_State_E::INIT;
 }
 
 Kline_State_E KlineModule::RunInitState(void)
 {
-    gHalWrappers.GpioSet(GPIO_KLINE_TX, false);
+    m_ioRef.SetKlineTxPin(false);
     (void)osDelay(KLINE_INIT_LOW_TIME_MS);
-    gHalWrappers.GpioSet(GPIO_KLINE_TX, true);
+    m_ioRef.SetKlineTxPin(true);
     (void)osDelay(KLINE_INIT_HIGH_TIME_MS);
     // Restore UART pins
-    gHalWrappers.UartSetGpio(UART_KLINE, false);
+    m_ioRef.SetKlineUartGpio(false);
 
     bool success = true;
 
@@ -224,6 +223,7 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
             break;
     }
 
+    const HalWrappers_Uart_E uart = m_ioRef.GetKlineUart();
     uint8_t numTxBytes = 0U;
 
     if (success)
@@ -236,19 +236,19 @@ bool KlineModule::Transceive(const Kline_Request_E request, Kline_Comm_Response_
     if (success)
     {
         const uint8_t numRxBytes = gRequestResponseLength[static_cast<size_t>(request)] + numTxBytes;
-        success = gHalWrappers.UartReceive(UART_KLINE, &gUartBytesRx[0U], numRxBytes);
+        success = m_uartRef.UartReceive(uart, &gUartBytesRx[0U], numRxBytes);
     }
 
     // Initiate transmit
     if (success)
     {
-        success = gHalWrappers.UartTransmit(UART_KLINE, &gUartBytesTx[0U], numTxBytes, false);
+        success = m_uartRef.UartTransmit(uart, &gUartBytesTx[0U], numTxBytes, false);
     }
 
     // Wait for receive data
     if (success)
     {
-        success = gHalWrappers.UartWait(UART_KLINE, KLINE_RESPONSE_TIMEOUT_MS);
+        success = m_uartRef.UartWait(uart, KLINE_RESPONSE_TIMEOUT_MS);
     }
 
     if (success)
@@ -329,4 +329,4 @@ void KlineModule::InvalidateData(void)
     m_outputData.vehicleSpeed = SignalStatus_E::SNA;
 }
 
-} // namespace Eim
+} // namespace Shared

@@ -1,29 +1,39 @@
-#ifndef SERVO_DATA_HPP
-#define SERVO_DATA_HPP
+#ifndef KLINE_DATA_HPP
+#define KLINE_DATA_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "qualifiedValTypes.hpp"
+#include "qualifiedVal.hpp"
 #include "util.h"
+
+using namespace ::QualifiedVal;
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
-struct ServoData_S
+struct KlineData_S
 {
-    uint8_t id;
-    float_q positionDegrees;
-    float_q lossOfCommPositionDegrees;
-    float_q lossOfCommTimeout;
-    float_q current;
-    float_q temperature;
-    float_q voltage;
+    uint16_q rpm;
+    float_q batteryVoltage;
+    float_q vehicleSpeed;
+    // Throttle position sensor
+    float_q tpsVoltage;
+    float_q tpsAngle;
+    // Engine coolant temp sensor
+    float_q ectVoltage;
+    float_q ectTemp;
+    // Intake air temp sensor
+    float_q iatVoltage;
+    float_q iatTemp;
+    // Manifold absolute pressure sensor
+    float_q mapVoltage;
+    float_q mapPressure;
 };
 
-} // namespace Eim
+} // namespace Shared
 
-#endif // SERVO_DATA_HPP
+#endif // KLINE_DATA_HPP

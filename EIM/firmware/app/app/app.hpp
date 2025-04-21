@@ -5,6 +5,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "dataChannel.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "nocopy.hpp"
 #include "taskBase.hpp"
 
@@ -78,6 +79,14 @@ class App final
         using DataChannel       = Shared::DataChannel<T, SourceTask, DestTasks...>;
         using ModuleBase        = Shared::ModuleBase;
         using TaskBase          = Shared::TaskBase;
+
+        using KlineModule           = Shared::KlineModule;
+        using KlineData_S           = Shared::KlineData_S;
+        using KlineMessageModule    = Shared::KlineMessageModule;
+
+        using ServoModule           = Shared::ServoModule;
+        using ServoData_S           = Shared::ServoData_S;
+        using ServoMessageModule    = Shared::ServoMessageModule;
 
         Task1kHz     Task1kHz_t{};
         Task100Hz    Task100Hz_t{};
@@ -154,7 +163,9 @@ class App final
 
         // Modules
         ServoModule m_servoModule {
-            m_servoInput
+            m_servoInput,
+            gHalWrappers,
+            gHalWrappers,
         };
 
         // Module list
@@ -175,7 +186,10 @@ class App final
         // Inputs
 
         // Modules
-        KlineModule m_klineModule {};
+        KlineModule m_klineModule {
+            gHalWrappers,
+            gHalWrappers
+        };
 
         // Module list
         static constexpr size_t m_numberOfModules1Hz = 1U;

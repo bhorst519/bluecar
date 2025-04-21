@@ -30,6 +30,8 @@ class TxNoneModule final : public Shared::TxModuleBase
 
 class Tx10HzModule final : public Shared::TxModuleBase
 {
+    using ServoOutputInterface = Shared::ServoOutputInterface;
+
     public:
         constexpr Tx10HzModule(
                 const ServoOutputInterface& servoRef
@@ -48,6 +50,8 @@ class Tx10HzModule final : public Shared::TxModuleBase
 
 class Tx1HzModule final : public Shared::TxModuleBase
 {
+    using KlineOutputInterface = Shared::KlineOutputInterface;
+
     public:
         constexpr Tx1HzModule(
                 const KlineOutputInterface& klineRef
