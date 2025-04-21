@@ -4,13 +4,15 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "qualifiedValTypes.hpp"
+#include "qualifiedVal.hpp"
 #include "util.h"
+
+using namespace ::QualifiedVal;
 
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 struct ServoData_S
@@ -24,6 +26,6 @@ struct ServoData_S
     float_q voltage;
 };
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // SERVO_DATA_HPP

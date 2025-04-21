@@ -79,15 +79,15 @@ set(TARGET_SOURCES
     app/dataChannel/dataChannel.cpp
     app/halWrappers/halWrappersComponentSpecific.cpp
     app/ioInt/ioIntModule.cpp
-    app/kline/klineModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
-    app/servo/servoModule.cpp
     app/tach/tachModule.cpp
     app/tx/txModule.cpp
     ../../shared/halWrappers/halWrappers.cpp
+    ../../shared/kline/klineModule.cpp
     ../../shared/profiler/profiler.c
+    ../../shared/servo/servoModule.cpp
     ../../shared/taskBase/taskBase.cpp
 )
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
@@ -110,18 +110,18 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/dataChannel
     app/halWrappers
     app/ioInt
-    app/kline
     app/profiler
     app/rtos
     app/rx
-    app/servo
     app/tach
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS
     ../../shared/halWrappers
+    ../../shared/kline
     ../../shared/moduleBase
     ../../shared/profiler
+    ../../shared/servo
     ../../shared/taskBase
     ../../shared/utils
 )

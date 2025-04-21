@@ -13,7 +13,7 @@
 namespace Eim
 {
 
-class ServoInputMessageModule final : public ServoInputInterface
+class ServoInputMessageModule final : public Shared::ServoInputInterface
 {
     private:
         const Rx10HzOutputInterface& m_rx10HzRef;

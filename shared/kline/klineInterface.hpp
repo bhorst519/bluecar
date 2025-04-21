@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "halWrappers.hpp"
 #include "klineData.hpp"
 #include "nocopy.hpp"
 #include "util.h"
@@ -11,7 +12,7 @@
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
 **************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 class KlineOutputInterface
@@ -35,6 +36,20 @@ class KlineOutputInterface
         virtual float_q GetVehicleSpeed(void) const = 0;
 };
 
-} // namespace Eim
+class KlineIoInterface
+{
+    public:
+        constexpr KlineIoInterface()
+        {}
+
+        NOCOPY_NOMOVE(KlineIoInterface);
+
+        virtual HalWrappers_Uart_E GetKlineUart(void) const = 0;
+        virtual void SetKlineTxPin(const bool level) = 0;
+        virtual void SetKlineUartGpio(const bool setToGpio) = 0;
+        virtual void UartEnableKlineTransmit(void) = 0;
+};
+
+} // namespace Shared
 
 #endif // KLINE_INTERFACE_HPP

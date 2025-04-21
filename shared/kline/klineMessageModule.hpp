@@ -10,7 +10,7 @@
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
 **************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 class KlineMessageModule final : public KlineOutputInterface
@@ -84,6 +84,6 @@ class KlineMessageModule final : public KlineOutputInterface
         }
 };
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // KLINE_MESSAGE_MODULE_HPP

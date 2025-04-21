@@ -5,8 +5,10 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "halWrappers.hpp"
+#include "klineInterface.hpp"
 #include "nocopy.hpp"
 #include "profiler.h"
+#include "servoInterface.hpp"
 
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
@@ -27,12 +29,17 @@ using HalWrappers_Pwm_Info_S = Shared::HalWrappers_Pwm_Info_S;
 using HalWrappers_Adc_Info_S = Shared::HalWrappers_Adc_Info_S;
 using HalWrappers_Uart_Info_S = Shared::HalWrappers_Uart_Info_S;
 
+using KlineIoInterface = Shared::KlineIoInterface;
+using ServoIoInterface = Shared::ServoIoInterface;
+
 class HalWrappers :   public HalWrappersGpio
                     , public HalWrappersPwm
                     , public HalWrappersAdc
                     , public HalWrappersCan
                     , public HalWrappersUart
                     , public HalWrappersTimer
+                    , public KlineIoInterface
+                    , public ServoIoInterface
 {
     public:
         constexpr HalWrappers(
@@ -48,6 +55,8 @@ class HalWrappers :   public HalWrappersGpio
                 , HalWrappersCan(config.pCan)
                 , HalWrappersUart(config.pUart, uartInfo)
                 , HalWrappersTimer(config.pUsTim)
+                , KlineIoInterface()
+                , ServoIoInterface()
         {}
 
         NODEFAULT_NOCOPY_NOMOVE(HalWrappers);
@@ -65,7 +74,34 @@ class HalWrappers :   public HalWrappersGpio
             Shared::HalWrappersUart::UartSetGpio(uart, setToGpio, *this);
         }
 
-        void UartSetServoTransmit(void)
+        // KlineIoInterface
+        virtual HalWrappers_Uart_E GetKlineUart(void) const override
+        {
+            return UART_KLINE;
+        }
+
+        virtual void SetKlineTxPin(const bool level) override
+        {
+            GpioSet(GPIO_KLINE_TX, level);
+        }
+
+        virtual void SetKlineUartGpio(const bool setToGpio) override
+        {
+            UartSetGpio(UART_KLINE, setToGpio);
+        }
+
+        virtual void UartEnableKlineTransmit(void) override
+        {
+            GpioSet(GPIO_KLINE_EN, true);
+        }
+
+        // ServoIoInterface
+        virtual HalWrappers_Uart_E GetServoUart(void) const override
+        {
+            return UART_SERVO;
+        }
+
+        virtual void UartEnableServoTransmit(void) override
         {
             GpioSet(GPIO_SERVO_COMM_DIR, true);
         }

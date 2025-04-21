@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "halWrappers.hpp"
 #include "moduleBase.hpp"
 #include "servoCommTypes.hpp"
 #include "servoData.hpp"
@@ -12,17 +13,21 @@
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
-class ServoModule final : public Shared::ModuleBase
+class ServoModule final : public ModuleBase
 {
     public:
         constexpr ServoModule(
-                const ServoInputInterface& inputRef
+                const ServoInputInterface& inputRef,
+                HalWrappersUart& uartRef,
+                ServoIoInterface& ioRef
             ) :
                 ModuleBase(),
-                m_inputData(inputRef)
+                m_inputData(inputRef),
+                m_uartRef(uartRef),
+                m_ioRef(ioRef)
         {}
 
         NOCOPY_NOMOVE(ServoModule);
@@ -33,6 +38,8 @@ class ServoModule final : public Shared::ModuleBase
 
     private:
         const ServoInputInterface& m_inputData;
+        HalWrappersUart& m_uartRef;
+        ServoIoInterface& m_ioRef;
 
         ServoData_S m_outputData {};
         bool m_initialRead {false};
@@ -57,6 +64,6 @@ class ServoModule final : public Shared::ModuleBase
         bool SendSpecialRequest(const Servo_Special_Request_E request);
 };
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // SERVO_MODULE_HPP

@@ -1,7 +1,6 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "halWrappersComponentSpecific.hpp"
 #include "mathUtil.hpp"
 #include "servoModule.hpp"
 #include "util.h"
@@ -11,7 +10,7 @@
 ***************************************************************************************************/
 #define SERVO_RESPONSE_TIMEOUT_MS (3U)
 
-namespace Eim
+namespace Shared
 {
 
 static constexpr float SERVO_POSITION_MIN { -170.0F }; // degrees
@@ -204,6 +203,7 @@ bool ServoModule::VerifyResponse(const Servo_Request_E request, const Servo_Comm
 
 bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequest) const
 {
+    const HalWrappers_Uart_E uart = m_ioRef.GetServoUart();
     bool success = true;
 
     gRequestFrame.frame.code = static_cast<uint8_t>(request);
@@ -213,20 +213,21 @@ bool ServoModule::Transceive(const Servo_Request_E request, const bool checkRequ
     // Set up for receive, if needed
     if (success && checkRequest)
     {
-        success = gHalWrappers.UartReceive(UART_SERVO, &gResponseFrame.raw.data[0U], SERVO_FRAME_SIZE);
+        success = m_uartRef.UartReceive(uart, &gResponseFrame.raw.data[0U], SERVO_FRAME_SIZE);
     }
 
     // Initiate transmit
     if (success)
     {
         const bool txCompleteNotify = (!checkRequest);
-        success = gHalWrappers.UartTransmit(UART_SERVO, &gRequestFrame.raw.data[0U], SERVO_FRAME_SIZE, txCompleteNotify);
+        m_ioRef.UartEnableServoTransmit();
+        success = m_uartRef.UartTransmit(uart, &gRequestFrame.raw.data[0U], SERVO_FRAME_SIZE, txCompleteNotify);
     }
 
     // Wait for receive data, if needed. Otherwise wait for transmit to finish
     if (success)
     {
-        success = gHalWrappers.UartWait(UART_SERVO, SERVO_RESPONSE_TIMEOUT_MS);
+        success = m_uartRef.UartWait(uart, SERVO_RESPONSE_TIMEOUT_MS);
     }
 
     if (success && checkRequest)
@@ -453,4 +454,4 @@ bool ServoModule::SendSpecialRequest(const Servo_Special_Request_E request)
     return success;
 }
 
-} // namespace Eim
+} // namespace Shared

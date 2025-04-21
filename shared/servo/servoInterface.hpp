@@ -4,6 +4,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "halWrappers.hpp"
 #include "nocopy.hpp"
 #include "servoData.hpp"
 #include "util.h"
@@ -11,7 +12,7 @@
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
 **************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 class ServoInputInterface
@@ -44,6 +45,18 @@ class ServoOutputInterface
         virtual float_q GetVoltage(void) const = 0;
 };
 
-} // namespace Eim
+class ServoIoInterface
+{
+    public:
+        constexpr ServoIoInterface()
+        {}
+
+        NOCOPY_NOMOVE(ServoIoInterface);
+
+        virtual HalWrappers_Uart_E GetServoUart(void) const = 0;
+        virtual void UartEnableServoTransmit(void) = 0;
+};
+
+} // namespace Shared
 
 #endif // SERVO_INTERFACE_HPP

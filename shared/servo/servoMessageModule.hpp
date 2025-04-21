@@ -10,7 +10,7 @@
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
 **************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 class ServoMessageModule final : public ServoOutputInterface
@@ -64,6 +64,6 @@ class ServoMessageModule final : public ServoOutputInterface
         }
 };
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // SERVO_MESSAGE_MODULE_HPP

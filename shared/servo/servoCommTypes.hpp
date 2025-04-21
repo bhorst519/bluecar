@@ -9,7 +9,7 @@
 /***************************************************************************************************
 *                                          D E F I N E S                                           *
 ***************************************************************************************************/
-namespace Eim
+namespace Shared
 {
 
 static constexpr uint8_t SERVO_BROADCAST_ID { 0x1F };
@@ -275,6 +275,6 @@ constexpr bool ServoGetValidId(const uint8_t id)
             && (id != SERVO_BROADCAST_ID) );
 }
 
-} // namespace Eim
+} // namespace Shared
 
 #endif // SERVO_COMM_TYPES_HPP
