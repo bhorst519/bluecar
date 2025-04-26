@@ -191,7 +191,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dbcFile", dest="dbcFile", help="Input DBC file")
     parser.add_argument("--targetDir", dest="targetDir", help="Generated code target directory")
-    parser.add_argument("--alias", dest="alias", help="Alias/namespact for code generation")
+    parser.add_argument("--alias", dest="alias", help="Alias/namespace for code generation")
     parser.add_argument("--node", dest="node", help="Transmit node name")
     parser.add_argument("--genDebugFiles", dest="genDebugFiles", action="store_true", default=False)
 
