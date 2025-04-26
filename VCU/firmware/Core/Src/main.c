@@ -19,9 +19,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "string.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+// #include "halWrappersConfig.h"
+#include "profiler.h"
+#include "rtos.h"
 
 /* USER CODE END Includes */
 
@@ -56,7 +60,23 @@ UART_HandleTypeDef huart3;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
+osThreadId defaultTaskHandle;
+uint32_t defaultTaskBuffer[ 256 ];
+osStaticThreadDef_t defaultTaskControlBlock;
+osThreadId Task1kHzHandle;
+uint32_t Task1kHzBuffer[ 256 ];
+osStaticThreadDef_t Task1kHzControlBlock;
+osThreadId Task100HzHandle;
+uint32_t Task100HzBuffer[ 256 ];
+osStaticThreadDef_t Task100HzControlBlock;
+osThreadId Task10HzHandle;
+uint32_t Task10HzBuffer[ 256 ];
+osStaticThreadDef_t Task10HzControlBlock;
 /* USER CODE BEGIN PV */
+
+static Profiler_Data_S g1kHzProfilerData;
+static Profiler_Data_S g100HzProfilerData;
+static Profiler_Data_S g10HzProfilerData;
 
 /* USER CODE END PV */
 
@@ -68,6 +88,11 @@ static void MX_ETH_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_ADC1_Init(void);
+void StartDefaultTask(void const * argument);
+void StartTask1kHz(void const * argument);
+void StartTask100Hz(void const * argument);
+void StartTask10Hz(void const * argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -114,6 +139,59 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadStaticDef(defaultTask, StartDefaultTask, osPriorityIdle, 0, 256, defaultTaskBuffer, &defaultTaskControlBlock);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of Task1kHz */
+  osThreadStaticDef(Task1kHz, StartTask1kHz, osPriorityRealtime, 0, 256, Task1kHzBuffer, &Task1kHzControlBlock);
+  Task1kHzHandle = osThreadCreate(osThread(Task1kHz), NULL);
+
+  /* definition and creation of Task100Hz */
+  osThreadStaticDef(Task100Hz, StartTask100Hz, osPriorityHigh, 0, 256, Task100HzBuffer, &Task100HzControlBlock);
+  Task100HzHandle = osThreadCreate(osThread(Task100Hz), NULL);
+
+  /* definition and creation of Task10Hz */
+  osThreadStaticDef(Task10Hz, StartTask10Hz, osPriorityAboveNormal, 0, 256, Task10HzBuffer, &Task10HzControlBlock);
+  Task10HzHandle = osThreadCreate(osThread(Task10Hz), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
+  vTaskSetThreadLocalStoragePointer(Task1kHzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1kHzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1KHZ, (void *)Task1kHzHandle);
+
+  g100HzProfilerData.configWindowNumPeriods = 100U; // 100Hz
+  vTaskSetThreadLocalStoragePointer(Task100HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g100HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_100HZ, (void *)Task100HzHandle);
+
+  g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
+  vTaskSetThreadLocalStoragePointer(Task10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_10HZ, (void *)Task10HzHandle);
+  /* USER CODE END RTOS_THREADS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -458,6 +536,90 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void const * argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartTask1kHz */
+/**
+* @brief Function implementing the Task1kHz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask1kHz */
+void StartTask1kHz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask1kHz */
+  (void)argument;
+  RtosRunTask1kHz();
+  /* USER CODE END StartTask1kHz */
+}
+
+/* USER CODE BEGIN Header_StartTask100Hz */
+/**
+* @brief Function implementing the Task100Hz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask100Hz */
+void StartTask100Hz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask100Hz */
+  (void)argument;
+  RtosRunTask100Hz();
+  /* USER CODE END StartTask100Hz */
+}
+
+/* USER CODE BEGIN Header_StartTask10Hz */
+/**
+* @brief Function implementing the Task10Hz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask10Hz */
+void StartTask10Hz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask10Hz */
+  (void)argument;
+  RtosRunTask10Hz();
+  /* USER CODE END StartTask10Hz */
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM2 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM2) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

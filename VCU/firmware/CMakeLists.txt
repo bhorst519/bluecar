@@ -79,16 +79,16 @@ set(TARGET_SOURCES
     # ${TARGET_SOURCES_CANGEN}
     # app/adc/adcModule.cpp
     # app/can/canModule.cpp
-    # app/dataChannel/dataChannel.cpp
+    app/dataChannel/dataChannel.cpp
     # app/halWrappers/halWrappersComponentSpecific.cpp
     # app/ioInt/ioIntModule.cpp
-    # app/profiler/profilerComponentSpecific.cpp
-    # app/rtos/rtos.cpp
-    # app/rx/rxModule.cpp
-    # app/tx/txModule.cpp
+    app/profiler/profilerComponentSpecific.cpp
+    app/rtos/rtos.cpp
+    app/rx/rxModule.cpp
+    app/tx/txModule.cpp
     # ../../shared/halWrappers/halWrappers.cpp
-    # ../../shared/profiler/profiler.c
-    # ../../shared/taskBase/taskBase.cpp
+    ../../shared/profiler/profiler.c
+    ../../shared/taskBase/taskBase.cpp
 )
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
@@ -105,22 +105,22 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     # ${TARGET_DIR_CANGEN}
     # app/adc
-    # app/app
+    app/app
     # app/can
-    # app/dataChannel
+    app/dataChannel
     # app/halWrappers
     # app/ioInt
-    # app/profiler
-    # app/rtos
-    # app/rx
-    # app/tx
-    # ../../shared/dataChannel
-    # ../../shared/FreeRTOS
+    app/profiler
+    app/rtos
+    app/rx
+    app/tx
+    ../../shared/dataChannel
+    ../../shared/FreeRTOS
     # ../../shared/halWrappers
-    # ../../shared/moduleBase
-    # ../../shared/profiler
-    # ../../shared/taskBase
-    # ../../shared/utils
+    ../../shared/moduleBase
+    ../../shared/profiler
+    ../../shared/taskBase
+    ../../shared/utils
 )
 
 # Add project symbols (macros)
