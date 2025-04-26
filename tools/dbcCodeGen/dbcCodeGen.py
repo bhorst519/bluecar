@@ -1,4 +1,4 @@
-import argparse, os, re
+import argparse, json, os, re
 from render import Render
 from helpers import *
 
@@ -6,15 +6,22 @@ from helpers import *
 # Class for code generation management
 #---------------------------------------------------------------------------------------------------
 class DbcCodeGen:
-    def __init__(self, dbcFilePath, generatedCodeDirPath, alias, node, genDebugFiles):
+    def __init__(self, dbcFilePath, rxFilePath, generatedCodeDirPath, alias, node, genDebugFiles):
         self.generatedCodeDirPath = generatedCodeDirPath
         self.alias = alias
         self.node = node
         self.genDebugFiles = genDebugFiles
+        self.rxExpressions = [".*"]
 
         self.dbcFileHandle = open(dbcFilePath, "r")
         if not os.path.exists(generatedCodeDirPath):
             os.mkdir(generatedCodeDirPath)
+
+        if rxFilePath is not None:
+            with open(rxFilePath, "r") as rxFileHandle:
+                self.rxExpressions = json.load(rxFileHandle)
+        if type(self.rxExpressions) is not list:
+            raise Exception(f"RX file {rxFilePath} is not a list of regex expressions")
 
         if genDebugFiles:
             signalInfoFile = os.path.join(generatedCodeDirPath, f"{alias}_signals.txt")
@@ -146,8 +153,8 @@ class DbcCodeGen:
 
 
         # Filter for receive info
-        # TODO This could be filtered better, just do anything that isn't the transmit node
-        signalsToReceive = [s for s in signalInfo if s["transmitter"] != self.node]
+        signalsToReceive = [s for s in signalInfo if any([re.search(expr, s["name"]) for expr in self.rxExpressions])]
+        signalsToReceive = [s for s in signalsToReceive if s["transmitter"] != self.node]
         # Get the relevant (message, muxIdx) pairs based on the signals to receive
         messageMuxPairsToReceive = list(set([(s["message"], s["muxIdx"]) for s in signalsToReceive]))
         messageMuxesToReceive = {}
@@ -190,6 +197,7 @@ def get_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--dbcFile", dest="dbcFile", help="Input DBC file")
+    parser.add_argument("--rxFile", dest="rxFile", help="Generated code target directory", default=None)
     parser.add_argument("--targetDir", dest="targetDir", help="Generated code target directory")
     parser.add_argument("--alias", dest="alias", help="Alias/namespace for code generation")
     parser.add_argument("--node", dest="node", help="Transmit node name")
@@ -201,5 +209,5 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     print(f"Generating CAN code for alias: {args.alias}, node: {args.node}")
-    sampleCodeGen = DbcCodeGen(args.dbcFile, args.targetDir, args.alias, args.node, args.genDebugFiles)
+    sampleCodeGen = DbcCodeGen(args.dbcFile, args.rxFile, args.targetDir, args.alias, args.node, args.genDebugFiles)
     sampleCodeGen.Run()

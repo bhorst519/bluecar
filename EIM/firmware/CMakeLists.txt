@@ -50,6 +50,7 @@ file(GLOB CANGEN_SCRIPT_SOURCES     "${CANGEN_SCRIPT_DIR}/*.py")
 file(GLOB CANGEN_SCRIPT_TEMPLATES   "${CANGEN_SCRIPT_DIR}/*.jinja")
 set(CANGEN_SCRIPT                   ${CANGEN_SCRIPT_DIR}/dbcCodeGen.py)
 set(DBC_FILE                        ${CMAKE_SOURCE_DIR}/../../tools/network/EIM.dbc)
+set(RX_FILE                         ${CMAKE_SOURCE_DIR}/tools/canRxSignals.json)
 set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
 set(TARGET_SOURCES_CANGEN
     ${TARGET_DIR_CANGEN}/EIM_canReceiver.cpp
@@ -57,8 +58,10 @@ set(TARGET_SOURCES_CANGEN
 )
 add_custom_command(
     OUTPUT ${TARGET_DIR_CANGEN} ${TARGET_SOURCES_CANGEN}
-    COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node EIM
+    COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --rxFile ${RX_FILE}
+            --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node EIM
     DEPENDS ${DBC_FILE}
+            ${RX_FILE}
             ${CANGEN_SCRIPT_SOURCES}
             ${CANGEN_SCRIPT_TEMPLATES}
     VERBATIM
