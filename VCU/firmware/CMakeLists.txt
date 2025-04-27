@@ -45,27 +45,27 @@ add_subdirectory(cmake/stm32cubemx)
 #---------------------------------------------------------------------------------------------------
 # Generate code
 #---------------------------------------------------------------------------------------------------
-# set(CANGEN_SCRIPT_DIR               ${CMAKE_SOURCE_DIR}/../../tools/dbcCodeGen)
-# file(GLOB CANGEN_SCRIPT_SOURCES     "${CANGEN_SCRIPT_DIR}/*.py")
-# file(GLOB CANGEN_SCRIPT_TEMPLATES   "${CANGEN_SCRIPT_DIR}/*.jinja")
-# set(CANGEN_SCRIPT                   ${CANGEN_SCRIPT_DIR}/dbcCodeGen.py)
-# set(DBC_FILE                        ${CMAKE_SOURCE_DIR}/../../tools/network/EIM.dbc)
-# set(RX_FILE                         ${CMAKE_SOURCE_DIR}/tools/canRxSignals.json)
-# set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
-# set(TARGET_SOURCES_CANGEN
-#     ${TARGET_DIR_CANGEN}/VCU_canReceiver.cpp
-#     ${TARGET_DIR_CANGEN}/VCU_canTransmitter.cpp
-# )
-# add_custom_command(
-#     OUTPUT ${TARGET_DIR_CANGEN} ${TARGET_SOURCES_CANGEN}
-    # COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --rxFile ${RX_FILE}
-    #         --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node VCU
-#     DEPENDS ${DBC_FILE}
-#             ${RX_FILE}
-#             ${CANGEN_SCRIPT_SOURCES}
-#             ${CANGEN_SCRIPT_TEMPLATES}
-#     VERBATIM
-# )
+set(CANGEN_SCRIPT_DIR               ${CMAKE_SOURCE_DIR}/../../tools/dbcCodeGen)
+file(GLOB CANGEN_SCRIPT_SOURCES     "${CANGEN_SCRIPT_DIR}/*.py")
+file(GLOB CANGEN_SCRIPT_TEMPLATES   "${CANGEN_SCRIPT_DIR}/*.jinja")
+set(CANGEN_SCRIPT                   ${CANGEN_SCRIPT_DIR}/dbcCodeGen.py)
+set(DBC_FILE                        ${CMAKE_SOURCE_DIR}/../../tools/network/EIM.dbc)
+set(RX_FILE                         ${CMAKE_SOURCE_DIR}/tools/canRxSignals.json)
+set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
+set(TARGET_SOURCES_CANGEN
+    ${TARGET_DIR_CANGEN}/EIM_canReceiver.cpp
+    ${TARGET_DIR_CANGEN}/EIM_canTransmitter.cpp
+)
+add_custom_command(
+    OUTPUT ${TARGET_DIR_CANGEN} ${TARGET_SOURCES_CANGEN}
+    COMMAND python3 ${CANGEN_SCRIPT} --dbcFile ${DBC_FILE} --rxFile ${RX_FILE}
+            --targetDir ${TARGET_DIR_CANGEN} --alias EIM --node VCU
+    DEPENDS ${DBC_FILE}
+            ${RX_FILE}
+            ${CANGEN_SCRIPT_SOURCES}
+            ${CANGEN_SCRIPT_TEMPLATES}
+    VERBATIM
+)
 
 #---------------------------------------------------------------------------------------------------
 # Setup build
@@ -76,17 +76,17 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 set(TARGET_SOURCES
-    # ${TARGET_SOURCES_CANGEN}
+    ${TARGET_SOURCES_CANGEN}
     # app/adc/adcModule.cpp
-    # app/can/canModule.cpp
+    app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
-    # app/halWrappers/halWrappersComponentSpecific.cpp
+    app/halWrappers/halWrappersComponentSpecific.cpp
     # app/ioInt/ioIntModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/tx/txModule.cpp
-    # ../../shared/halWrappers/halWrappers.cpp
+    ../../shared/halWrappers/halWrappers.cpp
     ../../shared/profiler/profiler.c
     ../../shared/taskBase/taskBase.cpp
 )
@@ -103,12 +103,12 @@ set_source_files_properties(
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
-    # ${TARGET_DIR_CANGEN}
+    ${TARGET_DIR_CANGEN}
     # app/adc
     app/app
-    # app/can
+    app/can
     app/dataChannel
-    # app/halWrappers
+    app/halWrappers
     # app/ioInt
     app/profiler
     app/rtos
@@ -116,7 +116,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS
-    # ../../shared/halWrappers
+    ../../shared/halWrappers
     ../../shared/moduleBase
     ../../shared/profiler
     ../../shared/taskBase

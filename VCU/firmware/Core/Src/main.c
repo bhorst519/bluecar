@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-// #include "halWrappersConfig.h"
+#include "halWrappersConfig.h"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -56,6 +56,8 @@ CAN_HandleTypeDef hcan1;
 
 ETH_HandleTypeDef heth;
 
+TIM_HandleTypeDef htim5;
+
 UART_HandleTypeDef huart3;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
@@ -72,11 +74,22 @@ osStaticThreadDef_t Task100HzControlBlock;
 osThreadId Task10HzHandle;
 uint32_t Task10HzBuffer[ 256 ];
 osStaticThreadDef_t Task10HzControlBlock;
+osThreadId Task1HzHandle;
+uint32_t Task1HzBuffer[ 256 ];
+osStaticThreadDef_t Task1HzControlBlock;
 /* USER CODE BEGIN PV */
+
+HalWrappers_Config_S gHalWrappersConfig =
+{
+  .pAdc = &hadc1,
+  .pUsTim = &htim5,
+  .pCan = {&hcan1},
+};
 
 static Profiler_Data_S g1kHzProfilerData;
 static Profiler_Data_S g100HzProfilerData;
 static Profiler_Data_S g10HzProfilerData;
+static Profiler_Data_S g1HzProfilerData;
 
 /* USER CODE END PV */
 
@@ -88,10 +101,12 @@ static void MX_ETH_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM5_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask1kHz(void const * argument);
 void StartTask100Hz(void const * argument);
 void StartTask10Hz(void const * argument);
+void StartTask1Hz(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -136,8 +151,9 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_ADC1_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-
+  RtosInit();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -173,6 +189,10 @@ int main(void)
   osThreadStaticDef(Task10Hz, StartTask10Hz, osPriorityAboveNormal, 0, 256, Task10HzBuffer, &Task10HzControlBlock);
   Task10HzHandle = osThreadCreate(osThread(Task10Hz), NULL);
 
+  /* definition and creation of Task1Hz */
+  osThreadStaticDef(Task1Hz, StartTask1Hz, osPriorityNormal, 0, 256, Task1HzBuffer, &Task1HzControlBlock);
+  Task1HzHandle = osThreadCreate(osThread(Task1Hz), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   g1kHzProfilerData.configWindowNumPeriods = 1000U; // 1kHz
@@ -186,6 +206,10 @@ int main(void)
   g10HzProfilerData.configWindowNumPeriods = 10U; // 10Hz
   vTaskSetThreadLocalStoragePointer(Task10HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g10HzProfilerData);
   ProfilerScheduledTaskRegister(PROFILER_TASK_10HZ, (void *)Task10HzHandle);
+
+  g1HzProfilerData.configWindowNumPeriods = 2U; // 1Hz * 2
+  vTaskSetThreadLocalStoragePointer(Task1HzHandle, THREAD_LOCAL_STORAGE_PROFILER_IDX, (void *)&g1HzProfilerData);
+  ProfilerScheduledTaskRegister(PROFILER_TASK_1HZ, (void *)Task1HzHandle);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -317,11 +341,11 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 16;
+  hcan1.Init.Prescaler = 6;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_11TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
   hcan1.Init.AutoBusOff = DISABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
@@ -384,6 +408,76 @@ static void MX_ETH_Init(void)
   /* USER CODE BEGIN ETH_Init 2 */
 
   /* USER CODE END ETH_Init 2 */
+
+}
+
+/**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 84;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 4294967295;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_OC_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
 
 }
 
@@ -598,6 +692,21 @@ void StartTask10Hz(void const * argument)
   (void)argument;
   RtosRunTask10Hz();
   /* USER CODE END StartTask10Hz */
+}
+
+/* USER CODE BEGIN Header_StartTask1Hz */
+/**
+* @brief Function implementing the Task1Hz thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask1Hz */
+void StartTask1Hz(void const * argument)
+{
+  /* USER CODE BEGIN StartTask1Hz */
+  (void)argument;
+  RtosRunTask1Hz();
+  /* USER CODE END StartTask1Hz */
 }
 
 /**

@@ -3,7 +3,7 @@
 ***************************************************************************************************/
 #include "app.hpp"
 #include "cmsis_os.h"
-// #include "halWrappersComponentSpecific.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -17,6 +17,7 @@ static Vcu::App m_app {};
 ***************************************************************************************************/
 void RtosInit(void)
 {
+    Vcu::gHalWrappers.Init();
     m_app.Init();
 }
 
@@ -63,9 +64,32 @@ void RtosRunTask10Hz(void)
 
         m_app.RunTask10Hz();
 
-        // Vcu::gHalWrappers.PwmSet(PWM_LED_2B, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
+        Vcu::gHalWrappers.GpioSet(GPIO_LED_DEV_R, blink);
+        Vcu::gHalWrappers.GpioSet(GPIO_LED_R, blink);
         blink = !blink;
 
+        ProfilerScheduledTaskCheckOut();
+    }
+}
+
+void RtosRunTask1Hz(void)
+{
+    uint32_t currentTick = osKernelSysTick();
+
+    bool blink = false;
+
+    for(;;)
+    {
+        (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
+        m_app.RunTask1Hz();
+
+        Vcu::gHalWrappers.GpioSet(GPIO_LED_DEV_G, blink);
+        Vcu::gHalWrappers.GpioSet(GPIO_LED_G, blink);
+        blink = !blink;
+
+        ProfilerUpdateLoad();
         ProfilerScheduledTaskCheckOut();
     }
 }

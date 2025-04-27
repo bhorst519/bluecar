@@ -1,7 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-// #include "halWrappersComponentSpecific.hpp"
+#include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
 
 /***************************************************************************************************
@@ -11,13 +11,12 @@ extern "C" {
 
 void ProfilerSpecificClearTimerUs(void)
 {
-    // Vcu::gHalWrappers.TimerClearUs();
+    Vcu::gHalWrappers.TimerClearUs();
 }
 
 uint32_t ProfilerSpecificGetTimerUs(void)
 {
-    // return Vcu::gHalWrappers.TimerGetUs();
-    return 0U;
+    return Vcu::gHalWrappers.TimerGetUs();
 }
 
 } // extern "C"
