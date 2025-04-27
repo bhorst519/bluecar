@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-// #include "halWrappersConfig.h"
+#include "halWrappersConfig.h"
 #include "profiler.h"
 #include "rtos.h"
 
@@ -75,6 +75,13 @@ osThreadId Task10HzHandle;
 uint32_t Task10HzBuffer[ 256 ];
 osStaticThreadDef_t Task10HzControlBlock;
 /* USER CODE BEGIN PV */
+
+HalWrappers_Config_S gHalWrappersConfig =
+{
+  .pAdc = &hadc1,
+  .pUsTim = &htim5,
+  .pCan = {&hcan1},
+};
 
 static Profiler_Data_S g1kHzProfilerData;
 static Profiler_Data_S g100HzProfilerData;

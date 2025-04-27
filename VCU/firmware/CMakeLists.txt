@@ -80,13 +80,13 @@ set(TARGET_SOURCES
     # app/adc/adcModule.cpp
     # app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
-    # app/halWrappers/halWrappersComponentSpecific.cpp
+    app/halWrappers/halWrappersComponentSpecific.cpp
     # app/ioInt/ioIntModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/tx/txModule.cpp
-    # ../../shared/halWrappers/halWrappers.cpp
+    ../../shared/halWrappers/halWrappers.cpp
     ../../shared/profiler/profiler.c
     ../../shared/taskBase/taskBase.cpp
 )
@@ -108,7 +108,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/app
     # app/can
     app/dataChannel
-    # app/halWrappers
+    app/halWrappers
     # app/ioInt
     app/profiler
     app/rtos
@@ -116,7 +116,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS
-    # ../../shared/halWrappers
+    ../../shared/halWrappers
     ../../shared/moduleBase
     ../../shared/profiler
     ../../shared/taskBase
