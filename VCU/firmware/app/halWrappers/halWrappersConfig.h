@@ -24,11 +24,11 @@ extern "C" {
 typedef enum
 {
     // Outputs
-    GPIO_LED_DEV_1,
-    GPIO_LED_DEV_2,
-    GPIO_LED_DEV_3,
-    GPIO_LED_1,
-    GPIO_LED_2,
+    GPIO_LED_DEV_G,
+    GPIO_LED_DEV_B,
+    GPIO_LED_DEV_R,
+    GPIO_LED_R,
+    GPIO_LED_G,
     // Inputs
     GPIO_ENG_ENABLE,
     GPIO_ENG_START,

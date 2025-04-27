@@ -153,7 +153,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-
+  RtosInit();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
