@@ -26,6 +26,7 @@ typedef enum
     PROFILER_TASK_1KHZ = PROFILER_SCHEDULED_FIRST,
     PROFILER_TASK_100HZ,
     PROFILER_TASK_10HZ,
+    PROFILER_TASK_1HZ,
 
     PROFILER_MAX_NUM
 } Profiler_E;
@@ -33,8 +34,8 @@ typedef enum
 #define PROFILER_SCHEDULED_MAX_NUM      PROFILER_SCHEDULED_IDX(PROFILER_MAX_NUM)
 
 UTIL_ASSERT((size_t)PROFILER_NON_SCHEDULED_MAX_NUM == 3U,   "Number of profilers incorrectly deduced");
-UTIL_ASSERT((size_t)PROFILER_SCHEDULED_MAX_NUM == 3U,       "Number of profilers incorrectly deduced");
-UTIL_ASSERT((size_t)PROFILER_MAX_NUM == 6U,                 "Number of profilers incorrectly deduced");
+UTIL_ASSERT((size_t)PROFILER_SCHEDULED_MAX_NUM == 4U,       "Number of profilers incorrectly deduced");
+UTIL_ASSERT((size_t)PROFILER_MAX_NUM == 7U,                 "Number of profilers incorrectly deduced");
 
 #ifdef __cplusplus
 }

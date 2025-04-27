@@ -69,3 +69,24 @@ void RtosRunTask10Hz(void)
         ProfilerScheduledTaskCheckOut();
     }
 }
+
+void RtosRunTask1Hz(void)
+{
+    uint32_t currentTick = osKernelSysTick();
+
+    bool blink = false;
+
+    for(;;)
+    {
+        (void)osDelayUntil(&currentTick, TASK_1HZ_MS_TO_DELAY);
+        ProfilerScheduledTaskCheckIn();
+
+        m_app.RunTask1Hz();
+
+        // Vcu::gHalWrappers.PwmSet(PWM_LED_2R, (blink ? PWM_ON_RGB : PWM_OFF_RGB));
+        blink = !blink;
+
+        ProfilerUpdateLoad();
+        ProfilerScheduledTaskCheckOut();
+    }
+}

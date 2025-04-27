@@ -26,6 +26,19 @@ class TxNoneModule final : public Shared::TxModuleBase
         virtual void Transmit(void) override;
 };
 
+class Tx1HzModule final : public Shared::TxModuleBase
+{
+    public:
+        constexpr Tx1HzModule(
+            ) :
+                TxModuleBase()
+        {}
+
+        NOCOPY_NOMOVE(Tx1HzModule);
+
+        virtual void Transmit(void) override;
+};
+
 } // namespace Vcu
 
 #endif // TX_MODULE_HPP

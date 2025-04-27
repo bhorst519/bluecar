@@ -5,12 +5,11 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "dataChannel.hpp"
-// #include "halWrappersComponentSpecific.hpp"
 #include "nocopy.hpp"
 #include "taskBase.hpp"
 
 // Modules
-// #include "canModule.hpp"
+#include "canModule.hpp"
 #include "rxModule.hpp"
 #include "txModule.hpp"
 
@@ -40,6 +39,7 @@ class App final
             m_task1kHz.Init();
             m_task100Hz.Init();
             m_task10Hz.Init();
+            m_task1Hz.Init();
         }
 
         void RunTask1kHz(void)
@@ -57,6 +57,11 @@ class App final
             m_task10Hz.Run();
         }
 
+        void RunTask1Hz(void)
+        {
+            m_task1Hz.Run();
+        }
+
     private:
         using DataChannelBase   = Shared::DataChannelBase;
         template<typename T, typename SourceTask, typename... DestTasks>
@@ -67,6 +72,7 @@ class App final
         Task1kHz     Task1kHz_t{};
         Task100Hz    Task100Hz_t{};
         Task10Hz     Task10Hz_t{};
+        Task1Hz      Task1Hz_t{};
 
         RxNoneModule m_rxNoneModule {};
         TxNoneModule m_txNoneModule {};
@@ -79,13 +85,14 @@ class App final
         // Inputs
 
         // Modules
+        CanModule m_canModule {};
 
         // Module list
-        // static constexpr size_t m_numberOfModules1kHz = 0U;
-        // ModuleBase * const m_moduleList1kHz {nullptr};
-        // ModuleBase * const m_moduleList1kHz[m_numberOfModules1kHz] =
-        // {
-        // };
+        static constexpr size_t m_numberOfModules1kHz = 1U;
+        ModuleBase * const m_moduleList1kHz[m_numberOfModules1kHz] =
+        {
+            &m_canModule,
+        };
 
         //------------------------------------------------------------------------------------------
         // 100Hz objects
@@ -118,6 +125,22 @@ class App final
         // };
 
         //------------------------------------------------------------------------------------------
+        // 1Hz objects
+        //------------------------------------------------------------------------------------------
+        // TX/RX modules
+        Tx1HzModule m_tx1HzModule {};
+
+        // Inputs
+
+        // Modules
+
+        // Module list
+        // static constexpr size_t m_numberOfModules1Hz = 0U;
+        // ModuleBase * const m_moduleList1Hz[m_numberOfModules1Hz] =
+        // {
+        // };
+
+        //------------------------------------------------------------------------------------------
         // Data channels
         //------------------------------------------------------------------------------------------
         // static constexpr size_t m_numberOfDataChannels = 0U;
@@ -133,8 +156,8 @@ class App final
         //------------------------------------------------------------------------------------------
         TaskBase    m_task1kHz{
                           Task1kHz_t
-                        // , m_moduleList1kHz
-                        // , m_numberOfModules1kHz
+                        , m_moduleList1kHz
+                        , m_numberOfModules1kHz
                         // , m_dataChannelList
                         // , m_numberOfDataChannels
                         , m_rxNoneModule
@@ -157,6 +180,15 @@ class App final
                         // , m_numberOfDataChannels
                         , m_rxNoneModule
                         , m_txNoneModule
+                    };
+        TaskBase    m_task1Hz{
+                          Task1Hz_t
+                        // , m_moduleList1Hz
+                        // , m_numberOfModules1Hz
+                        // , m_dataChannelList
+                        // , m_numberOfDataChannels
+                        , m_rxNoneModule
+                        , m_tx1HzModule
                     };
 };
 

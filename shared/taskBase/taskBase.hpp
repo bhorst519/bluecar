@@ -41,6 +41,23 @@ class TaskBase
                 m_txModuleRef(txModuleRef)
         {}
 
+        // Task for app with no data channels
+        constexpr TaskBase(
+                const TaskId taskId,
+                ModuleBasePtr * const pModulePtrList,
+                const size_t numberOfModules,
+                RxModuleBase& rxModuleRef,
+                TxModuleBase& txModuleRef
+            ) :
+                m_taskId(taskId),
+                m_pModulePtrList(pModulePtrList),
+                m_numberOfModules(numberOfModules),
+                m_pDataChannelPtrList(nullptr),
+                m_numberOfDataChannels(0U),
+                m_rxModuleRef(rxModuleRef),
+                m_txModuleRef(txModuleRef)
+        {}
+
         // Dummy task
         constexpr TaskBase(
                 const TaskId taskId,

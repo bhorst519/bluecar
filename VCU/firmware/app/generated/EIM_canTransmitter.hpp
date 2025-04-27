@@ -71,6 +71,30 @@ void CANTX_EIM_SetSRaw_VCU_10Hz_MinPeriod(const uint32_t rawVal);
 void CANTX_EIM_SetSFromFrame_VCU_10Hz_MinPeriod(const float converted, uint8_t * const pData);
 void CANTX_EIM_SetS_VCU_10Hz_MinPeriod(const float converted);
 
+// VCU_1Hz_AvgPeriod
+void CANTX_EIM_SetSRawFromFrame_VCU_1Hz_AvgPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_1Hz_AvgPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_1Hz_AvgPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_1Hz_AvgPeriod(const float converted);
+
+// VCU_1Hz_Load
+void CANTX_EIM_SetSRawFromFrame_VCU_1Hz_Load(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_1Hz_Load(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_1Hz_Load(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_1Hz_Load(const float converted);
+
+// VCU_1Hz_MaxPeriod
+void CANTX_EIM_SetSRawFromFrame_VCU_1Hz_MaxPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_1Hz_MaxPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_1Hz_MaxPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_1Hz_MaxPeriod(const float converted);
+
+// VCU_1Hz_MinPeriod
+void CANTX_EIM_SetSRawFromFrame_VCU_1Hz_MinPeriod(const uint32_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_1Hz_MinPeriod(const uint32_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_1Hz_MinPeriod(const float converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_1Hz_MinPeriod(const float converted);
+
 // VCU_1kHz_AvgPeriod
 void CANTX_EIM_SetSRawFromFrame_VCU_1kHz_AvgPeriod(const uint32_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_VCU_1kHz_AvgPeriod(const uint32_t rawVal);
