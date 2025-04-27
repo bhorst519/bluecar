@@ -174,10 +174,10 @@ class DbcCodeGen:
 
         configDict = {
             "alias": self.alias,
-            "messagesToTransmit": messagesToTransmit,
-            "signalsToTransmit": signalsToTransmit,
-            "messagesToReceive": messagesToReceive,
-            "signalsToReceive": signalsToReceive,
+            "messagesToTransmit": sorted(messagesToTransmit, key=lambda d: d["name"]),
+            "signalsToTransmit": sorted(signalsToTransmit, key=lambda d: d["name"]),
+            "messagesToReceive": sorted(messagesToReceive, key=lambda d: d["name"]),
+            "signalsToReceive": sorted(signalsToReceive, key=lambda d: d["name"]),
         }
         Render(targetDir=self.generatedCodeDirPath, alias=self.alias, configDict=configDict)
 

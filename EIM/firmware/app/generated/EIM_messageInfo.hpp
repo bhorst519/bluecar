@@ -4,18 +4,6 @@
 //--------------------------------------------------------------------------------------------------
 // Transmit message info macros
 //--------------------------------------------------------------------------------------------------
-// EIM_PcbaVitals
-#define CAN_EIM_EIM_PcbaVitals_MID (1027U)
-#define CAN_EIM_EIM_PcbaVitals_DLC (8U)
-#define CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX (5U)
-#define CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX (0U)
-#define CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX (1U)
-#define CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX (2U)
-#define CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX (3U)
-#define CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX (4U)
-#define CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX (5U)
-#define CANTX_EIM_EIM_PcbaVitals_ARR_LEN (6U)
-
 // EIM_CpuStats
 #define CAN_EIM_EIM_CpuStats_MID (1026U)
 #define CAN_EIM_EIM_CpuStats_DLC (8U)
@@ -28,14 +16,6 @@
 #define CANTX_EIM_EIM_CpuStats_M5_ARR_IDX (5U)
 #define CANTX_EIM_EIM_CpuStats_ARR_LEN (6U)
 
-// EIM_ServoStatus
-#define CAN_EIM_EIM_ServoStatus_MID (1025U)
-#define CAN_EIM_EIM_ServoStatus_DLC (8U)
-#define CAN_EIM_EIM_ServoStatus_MAX_MUX_IDX (1U)
-#define CANTX_EIM_EIM_ServoStatus_M0_ARR_IDX (0U)
-#define CANTX_EIM_EIM_ServoStatus_M1_ARR_IDX (1U)
-#define CANTX_EIM_EIM_ServoStatus_ARR_LEN (2U)
-
 // EIM_EngineStatus
 #define CAN_EIM_EIM_EngineStatus_MID (1024U)
 #define CAN_EIM_EIM_EngineStatus_DLC (8U)
@@ -43,6 +23,26 @@
 #define CANTX_EIM_EIM_EngineStatus_M0_ARR_IDX (0U)
 #define CANTX_EIM_EIM_EngineStatus_M1_ARR_IDX (1U)
 #define CANTX_EIM_EIM_EngineStatus_ARR_LEN (2U)
+
+// EIM_PcbaVitals
+#define CAN_EIM_EIM_PcbaVitals_MID (1027U)
+#define CAN_EIM_EIM_PcbaVitals_DLC (8U)
+#define CAN_EIM_EIM_PcbaVitals_MAX_MUX_IDX (5U)
+#define CANTX_EIM_EIM_PcbaVitals_M0_ARR_IDX (0U)
+#define CANTX_EIM_EIM_PcbaVitals_M1_ARR_IDX (1U)
+#define CANTX_EIM_EIM_PcbaVitals_M2_ARR_IDX (2U)
+#define CANTX_EIM_EIM_PcbaVitals_M3_ARR_IDX (3U)
+#define CANTX_EIM_EIM_PcbaVitals_M4_ARR_IDX (4U)
+#define CANTX_EIM_EIM_PcbaVitals_M5_ARR_IDX (5U)
+#define CANTX_EIM_EIM_PcbaVitals_ARR_LEN (6U)
+
+// EIM_ServoStatus
+#define CAN_EIM_EIM_ServoStatus_MID (1025U)
+#define CAN_EIM_EIM_ServoStatus_DLC (8U)
+#define CAN_EIM_EIM_ServoStatus_MAX_MUX_IDX (1U)
+#define CANTX_EIM_EIM_ServoStatus_M0_ARR_IDX (0U)
+#define CANTX_EIM_EIM_ServoStatus_M1_ARR_IDX (1U)
+#define CANTX_EIM_EIM_ServoStatus_ARR_LEN (2U)
 
 //--------------------------------------------------------------------------------------------------
 // Receive message info macros
