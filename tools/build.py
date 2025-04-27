@@ -8,6 +8,7 @@ repoRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 firmware_dirs = {
     "stersmith": os.path.join(repoRoot, "stersmithNucleoMvp"),
     "EIM": os.path.join(repoRoot, "EIM", "firmware"),
+    "VCU": os.path.join(repoRoot, "VCU", "firmware"),
 }
 
 #---------------------------------------------------------------------------------------------------

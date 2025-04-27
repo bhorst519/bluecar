@@ -41,6 +41,38 @@ class TaskBase
                 m_txModuleRef(txModuleRef)
         {}
 
+        // Dummy task
+        constexpr TaskBase(
+                const TaskId taskId,
+                DataChannelBasePtr * const pDataChannelPtrList,
+                const size_t numberOfDataChannels,
+                RxModuleBase& rxModuleRef,
+                TxModuleBase& txModuleRef
+            ) :
+                m_taskId(taskId),
+                m_pModulePtrList(nullptr),
+                m_numberOfModules(0U),
+                m_pDataChannelPtrList(pDataChannelPtrList),
+                m_numberOfDataChannels(numberOfDataChannels),
+                m_rxModuleRef(rxModuleRef),
+                m_txModuleRef(txModuleRef)
+        {}
+
+        // Dummy task for app with no data channels
+        constexpr TaskBase(
+                const TaskId taskId,
+                RxModuleBase& rxModuleRef,
+                TxModuleBase& txModuleRef
+            ) :
+                m_taskId(taskId),
+                m_pModulePtrList(nullptr),
+                m_numberOfModules(0U),
+                m_pDataChannelPtrList(nullptr),
+                m_numberOfDataChannels(0U),
+                m_rxModuleRef(rxModuleRef),
+                m_txModuleRef(txModuleRef)
+        {}
+
         NODEFAULT_NOCOPY_NOMOVE(TaskBase);
 
         void Init(void) const;
