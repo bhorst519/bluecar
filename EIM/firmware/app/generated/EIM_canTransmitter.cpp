@@ -2212,6 +2212,41 @@ bool CANTX_EIM_Init(void)
         &gEIM_ServoStatus_TX_ARR[CANTX_EIM_EIM_ServoStatus_M1_ARR_IDX][0U]
     );
 
+    // Signals SNA on init
+    CANTX_EIM_SetS_EIM_ECM_BatteryVoltage(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_EctTemp(int32_q{});
+    CANTX_EIM_SetS_EIM_ECM_EctVoltage(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_IatTemp(int32_q{});
+    CANTX_EIM_SetS_EIM_ECM_IatVoltage(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_MapPressure(uint32_q{});
+    CANTX_EIM_SetS_EIM_ECM_MapVoltage(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_Rpm(uint32_q{});
+    CANTX_EIM_SetS_EIM_ECM_TpsAngle(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_TpsVoltage(float_q{});
+    CANTX_EIM_SetS_EIM_ECM_VehicleSpeed(uint32_q{});
+    CANTX_EIM_SetS_EIM_PCBA_12V(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_BrakeLightCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_DieTemp(int32_q{});
+    CANTX_EIM_SetS_EIM_PCBA_Eng12V(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_EngOnCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_EngStartCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_EngTempV(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_FuelLevelV(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_FuelLowV(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_HighBeamCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_HornCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_Servo12V(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_TachFreq(uint32_q{});
+    CANTX_EIM_SetS_EIM_PCBA_TachRpm(uint32_q{});
+    CANTX_EIM_SetS_EIM_PCBA_TurnLCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_PCBA_TurnRCurrent(float_q{});
+    CANTX_EIM_SetS_EIM_Servo_Current(float_q{});
+    CANTX_EIM_SetS_EIM_Servo_LossOfCommPosition(float_q{});
+    CANTX_EIM_SetS_EIM_Servo_LossOfCommTimeout(uint32_q{});
+    CANTX_EIM_SetS_EIM_Servo_Position(float_q{});
+    CANTX_EIM_SetS_EIM_Servo_Temp(int32_q{});
+    CANTX_EIM_SetS_EIM_Servo_Voltage(float_q{});
+
     return true;
 }
 
