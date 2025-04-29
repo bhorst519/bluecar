@@ -149,11 +149,23 @@ void CANTX_EIM_SetS_VCU_CPU_Load(const float converted);
 void CANTX_EIM_SetSRawFromFrame_VCU_CpuStatsMux(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSFromFrame_VCU_CpuStatsMux(const uint32_t converted, uint8_t * const pData);
 
+// VCU_PCBA_Aps1Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1Pct(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps1Pct(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1Pct(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps1Pct(const float_q converted);
+
 // VCU_PCBA_Aps1V
 void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1V(const uint16_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSRaw_VCU_PCBA_Aps1V(const uint16_t rawVal);
 void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1V(const float_q converted, uint8_t * const pData);
 void CANTX_EIM_SetS_VCU_PCBA_Aps1V(const float_q converted);
+
+// VCU_PCBA_Aps2Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2Pct(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps2Pct(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps2Pct(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps2Pct(const float_q converted);
 
 // VCU_PCBA_Aps2V
 void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2V(const uint16_t rawVal, uint8_t * const pData);

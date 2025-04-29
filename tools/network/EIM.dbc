@@ -154,6 +154,8 @@ BO_ 1033 VCU_PcbaVitals: 8 VCU
  SG_ VCU_PCBA_DieTemp m0 : 16|8@1+ (1,-50) [-50|204] "C" Vector__XXX
  SG_ VCU_PCBA_Aps1V m0 : 24|12@1+ (0.001,0) [0|4.094] "V" Vector__XXX
  SG_ VCU_PCBA_Aps2V m0 : 36|12@1+ (0.001,0) [0|4.094] "V" Vector__XXX
+ SG_ VCU_PCBA_Aps1Pct m1 : 8|10@1+ (0.1,0) [0|102.2] "%" Vector__XXX
+ SG_ VCU_PCBA_Aps2Pct m1 : 24|10@1+ (0.1,0) [0|102.2] "%" Vector__XXX
 
 BO_ 519 TESTER_request: 4 TESTER
  SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.775|204.775] "deg" Vector__XXX
@@ -225,7 +227,9 @@ VAL_ 1800 EIM_ECM_IatTemp 255 "SNA" ;
 VAL_ 1800 EIM_ECM_EctVoltage 255 "SNA" ;
 VAL_ 1800 EIM_ECM_EctTemp 255 "SNA" ;
 VAL_ 1800 EIM_ECM_BatteryVoltage 255 "SNA" ;
+VAL_ 1033 VCU_PCBA_Aps1Pct 1023 "SNA" ;
 VAL_ 1033 VCU_PCBA_Aps1V 4095 "SNA" ;
+VAL_ 1033 VCU_PCBA_Aps2Pct 1023 "SNA" ;
 VAL_ 1033 VCU_PCBA_Aps2V 4095 "SNA" ;
 VAL_ 1033 VCU_PCBA_DieTemp 255 "SNA" ;
 

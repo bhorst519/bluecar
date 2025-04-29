@@ -5,6 +5,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "adcInterface.hpp"
+#include "apsInterface.hpp"
 #include "ioIntInterface.hpp"
 #include "moduleBase.hpp"
 #include "util.h"
@@ -33,10 +34,12 @@ class Tx100HzModule final : public Shared::TxModuleBase
     public:
         constexpr Tx100HzModule(
                 const AdcOutputInterface& adcRef,
+                const ApsOutputInterface& apsRef,
                 const IoIntOutputInterface& ioIntRef
             ) :
                 TxModuleBase(),
                 m_adcRef(adcRef),
+                m_apsRef(apsRef),
                 m_ioIntRef(ioIntRef)
         {}
 
@@ -46,6 +49,7 @@ class Tx100HzModule final : public Shared::TxModuleBase
 
     private:
         const AdcOutputInterface& m_adcRef;
+        const ApsOutputInterface& m_apsRef;
         const IoIntOutputInterface& m_ioIntRef;
 };
 

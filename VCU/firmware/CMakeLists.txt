@@ -78,6 +78,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 set(TARGET_SOURCES
     ${TARGET_SOURCES_CANGEN}
     app/adc/adcModule.cpp
+    app/aps/apsModule.cpp
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
     app/halWrappers/halWrappersComponentSpecific.cpp
@@ -106,6 +107,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${TARGET_DIR_CANGEN}
     app/adc
     app/app
+    app/aps
     app/can
     app/dataChannel
     app/halWrappers

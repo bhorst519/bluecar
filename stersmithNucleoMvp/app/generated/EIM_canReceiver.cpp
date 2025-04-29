@@ -50,7 +50,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_BrakeLightEnable(const uint8_t * const p
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -84,7 +84,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_HeadlightEnable(const uint8_t * const pD
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -118,7 +118,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_HighBeamEnable(const uint8_t * const pDa
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -152,7 +152,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_HornEnable(const uint8_t * const pData)
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -186,7 +186,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_MainRelayEnable(const uint8_t * const pD
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -224,7 +224,7 @@ float_q CANRX_EIM_GetSFromFrame_TESTER_Servo_Position(const uint8_t * const pDat
         // Sign extend
         const int16_t rawTemp = raw << 2;
         raw = rawTemp >> 2;
-        converted = ((( decltype(converted.Val()) )raw) * 0.025F) + 0.0F;
+        converted = ((decltype(converted.Val()))raw * 0.025F) + 0.0F;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -258,7 +258,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pDa
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;
@@ -292,7 +292,7 @@ uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnRightEnable(const uint8_t * const pD
     }
     else
     {
-        converted = ((( decltype(converted.Val()) )raw) * 1U) + 0U;
+        converted = ((decltype(converted.Val()))raw * 1U) + 0U;
         converted = SignalStatus_E::VALID;
     }
     return converted;

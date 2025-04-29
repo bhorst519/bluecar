@@ -15,6 +15,12 @@
                                     return (lhs.m_val op rhs.m_val);\
                                 }
 
+#define OP_OVERLOAD(op)         friend constexpr QualifiedVal operator op(const QualifiedVal lhs,\
+                                                                          const T rhs)\
+                                {\
+                                    return QualifiedVal{(lhs.m_val op rhs), lhs.m_status};\
+                                }
+
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
@@ -78,6 +84,11 @@ struct QualifiedVal
         COMPARE_OVERLOAD(>)
         COMPARE_OVERLOAD(<=)
         COMPARE_OVERLOAD(<)
+
+        OP_OVERLOAD(+)
+        OP_OVERLOAD(-)
+        OP_OVERLOAD(*)
+        OP_OVERLOAD(/)
 
         //------------------------------------------------------------------------------------------
         // Member functions

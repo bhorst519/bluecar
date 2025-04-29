@@ -126,11 +126,10 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
         raw = rawTemp >> {{ bitsToShift }};
     {% endif %}
 {% endif %}
-{% set convType = "decltype(converted.Val())" if checkValidity else signal["convType"] %}
 {% set convAppend = "F" if signal["convType"].startswith("float") else "U" if signal["convType"].startswith("u") else "" %}
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
-        converted = ((( {{ convType }} )raw) * {{ scale }}) + {{ offset }};
+        converted = ((decltype(converted.Val()))raw * {{ scale }}) + {{ offset }};
         converted = SignalStatus_E::VALID;
     }
     return converted;

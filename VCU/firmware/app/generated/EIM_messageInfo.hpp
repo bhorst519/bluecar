@@ -19,9 +19,10 @@
 // VCU_PcbaVitals
 #define CAN_EIM_VCU_PcbaVitals_MID (1033U)
 #define CAN_EIM_VCU_PcbaVitals_DLC (8U)
-#define CAN_EIM_VCU_PcbaVitals_MAX_MUX_IDX (0U)
+#define CAN_EIM_VCU_PcbaVitals_MAX_MUX_IDX (1U)
 #define CANTX_EIM_VCU_PcbaVitals_M0_ARR_IDX (0U)
-#define CANTX_EIM_VCU_PcbaVitals_ARR_LEN (1U)
+#define CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX (1U)
+#define CANTX_EIM_VCU_PcbaVitals_ARR_LEN (2U)
 
 //--------------------------------------------------------------------------------------------------
 // Receive message info macros

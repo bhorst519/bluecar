@@ -56,6 +56,11 @@ void Tx100HzModule::Transmit(void)
     CANTX_EIM_SetS_VCU_PCBA_BrakeSwitch(static_cast<uint32_t>(m_ioIntRef.GetBrakeSwitch()));
     CANTX_EIM_SetS_VCU_PCBA_UserSwitch(static_cast<uint32_t>(m_ioIntRef.GetUserSwitch()));
     taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_VCU_PCBA_Aps1Pct(m_apsRef.GetAps1Frac() * 100.0F);
+    CANTX_EIM_SetS_VCU_PCBA_Aps2Pct(m_apsRef.GetAps2Frac() * 100.0F);
+    taskEXIT_CRITICAL();
 }
 
 void Tx1HzModule::Transmit(void)

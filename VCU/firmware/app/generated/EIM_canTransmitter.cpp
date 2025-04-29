@@ -42,6 +42,7 @@ uint32_t CANTX_EIM_GetMuxFromIdx_VCU_CpuStats(const uint32_t muxIdx)
 }
 uint32_t gVCU_PcbaVitals_MuxFromIdx[] = {
     0U,
+    1U,
 };
 uint32_t CANTX_EIM_GetMuxFromIdx_VCU_PcbaVitals(const uint32_t muxIdx)
 {
@@ -625,6 +626,38 @@ void CANTX_EIM_SetSFromFrame_VCU_CpuStatsMux(const uint32_t converted, uint8_t *
     CANTX_EIM_SetSRawFromFrame_VCU_CpuStatsMux((uint8_t)rawVal, pData);
 }
 
+// VCU_PCBA_Aps1Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1Pct(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[1] = (uint8_t)(((rawVal) & 0xFF));
+    pData[2] &= (uint8_t)(~0x03);
+    pData[2] |= (uint8_t)((((rawVal) >> 8) & 0x03));
+}
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps1Pct(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1Pct(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1Pct(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 1023U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 102.2F ? 102.2F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.1F);
+    }
+    CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1Pct((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_VCU_PCBA_Aps1Pct(const float_q converted)
+{
+    uint8_t * const pData = &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1Pct(converted, pData);
+}
+
 // VCU_PCBA_Aps1V
 void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1V(const uint16_t rawVal, uint8_t * const pData)
 {
@@ -655,6 +688,38 @@ void CANTX_EIM_SetS_VCU_PCBA_Aps1V(const float_q converted)
 {
     uint8_t * const pData = &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M0_ARR_IDX][0U];
     CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1V(converted, pData);
+}
+
+// VCU_PCBA_Aps2Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2Pct(const uint16_t rawVal, uint8_t * const pData)
+{
+    pData[3] = (uint8_t)(((rawVal) & 0xFF));
+    pData[4] &= (uint8_t)(~0x03);
+    pData[4] |= (uint8_t)((((rawVal) >> 8) & 0x03));
+}
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps2Pct(const uint16_t rawVal)
+{
+    uint8_t * const pData = &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2Pct(rawVal, pData);
+}
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps2Pct(const float_q converted, uint8_t * const pData)
+{
+    uint16_t rawVal;
+    if (!converted.Valid())
+    {
+        rawVal = 1023U; // SNA value
+    }
+    else
+    {
+        const decltype(converted.Val()) convertedSat = (converted > 102.2F ? 102.2F : (converted < 0.0F ? 0.0F : converted));
+        rawVal = (uint16_t)((convertedSat - 0.0F) / 0.1F);
+    }
+    CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2Pct((uint16_t)rawVal, pData);
+}
+void CANTX_EIM_SetS_VCU_PCBA_Aps2Pct(const float_q converted)
+{
+    uint8_t * const pData = &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps2Pct(converted, pData);
 }
 
 // VCU_PCBA_Aps2V
@@ -880,9 +945,15 @@ bool CANTX_EIM_Init(void)
         0U,
         &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M0_ARR_IDX][0U]
     );
+    CANTX_EIM_SetSFromFrame_VCU_PcbaVitalsMux(
+        1U,
+        &gVCU_PcbaVitals_TX_ARR[CANTX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U]
+    );
 
     // Signals SNA on init
+    CANTX_EIM_SetS_VCU_PCBA_Aps1Pct(float_q{});
     CANTX_EIM_SetS_VCU_PCBA_Aps1V(float_q{});
+    CANTX_EIM_SetS_VCU_PCBA_Aps2Pct(float_q{});
     CANTX_EIM_SetS_VCU_PCBA_Aps2V(float_q{});
     CANTX_EIM_SetS_VCU_PCBA_DieTemp(int32_q{});
 
