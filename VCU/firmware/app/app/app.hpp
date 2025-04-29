@@ -11,11 +11,13 @@
 // Modules
 #include "adcModule.hpp"
 #include "canModule.hpp"
+#include "ioIntModule.hpp"
 #include "rxModule.hpp"
 #include "txModule.hpp"
 
 // Message modules
 #include "adcMessageModule.hpp"
+#include "ioIntMessageModule.hpp"
 #include "rxMessageModule.hpp"
 
 // Input message modules
@@ -103,12 +105,14 @@ class App final
 
         // Modules
         AdcModule m_adcModule {};
+        IoIntModule m_ioIntModule {};
 
         // Module list
-        static constexpr size_t m_numberOfModules100Hz = 1U;
+        static constexpr size_t m_numberOfModules100Hz = 2U;
         ModuleBase * const m_moduleList100Hz[m_numberOfModules100Hz] =
         {
             &m_adcModule,
+            &m_ioIntModule,
         };
 
         //------------------------------------------------------------------------------------------
@@ -150,12 +154,18 @@ class App final
                           >m_adcDataChannel{ m_adcModule.GetOutputDataReference() };
         AdcMessageModule m_adcMessageModule100Hz { m_adcDataChannel.GetBuffer(Task100Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 1U;
+        DataChannel< IoIntData_S
+                   , Task100Hz  // source task
+                          >m_ioIntDataChannel{ m_ioIntModule.GetOutputDataReference() };
+        IoIntMessageModule m_ioIntMessageModule100Hz { m_ioIntDataChannel.GetBuffer(Task100Hz_t) };
+
+        static constexpr size_t m_numberOfDataChannels = 2U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
             // 1kHz source
             // 100Hz source
             &m_adcDataChannel,
+            &m_ioIntDataChannel,
             // 10Hz source
             // 1Hz source
         };
