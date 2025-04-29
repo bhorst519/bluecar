@@ -106,14 +106,17 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
     {{ signal["convType"] }} converted;
 {% set checkValidity = "SNA" in signal %}
 {% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
+{% set everReceived = "g{}_EverReceived[{}]".format(signal["message"], RxArrIdx(signal["message"], signal["muxIdx"])) %}
 {% if checkValidity %}
     if (   (raw == {{ signal["SNA"]|string + convIntAppend }}) // SNA value
-        || (!g{{ signal["message"] }}_EverReceived[{{ RxArrIdx(signal["message"], signal["muxIdx"]) }}]) )
+        || (!{{ everReceived }}) )
+{% else %}
+    if (!{{ everReceived }})
+{% endif %}
     {
         converted = SignalStatus_E::SNA;
     }
     else
-{% endif %}
     {
 {% if signal["signed"] %}
     {% set bitsToShift = BIT_LENGTH_FROM_TYPE[signal["convIntType"]] - signal["bitLength"] %}
@@ -128,9 +131,7 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 {% set scale = signal["scale"]|string + convAppend %}
 {% set offset = signal["offset"]|string + convAppend %}
         converted = ((( {{ convType }} )raw) * {{ scale }}) + {{ offset }};
-{% if checkValidity %}
         converted = SignalStatus_E::VALID;
-{% endif %}
     }
     return converted;
 }
@@ -163,7 +164,7 @@ static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
 {% for muxIdx in message["receiveMuxIdxs"] %}
         case {{ muxIdx }}U:
         {
-            {{ MessageMuxReceiver(message["name"], muxIdx)|indent }}
+            {{ MessageMuxReceiver(message["name"], muxIdx)|indent(12) }}
             break;
         }
 {% endfor %}
@@ -175,7 +176,7 @@ static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
     }
 {% else %}
 
-    {{ MessageMuxReceiver(message["name"], None)|indent }}
+    {{ MessageMuxReceiver(message["name"], None)|indent(4) }}
 {% endif %}
 
     if (success)

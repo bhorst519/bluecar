@@ -67,6 +67,30 @@ uint8_t CANRX_EIM_GetSRaw_TESTER_TurnRightEnable(void);
 uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnRightEnable(const uint8_t * const pData);
 uint32_q CANRX_EIM_GetS_TESTER_TurnRightEnable(void);
 
+// VCU_PCBA_BrakeSwitch
+uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_VCU_PCBA_BrakeSwitch(void);
+uint32_q CANRX_EIM_GetSFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t * const pData);
+uint32_q CANRX_EIM_GetS_VCU_PCBA_BrakeSwitch(void);
+
+// VCU_PCBA_EngEnable
+uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_EngEnable(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_VCU_PCBA_EngEnable(void);
+uint32_q CANRX_EIM_GetSFromFrame_VCU_PCBA_EngEnable(const uint8_t * const pData);
+uint32_q CANRX_EIM_GetS_VCU_PCBA_EngEnable(void);
+
+// VCU_PCBA_EngStart
+uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_EngStart(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_VCU_PCBA_EngStart(void);
+uint32_q CANRX_EIM_GetSFromFrame_VCU_PCBA_EngStart(const uint8_t * const pData);
+uint32_q CANRX_EIM_GetS_VCU_PCBA_EngStart(void);
+
+// VCU_PcbaVitalsMux
+uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PcbaVitalsMux(const uint8_t * const pData);
+uint8_t CANRX_EIM_GetSRaw_VCU_PcbaVitalsMux(void);
+uint32_q CANRX_EIM_GetSFromFrame_VCU_PcbaVitalsMux(const uint8_t * const pData);
+uint32_q CANRX_EIM_GetS_VCU_PcbaVitalsMux(void);
+
 } // namespace CanGen
 
 #endif // CAN_RECEIVER_HPP

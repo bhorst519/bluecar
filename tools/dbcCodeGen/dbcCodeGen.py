@@ -181,6 +181,11 @@ class DbcCodeGen:
         # Filter for receive info
         signalsToReceive = [s for s in signalInfo if any([re.search(expr, s["name"]) for expr in self.rxExpressions])]
         signalsToReceive = [s for s in signalsToReceive if s["transmitter"] != self.node]
+        # Replace convType with QualifiedVal type
+        for idx, signal in enumerate(signalsToReceive):
+            convType = signalsToReceive[idx]["convType"]
+            if not convType.endswith("_q"):
+                signalsToReceive[idx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
         # Get the relevant (message, muxIdx) pairs based on the signals to receive
         messageMuxPairsToReceive = list(set([(s["message"], s["muxIdx"]) for s in signalsToReceive]))
         messageMuxesToReceive = {}

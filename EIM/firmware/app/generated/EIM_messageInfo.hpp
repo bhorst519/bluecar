@@ -47,12 +47,19 @@
 //--------------------------------------------------------------------------------------------------
 // Receive message info macros
 //--------------------------------------------------------------------------------------------------
-#define CANRX_EIM_NUM_MESSAGES (1U)
+#define CANRX_EIM_NUM_MESSAGES (2U)
 
 // TESTER_request
 #define CAN_EIM_TESTER_request_MID (519U)
 #define CAN_EIM_TESTER_request_DLC (4U)
 #define CAN_EIM_TESTER_request_MAX_MUX_IDX (0U)
 #define CANRX_EIM_TESTER_request_ARR_LEN (1U)
+
+// VCU_PcbaVitals
+#define CAN_EIM_VCU_PcbaVitals_MID (1033U)
+#define CAN_EIM_VCU_PcbaVitals_DLC (8U)
+#define CAN_EIM_VCU_PcbaVitals_MAX_MUX_IDX (0U)
+#define CANRX_EIM_VCU_PcbaVitals_M0_ARR_IDX (0U)
+#define CANRX_EIM_VCU_PcbaVitals_ARR_LEN (1U)
 
 #endif // MESSAGE_INFO_HPP

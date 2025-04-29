@@ -16,6 +16,8 @@ namespace Eim
 struct Rx100HzData_S
 {
     uint8_q brakeLightEn;
+    uint8_q engineOnEn;
+    uint8_q engineStartEn;
     uint8_q headlightEn;
     uint8_q highBeamEn;
     uint8_q hornEn;
