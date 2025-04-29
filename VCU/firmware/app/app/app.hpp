@@ -100,6 +100,10 @@ class App final
         // 100Hz objects
         //------------------------------------------------------------------------------------------
         // TX/RX modules
+        Tx100HzModule m_tx100HzModule {
+            m_adcMessageModule100Hz,
+            m_ioIntMessageModule100Hz
+        };
 
         // Inputs
 
@@ -189,7 +193,7 @@ class App final
                         , m_dataChannelList
                         , m_numberOfDataChannels
                         , m_rxNoneModule
-                        , m_txNoneModule
+                        , m_tx100HzModule
                     };
         TaskBase    m_task10Hz{
                           Task10Hz_t

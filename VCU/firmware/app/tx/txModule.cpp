@@ -42,6 +42,22 @@ void TxNoneModule::Transmit(void)
     // Nothing to do
 }
 
+void Tx100HzModule::Transmit(void)
+{
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_VCU_PCBA_DieTemp(m_adcRef.GetAdcFilt10Hz(ANALOG_DIE_TEMP).Convert(int32_t()));
+    CANTX_EIM_SetS_VCU_PCBA_Aps1V(m_adcRef.GetAdcFilt10Hz(ANALOG_APS_1));
+    CANTX_EIM_SetS_VCU_PCBA_Aps2V(m_adcRef.GetAdcFilt10Hz(ANALOG_APS_2));
+    taskEXIT_CRITICAL();
+
+    taskENTER_CRITICAL();
+    CANTX_EIM_SetS_VCU_PCBA_EngEnable(static_cast<uint32_t>(m_ioIntRef.GetEngineEnable()));
+    CANTX_EIM_SetS_VCU_PCBA_EngStart(static_cast<uint32_t>(m_ioIntRef.GetEngineStart()));
+    CANTX_EIM_SetS_VCU_PCBA_BrakeSwitch(static_cast<uint32_t>(m_ioIntRef.GetBrakeSwitch()));
+    CANTX_EIM_SetS_VCU_PCBA_UserSwitch(static_cast<uint32_t>(m_ioIntRef.GetUserSwitch()));
+    taskEXIT_CRITICAL();
+}
+
 void Tx1HzModule::Transmit(void)
 {
     // CPU load
