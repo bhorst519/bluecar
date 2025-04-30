@@ -1,37 +1,24 @@
-#ifndef RX_DATA_HPP
-#define RX_DATA_HPP
-
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
-#include "qualifiedValTypes.hpp"
-#include "util.h"
+#include "throttleModule.hpp"
 
 /***************************************************************************************************
-*                                         T Y P E D E F S                                          *
+*                                 M E T H O D  D E F I N I T I O N S                               *
 ***************************************************************************************************/
 namespace Eim
 {
 
-struct Rx100HzData_S
+void ThrottleModule::Init(void)
 {
-    uint8_q brakeLightEn;
-    uint8_q engineOnEn;
-    uint8_q engineStartEn;
-    uint8_q headlightEn;
-    uint8_q highBeamEn;
-    uint8_q hornEn;
-    uint8_q mainRelayEn;
-    uint8_q turnRightEn;
-    uint8_q turnLeftEn;
-};
+    m_outputData.idleThrottlePosDegrees = m_inputData.InterpThrottlePosDegrees(0.0F);
+}
 
-struct Rx10HzData_S
+void ThrottleModule::Run(void)
 {
-    float_q apsFrac;
-    float_q servoPositionRequest;
-};
+    const float_q apsFrac = m_inputData.GetApsFrac();
+    m_outputData.throttlePosRequestDegrees = apsFrac.Status();
+    m_outputData.throttlePosRequestDegrees = m_inputData.InterpThrottlePosDegrees(apsFrac);
+}
 
 } // namespace Eim
-
-#endif // RX_DATA_HPP

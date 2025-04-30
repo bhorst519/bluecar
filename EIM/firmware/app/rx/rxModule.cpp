@@ -28,7 +28,7 @@ void Rx100HzModule::Receive(void)
     m_outputData.turnRightEn = CANRX_EIM_GetS_TESTER_TurnRightEnable().Convert(uint8_t());
     m_outputData.turnLeftEn = CANRX_EIM_GetS_TESTER_TurnLeftEnable().Convert(uint8_t());
 
-    m_outputData.mainRelayEn = true;
+    m_outputData.mainRelayEn = uint8_q(1U, SignalStatus_E::VALID);
     m_outputData.engineOnEn = CANRX_EIM_GetS_VCU_PCBA_EngEnable().Convert(uint8_t());
     m_outputData.engineStartEn = CANRX_EIM_GetS_VCU_PCBA_EngStart().Convert(uint8_t());
     m_outputData.brakeLightEn = CANRX_EIM_GetS_VCU_PCBA_BrakeSwitch().Convert(uint8_t());
@@ -36,6 +36,7 @@ void Rx100HzModule::Receive(void)
 
 void Rx10HzModule::Receive(void)
 {
+    m_outputData.apsFrac = CANRX_EIM_GetS_VCU_PCBA_Aps1Pct() * 0.01F;
     m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
 }
 

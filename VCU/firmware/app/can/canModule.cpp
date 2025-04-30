@@ -39,7 +39,7 @@ void CanModule::Init(void)
     m_muxTransmit_VCU_CpuStats.numMuxes = (CAN_EIM_VCU_CpuStats_MAX_MUX_IDX + 1U);
     m_muxTransmit_VCU_CpuStats.counter = 0U;
 
-    m_muxTransmit_VCU_PcbaVitals.periodMs = 100U;
+    m_muxTransmit_VCU_PcbaVitals.periodMs = 10U;
     m_muxTransmit_VCU_PcbaVitals.numMuxes = (CAN_EIM_VCU_PcbaVitals_MAX_MUX_IDX + 1U);
     m_muxTransmit_VCU_PcbaVitals.counter = 0U;
 }

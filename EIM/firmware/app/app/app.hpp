@@ -17,6 +17,7 @@
 #include "rxModule.hpp"
 #include "servoModule.hpp"
 #include "tachModule.hpp"
+#include "throttleModule.hpp"
 #include "txModule.hpp"
 
 // Message modules
@@ -26,10 +27,12 @@
 #include "rxMessageModule.hpp"
 #include "servoMessageModule.hpp"
 #include "tachMessageModule.hpp"
+#include "throttleMessageModule.hpp"
 
 // Input message modules
 #include "ioIntInputMessageModule.hpp"
 #include "servoInputMessageModule.hpp"
+#include "throttleInputMessageModule.hpp"
 
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
@@ -158,6 +161,9 @@ class App final
 
         // Inputs
         ServoInputMessageModule m_servoInput {
+            m_throttleMessageModule10Hz
+        };
+        ThrottleInputMessageModule m_throttleInput {
             m_rx10HzMessageModule10Hz
         };
 
@@ -167,11 +173,15 @@ class App final
             gHalWrappers,
             gHalWrappers,
         };
+        ThrottleModule m_throttleModule {
+            m_throttleInput
+        };
 
         // Module list
-        static constexpr size_t m_numberOfModules10Hz = 1U;
+        static constexpr size_t m_numberOfModules10Hz = 2U;
         ModuleBase * const m_moduleList10Hz[m_numberOfModules10Hz] =
         {
+            &m_throttleModule,
             &m_servoModule,
         };
 
@@ -234,13 +244,18 @@ class App final
                           >m_servoDataChannel{ m_servoModule.GetOutputDataReference() };
         ServoMessageModule m_servoMessageModule10Hz { m_servoDataChannel.GetBuffer(Task10Hz_t) };
 
+        DataChannel< ThrottleData_S
+                   , Task10Hz   // source task
+                             >m_throttleDataChannel{ m_throttleModule.GetOutputDataReference() };
+        ThrottleMessageModule m_throttleMessageModule10Hz { m_throttleDataChannel.GetBuffer(Task10Hz_t) };
+
         // 1Hz source
         DataChannel< KlineData_S
                    , Task1Hz    // source task
                           >m_klineDataChannel{ m_klineModule.GetOutputDataReference() };
         KlineMessageModule m_klineMessageModule1Hz { m_klineDataChannel.GetBuffer(Task1Hz_t) };
 
-        static constexpr size_t m_numberOfDataChannels = 7U;
+        static constexpr size_t m_numberOfDataChannels = 8U;
         DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
         {
             // 1kHz source
@@ -252,6 +267,7 @@ class App final
             // 10Hz source
             &m_rx10HzDataChannel,
             &m_servoDataChannel,
+            &m_throttleDataChannel,
             // 1Hz source
             &m_klineDataChannel,
         };

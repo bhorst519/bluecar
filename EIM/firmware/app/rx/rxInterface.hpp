@@ -41,6 +41,7 @@ class Rx10HzOutputInterface
 
         NOCOPY_NOMOVE(Rx10HzOutputInterface);
 
+        virtual float_q GetApsFrac(void) const = 0;
         virtual float_q GetServoPositionRequest(void) const = 0;
 };
 

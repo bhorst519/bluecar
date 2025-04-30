@@ -88,6 +88,11 @@ class Rx10HzMessageModule final : public Rx10HzOutputInterface
 
         NOCOPY_NOMOVE(Rx10HzMessageModule);
 
+        virtual float_q GetApsFrac(void) const override
+        {
+            return m_dataRef.apsFrac;
+        }
+
         virtual float_q GetServoPositionRequest(void) const override
         {
             return m_dataRef.servoPositionRequest;

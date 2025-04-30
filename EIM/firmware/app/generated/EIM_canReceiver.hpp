@@ -67,6 +67,12 @@ uint8_t CANRX_EIM_GetSRaw_TESTER_TurnRightEnable(void);
 uint32_q CANRX_EIM_GetSFromFrame_TESTER_TurnRightEnable(const uint8_t * const pData);
 uint32_q CANRX_EIM_GetS_TESTER_TurnRightEnable(void);
 
+// VCU_PCBA_Aps1Pct
+uint16_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_Aps1Pct(const uint8_t * const pData);
+uint16_t CANRX_EIM_GetSRaw_VCU_PCBA_Aps1Pct(void);
+float_q CANRX_EIM_GetSFromFrame_VCU_PCBA_Aps1Pct(const uint8_t * const pData);
+float_q CANRX_EIM_GetS_VCU_PCBA_Aps1Pct(void);
+
 // VCU_PCBA_BrakeSwitch
 uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t * const pData);
 uint8_t CANRX_EIM_GetSRaw_VCU_PCBA_BrakeSwitch(void);

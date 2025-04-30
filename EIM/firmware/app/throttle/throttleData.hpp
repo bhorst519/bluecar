@@ -1,5 +1,5 @@
-#ifndef RX_DATA_HPP
-#define RX_DATA_HPP
+#ifndef THROTTLE_DATA_HPP
+#define THROTTLE_DATA_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
@@ -13,25 +13,12 @@
 namespace Eim
 {
 
-struct Rx100HzData_S
+struct ThrottleData_S
 {
-    uint8_q brakeLightEn;
-    uint8_q engineOnEn;
-    uint8_q engineStartEn;
-    uint8_q headlightEn;
-    uint8_q highBeamEn;
-    uint8_q hornEn;
-    uint8_q mainRelayEn;
-    uint8_q turnRightEn;
-    uint8_q turnLeftEn;
-};
-
-struct Rx10HzData_S
-{
-    float_q apsFrac;
-    float_q servoPositionRequest;
+    float idleThrottlePosDegrees;
+    float_q throttlePosRequestDegrees;
 };
 
 } // namespace Eim
 
-#endif // RX_DATA_HPP
+#endif // THROTTLE_DATA_HPP

@@ -71,7 +71,9 @@ void ServoModule::Run(void)
     }
     else
     {
-        if (m_lossOfCommPositionDegreesToSet != m_outputData.lossOfCommPositionDegrees)
+        if (!MathUtil::IsWithinRange(m_lossOfCommPositionDegreesToSet,
+                                     m_outputData.lossOfCommPositionDegrees.Val(),
+                                     0.1F) )
         {
             (void)SendRequest(Servo_Request_E::SET_LOSS_OF_COMM_POSITION);
         }
@@ -91,10 +93,20 @@ void ServoModule::Run(void)
 
 void ServoModule::SanitizeInputs(void)
 {
+    const float lossOfCommPositionDegreesToSet = m_inputData.GetLossOfCommPositionDegreesToSet();
+    m_lossOfCommPositionDegreesToSet = MathUtil::Saturate(lossOfCommPositionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+
+    const float lossOfCommTimeoutToSet = m_inputData.GetLossOfCommTimeoutToSet();
+    m_lossOfCommTimeoutToSet = MathUtil::Saturate(lossOfCommTimeoutToSet, 0.0F, SERVO_LOSS_OF_COMM_TIMEOUT_MAX);
+
     const float_q positionDegreesToSet = m_inputData.GetPositionDegreesToSet();
     if (positionDegreesToSet.Valid())
     {
         m_positionDegreesToSet = MathUtil::Saturate(positionDegreesToSet.Val(), SERVO_POSITION_MIN, SERVO_POSITION_MAX);
+    }
+    else
+    {
+        m_positionDegreesToSet = m_lossOfCommPositionDegreesToSet;
     }
     // else
     // {
@@ -106,12 +118,6 @@ void ServoModule::SanitizeInputs(void)
     //     else if (position <= SERVO_POSITION_MIN) { position = SERVO_POSITION_MIN; gInc *= -1.0F; }
     //     m_positionDegreesToSet = position;
     // }
-
-    const float lossOfCommPositionDegreesToSet = m_inputData.GetLossOfCommPositionDegreesToSet();
-    m_lossOfCommPositionDegreesToSet = MathUtil::Saturate(lossOfCommPositionDegreesToSet, SERVO_POSITION_MIN, SERVO_POSITION_MAX);
-
-    const float lossOfCommTimeoutToSet = m_inputData.GetLossOfCommTimeoutToSet();
-    m_lossOfCommTimeoutToSet = MathUtil::Saturate(lossOfCommTimeoutToSet, 0.0F, SERVO_LOSS_OF_COMM_TIMEOUT_MAX);
 }
 
 void ServoModule::InvalidateData(void)
@@ -271,7 +277,7 @@ bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
                 / SERVO_POSITION_SCALE );
             data = ENDIANSWAP_U16(static_cast<uint16_t>(data));
             // Invalidate stored config data
-            m_outputData.lossOfCommTimeout = SignalStatus_E::SNA;
+            m_outputData.lossOfCommPositionDegrees = SignalStatus_E::SNA;
             break;
         case Servo_Request_E::SET_LOSS_OF_COMM_TIMEOUT:
         {
@@ -280,7 +286,7 @@ bool ServoModule::PrepareRequest(const Servo_Request_E request,  uint16_t& data)
                 / SERVO_LOSS_OF_COMM_TIMEOUT_SCALE );
             data = U16(dataToSet, dataToSet);
             // Invalidate stored config data
-            m_outputData.lossOfCommPositionDegrees = SignalStatus_E::SNA;
+            m_outputData.lossOfCommTimeout = SignalStatus_E::SNA;
             break;
         }
         case Servo_Request_E::READ_ACTUATOR_ID:

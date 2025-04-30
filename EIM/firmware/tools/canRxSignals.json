@@ -1,6 +1,7 @@
 [
     "TESTER_.*",
     "VCU_PcbaVitalsMux",
+    "VCU_PCBA_Aps1Pct",
     "VCU_PCBA_BrakeSwitch",
     "VCU_PCBA_EngEnable",
     "VCU_PCBA_EngStart"

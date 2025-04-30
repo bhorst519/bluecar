@@ -307,6 +307,41 @@ uint32_q CANRX_EIM_GetS_TESTER_TurnRightEnable(void)
     return CANRX_EIM_GetSFromFrame_TESTER_TurnRightEnable(pData);
 }
 
+// VCU_PCBA_Aps1Pct
+uint16_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_Aps1Pct(const uint8_t * const pData)
+{
+    const uint16_t rawVal =
+        (pData[1]) +
+        (((pData[2]) & 0x03) << 8);
+    return rawVal;
+}
+uint16_t CANRX_EIM_GetSRaw_VCU_PCBA_Aps1Pct(void)
+{
+    const uint8_t * const pData = &gVCU_PcbaVitals_RX_ARR[CANRX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    return CANRX_EIM_GetSRawFromFrame_VCU_PCBA_Aps1Pct(pData);
+}
+float_q CANRX_EIM_GetSFromFrame_VCU_PCBA_Aps1Pct(const uint8_t * const pData)
+{
+    uint16_t raw = (uint16_t)CANRX_EIM_GetSRawFromFrame_VCU_PCBA_Aps1Pct(pData);
+    float_q converted;
+    if (   (raw == 1023U) // SNA value
+        || (!gVCU_PcbaVitals_EverReceived[CANRX_EIM_VCU_PcbaVitals_M1_ARR_IDX]) )
+    {
+        converted = SignalStatus_E::SNA;
+    }
+    else
+    {
+        converted = ((decltype(converted.Val()))raw * 0.1F) + 0.0F;
+        converted = SignalStatus_E::VALID;
+    }
+    return converted;
+}
+float_q CANRX_EIM_GetS_VCU_PCBA_Aps1Pct(void)
+{
+    const uint8_t * const pData = &gVCU_PcbaVitals_RX_ARR[CANRX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+    return CANRX_EIM_GetSFromFrame_VCU_PCBA_Aps1Pct(pData);
+}
+
 // VCU_PCBA_BrakeSwitch
 uint8_t CANRX_EIM_GetSRawFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t * const pData)
 {
@@ -473,6 +508,12 @@ static bool CANRX_ProcessM_VCU_PcbaVitals(const uint8_t * const pData)
         {
             gVCU_PcbaVitals_LatestRxPtr = &gVCU_PcbaVitals_RX_ARR[CANRX_EIM_VCU_PcbaVitals_M0_ARR_IDX][0U];
             gVCU_PcbaVitals_EverReceived[CANRX_EIM_VCU_PcbaVitals_M0_ARR_IDX] = true;
+            break;
+        }
+        case 1U:
+        {
+            gVCU_PcbaVitals_LatestRxPtr = &gVCU_PcbaVitals_RX_ARR[CANRX_EIM_VCU_PcbaVitals_M1_ARR_IDX][0U];
+            gVCU_PcbaVitals_EverReceived[CANRX_EIM_VCU_PcbaVitals_M1_ARR_IDX] = true;
             break;
         }
         default:
