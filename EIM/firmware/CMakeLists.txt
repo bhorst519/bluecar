@@ -86,6 +86,7 @@ set(TARGET_SOURCES
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
     app/tach/tachModule.cpp
+    app/throttle/throttleModule.cpp
     app/tx/txModule.cpp
     ../../shared/halWrappers/halWrappers.cpp
     ../../shared/kline/klineModule.cpp
@@ -117,6 +118,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     app/rtos
     app/rx
     app/tach
+    app/throttle
     app/tx
     ../../shared/dataChannel
     ../../shared/FreeRTOS

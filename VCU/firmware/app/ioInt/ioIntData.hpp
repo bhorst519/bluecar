@@ -1,5 +1,5 @@
-#ifndef RX_DATA_HPP
-#define RX_DATA_HPP
+#ifndef IO_INT_DATA_HPP
+#define IO_INT_DATA_HPP
 
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
@@ -10,28 +10,17 @@
 /***************************************************************************************************
 *                                         T Y P E D E F S                                          *
 ***************************************************************************************************/
-namespace Eim
+namespace Vcu
 {
 
-struct Rx100HzData_S
+struct IoIntData_S
 {
-    uint8_q brakeLightEn;
-    uint8_q engineOnEn;
-    uint8_q engineStartEn;
-    uint8_q headlightEn;
-    uint8_q highBeamEn;
-    uint8_q hornEn;
-    uint8_q mainRelayEn;
-    uint8_q turnRightEn;
-    uint8_q turnLeftEn;
+    bool brakeSwitch;
+    bool engineEnable;
+    bool engineStart;
+    bool userSwitch;
 };
 
-struct Rx10HzData_S
-{
-    float_q apsFrac;
-    float_q servoPositionRequest;
-};
+} // namespace Vcu
 
-} // namespace Eim
-
-#endif // RX_DATA_HPP
+#endif // IO_INT_DATA_HPP

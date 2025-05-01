@@ -77,11 +77,12 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 set(TARGET_SOURCES
     ${TARGET_SOURCES_CANGEN}
-    # app/adc/adcModule.cpp
+    app/adc/adcModule.cpp
+    app/aps/apsModule.cpp
     app/can/canModule.cpp
     app/dataChannel/dataChannel.cpp
     app/halWrappers/halWrappersComponentSpecific.cpp
-    # app/ioInt/ioIntModule.cpp
+    app/ioInt/ioIntModule.cpp
     app/profiler/profilerComponentSpecific.cpp
     app/rtos/rtos.cpp
     app/rx/rxModule.cpp
@@ -104,12 +105,13 @@ set_source_files_properties(
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     ${TARGET_DIR_CANGEN}
-    # app/adc
+    app/adc
     app/app
+    app/aps
     app/can
     app/dataChannel
     app/halWrappers
-    # app/ioInt
+    app/ioInt
     app/profiler
     app/rtos
     app/rx

@@ -41,6 +41,7 @@ typedef enum
 {
     ANALOG_APS_1,
     ANALOG_APS_2,
+    ANALOG_DIE_TEMP,
     MAX_NUM_ANALOG
 } HalWrappers_Analog_E;
 

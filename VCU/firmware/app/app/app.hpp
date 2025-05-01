@@ -9,16 +9,21 @@
 #include "taskBase.hpp"
 
 // Modules
+#include "adcModule.hpp"
+#include "apsModule.hpp"
 #include "canModule.hpp"
+#include "ioIntModule.hpp"
 #include "rxModule.hpp"
 #include "txModule.hpp"
 
 // Message modules
+#include "adcMessageModule.hpp"
+#include "apsMessageModule.hpp"
+#include "ioIntMessageModule.hpp"
 #include "rxMessageModule.hpp"
 
 // Input message modules
-
-#include "taskId.hpp"
+#include "apsInputMessageModule.hpp"
 
 /***************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                 *
@@ -98,16 +103,32 @@ class App final
         // 100Hz objects
         //------------------------------------------------------------------------------------------
         // TX/RX modules
+        Tx100HzModule m_tx100HzModule {
+            m_adcMessageModule100Hz,
+            m_apsMessageModule100Hz,
+            m_ioIntMessageModule100Hz
+        };
 
         // Inputs
+        ApsInputMessageModule m_apsInput {
+            m_adcMessageModule100Hz
+        };
 
         // Modules
+        AdcModule m_adcModule {};
+        ApsModule m_apsModule {
+            m_apsInput
+        };
+        IoIntModule m_ioIntModule {};
 
         // Module list
-        // static constexpr size_t m_numberOfModules100Hz = 0U;
-        // ModuleBase * const m_moduleList100Hz[m_numberOfModules100Hz] =
-        // {
-        // };
+        static constexpr size_t m_numberOfModules100Hz = 3U;
+        ModuleBase * const m_moduleList100Hz[m_numberOfModules100Hz] =
+        {
+            &m_adcModule,
+            &m_ioIntModule,
+            &m_apsModule,
+        };
 
         //------------------------------------------------------------------------------------------
         // 10Hz objects
@@ -143,13 +164,32 @@ class App final
         //------------------------------------------------------------------------------------------
         // Data channels
         //------------------------------------------------------------------------------------------
-        // static constexpr size_t m_numberOfDataChannels = 0U;
-        // DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
-        // {
-        //     // 1kHz source
-        //     // 100Hz source
-        //     // 10Hz source
-        // };
+        DataChannel< AdcData_S
+                   , Task100Hz  // source task
+                          >m_adcDataChannel{ m_adcModule.GetOutputDataReference() };
+        AdcMessageModule m_adcMessageModule100Hz { m_adcDataChannel.GetBuffer(Task100Hz_t) };
+
+        DataChannel< ApsData_S
+                   , Task100Hz  // source task
+                          >m_apsDataChannel{ m_apsModule.GetOutputDataReference() };
+        ApsMessageModule m_apsMessageModule100Hz { m_apsDataChannel.GetBuffer(Task100Hz_t) };
+
+        DataChannel< IoIntData_S
+                   , Task100Hz  // source task
+                          >m_ioIntDataChannel{ m_ioIntModule.GetOutputDataReference() };
+        IoIntMessageModule m_ioIntMessageModule100Hz { m_ioIntDataChannel.GetBuffer(Task100Hz_t) };
+
+        static constexpr size_t m_numberOfDataChannels = 3U;
+        DataChannelBase * const m_dataChannelList[m_numberOfDataChannels] =
+        {
+            // 1kHz source
+            // 100Hz source
+            &m_adcDataChannel,
+            &m_apsDataChannel,
+            &m_ioIntDataChannel,
+            // 10Hz source
+            // 1Hz source
+        };
 
         //------------------------------------------------------------------------------------------
         // Task objects
@@ -158,26 +198,26 @@ class App final
                           Task1kHz_t
                         , m_moduleList1kHz
                         , m_numberOfModules1kHz
-                        // , m_dataChannelList
-                        // , m_numberOfDataChannels
+                        , m_dataChannelList
+                        , m_numberOfDataChannels
                         , m_rxNoneModule
                         , m_txNoneModule
                     };
         TaskBase    m_task100Hz{
                           Task100Hz_t
-                        // , m_moduleList100Hz
-                        // , m_numberOfModules100Hz
-                        // , m_dataChannelList
-                        // , m_numberOfDataChannels
+                        , m_moduleList100Hz
+                        , m_numberOfModules100Hz
+                        , m_dataChannelList
+                        , m_numberOfDataChannels
                         , m_rxNoneModule
-                        , m_txNoneModule
+                        , m_tx100HzModule
                     };
         TaskBase    m_task10Hz{
                           Task10Hz_t
                         // , m_moduleList10Hz
                         // , m_numberOfModules10Hz
-                        // , m_dataChannelList
-                        // , m_numberOfDataChannels
+                        , m_dataChannelList
+                        , m_numberOfDataChannels
                         , m_rxNoneModule
                         , m_txNoneModule
                     };
@@ -185,8 +225,8 @@ class App final
                           Task1Hz_t
                         // , m_moduleList1Hz
                         // , m_numberOfModules1Hz
-                        // , m_dataChannelList
-                        // , m_numberOfDataChannels
+                        , m_dataChannelList
+                        , m_numberOfDataChannels
                         , m_rxNoneModule
                         , m_tx1HzModule
                     };

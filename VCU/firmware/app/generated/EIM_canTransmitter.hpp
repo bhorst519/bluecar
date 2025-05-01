@@ -14,11 +14,13 @@ using namespace ::QualifiedVal;
 // Transmit message storage getters
 //--------------------------------------------------------------------------------------------------
 uint8_t * CANTX_EIM_GetTxStorage_VCU_CpuStats(const uint32_t muxIdx);
+uint8_t * CANTX_EIM_GetTxStorage_VCU_PcbaVitals(const uint32_t muxIdx);
 
 //--------------------------------------------------------------------------------------------------
 // Mux index getters for iteration
 //--------------------------------------------------------------------------------------------------
 uint32_t CANTX_EIM_GetMuxFromIdx_VCU_CpuStats(const uint32_t muxIdx);
+uint32_t CANTX_EIM_GetMuxFromIdx_VCU_PcbaVitals(const uint32_t muxIdx);
 
 //--------------------------------------------------------------------------------------------------
 // Signal transmit setter functions
@@ -146,6 +148,64 @@ void CANTX_EIM_SetS_VCU_CPU_Load(const float converted);
 // VCU_CpuStatsMux
 void CANTX_EIM_SetSRawFromFrame_VCU_CpuStatsMux(const uint8_t rawVal, uint8_t * const pData);
 void CANTX_EIM_SetSFromFrame_VCU_CpuStatsMux(const uint32_t converted, uint8_t * const pData);
+
+// VCU_PCBA_Aps1Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1Pct(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps1Pct(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1Pct(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps1Pct(const float_q converted);
+
+// VCU_PCBA_Aps1V
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps1V(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps1V(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps1V(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps1V(const float_q converted);
+
+// VCU_PCBA_Aps2Pct
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2Pct(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps2Pct(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps2Pct(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps2Pct(const float_q converted);
+
+// VCU_PCBA_Aps2V
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_Aps2V(const uint16_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_Aps2V(const uint16_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_Aps2V(const float_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_Aps2V(const float_q converted);
+
+// VCU_PCBA_BrakeSwitch
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_BrakeSwitch(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_BrakeSwitch(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_BrakeSwitch(const uint32_t converted);
+
+// VCU_PCBA_DieTemp
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_DieTemp(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_DieTemp(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_DieTemp(const int32_q converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_DieTemp(const int32_q converted);
+
+// VCU_PCBA_EngEnable
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_EngEnable(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_EngEnable(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_EngEnable(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_EngEnable(const uint32_t converted);
+
+// VCU_PCBA_EngStart
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_EngStart(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_EngStart(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_EngStart(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_EngStart(const uint32_t converted);
+
+// VCU_PCBA_UserSwitch
+void CANTX_EIM_SetSRawFromFrame_VCU_PCBA_UserSwitch(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSRaw_VCU_PCBA_UserSwitch(const uint8_t rawVal);
+void CANTX_EIM_SetSFromFrame_VCU_PCBA_UserSwitch(const uint32_t converted, uint8_t * const pData);
+void CANTX_EIM_SetS_VCU_PCBA_UserSwitch(const uint32_t converted);
+
+// VCU_PcbaVitalsMux
+void CANTX_EIM_SetSRawFromFrame_VCU_PcbaVitalsMux(const uint8_t rawVal, uint8_t * const pData);
+void CANTX_EIM_SetSFromFrame_VCU_PcbaVitalsMux(const uint32_t converted, uint8_t * const pData);
 
 //--------------------------------------------------------------------------------------------------
 // Message transmit init

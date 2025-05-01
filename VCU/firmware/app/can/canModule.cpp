@@ -35,19 +35,29 @@ void CanModule::Init(void)
     gHalWrappers.CanStart(CAN_1);
 
     // Transmit manager initialization
-    m_muxTransmit_EIM_CpuStats.periodMs = 1000U;
-    m_muxTransmit_EIM_CpuStats.numMuxes = (CAN_EIM_VCU_CpuStats_MAX_MUX_IDX + 1U);
-    m_muxTransmit_EIM_CpuStats.counter = 0U;
+    m_muxTransmit_VCU_CpuStats.periodMs = 1000U;
+    m_muxTransmit_VCU_CpuStats.numMuxes = (CAN_EIM_VCU_CpuStats_MAX_MUX_IDX + 1U);
+    m_muxTransmit_VCU_CpuStats.counter = 0U;
+
+    m_muxTransmit_VCU_PcbaVitals.periodMs = 10U;
+    m_muxTransmit_VCU_PcbaVitals.numMuxes = (CAN_EIM_VCU_PcbaVitals_MAX_MUX_IDX + 1U);
+    m_muxTransmit_VCU_PcbaVitals.counter = 0U;
 }
 
 void CanModule::Run(void)
 {
     uint32_t muxIdx = 0U;
 
-    if (ShouldTransmitMuxNow(m_muxTransmit_EIM_CpuStats, muxIdx))
+    if (ShouldTransmitMuxNow(m_muxTransmit_VCU_CpuStats, muxIdx))
     {
         uint8_t * const pCanData = CANTX_EIM_GetTxStorage_VCU_CpuStats(muxIdx);
         gHalWrappers.CanTransmit(CAN_1, CAN_EIM_VCU_CpuStats_MID, CAN_EIM_VCU_CpuStats_DLC, pCanData);
+    }
+
+    if (ShouldTransmitMuxNow(m_muxTransmit_VCU_PcbaVitals, muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_EIM_GetTxStorage_VCU_PcbaVitals(muxIdx);
+        gHalWrappers.CanTransmit(CAN_1, CAN_EIM_VCU_PcbaVitals_MID, CAN_EIM_VCU_PcbaVitals_DLC, pCanData);
     }
 }
 

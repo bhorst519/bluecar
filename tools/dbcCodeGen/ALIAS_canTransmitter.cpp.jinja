@@ -168,6 +168,14 @@ bool CANTX_{{ alias }}_Init(void)
 {% endif %}
 
 {% endfor %}
+{% set snaSignals = signalsToTransmit|selectattr("SNA", "defined")|list %}
+{% if snaSignals|length > 0 %}
+    // Signals SNA on init
+{% for signal in snaSignals %}
+    CANTX_{{ alias }}_SetS_{{ signal["name"] }}({{ signal["convType"] }}{});
+{% endfor %}
+
+{% endif %}
     return true;
 }
 

@@ -28,9 +28,9 @@ static constexpr HalWrappers_Gpio_Info_S gGpioInfo[MAX_NUM_GPIO] = {
 };
 
 static constexpr HalWrappers_Adc_Info_S gAdcInfo[MAX_NUM_ANALOG] = {
-    /* ANALOG_APS_1 */  {.ch = ADC_CHANNEL_3,   .scale = 1.0F,  .offset = 0.0F},
-    /* ANALOG_APS_2 */  {.ch = ADC_CHANNEL_10,  .scale = 1.0F,  .offset = 0.0F},
-
+    /* ANALOG_APS_1     */  {.ch = ADC_CHANNEL_3,           .scale = 1.0F,      .offset = 0.0F},
+    /* ANALOG_APS_2     */  {.ch = ADC_CHANNEL_10,          .scale = 1.0F,      .offset = 0.0F},
+    /* ANALOG_DIE_TEMP  */  {.ch = ADC_CHANNEL_TEMPSENSOR,  .scale = 400.0F,    .offset = -279.0F}, // 2.5mV / degC, .76V @ 25degC
 };
 
 HalWrappers gHalWrappers {

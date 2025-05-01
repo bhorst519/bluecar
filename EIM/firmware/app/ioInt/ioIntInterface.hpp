@@ -23,6 +23,8 @@ class IoIntInputInterface
         NOCOPY_NOMOVE(IoIntInputInterface);
 
         virtual uint8_q GetBrakeLightEn(void) const = 0;
+        virtual uint8_q GetEngineOnEn(void) const = 0;
+        virtual uint8_q GetEngineStartEn(void) const = 0;
         virtual uint8_q GetHeadlightEn(void) const = 0;
         virtual uint8_q GetHighBeamEn(void) const = 0;
         virtual uint8_q GetHornEn(void) const = 0;

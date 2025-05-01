@@ -32,6 +32,16 @@ class Rx100HzMessageModule final : public Rx100HzOutputInterface
             return m_dataRef.brakeLightEn;
         }
 
+        virtual uint8_q GetEngineOnEn(void) const override
+        {
+            return m_dataRef.engineOnEn;
+        }
+
+        virtual uint8_q GetEngineStartEn(void) const override
+        {
+            return m_dataRef.engineStartEn;
+        }
+
         virtual uint8_q GetHeadlightEn(void) const override
         {
             return m_dataRef.headlightEn;
@@ -77,6 +87,11 @@ class Rx10HzMessageModule final : public Rx10HzOutputInterface
         {}
 
         NOCOPY_NOMOVE(Rx10HzMessageModule);
+
+        virtual float_q GetApsFrac(void) const override
+        {
+            return m_dataRef.apsFrac;
+        }
 
         virtual float_q GetServoPositionRequest(void) const override
         {

@@ -54,9 +54,9 @@ class DbcCodeGen:
                 messageInfo += [thisMessageInfo]
                 inMessage = [thisMessageInfo["name"], thisMessageInfo["transmitter"]]
             elif regexSignalInfo is not None:
-                thisSignalInfo = GetSignalInfo(regexSignalInfo, inMessage[0], inMessage[1])
-                signalName = thisSignalInfo["name"]
                 if inMessage is not None:
+                    thisSignalInfo = GetSignalInfo(regexSignalInfo, inMessage[0], inMessage[1])
+                    signalName = thisSignalInfo["name"]
                     if thisSignalInfo["endianness"] == "big":
                         raise Exception(f"Unsupported big endian signal on line {idx+1}: {signalName}")
                     if thisSignalInfo["isMuxer"]:
@@ -97,8 +97,18 @@ class DbcCodeGen:
 
 
         # Check for errors
+        # - duplicate message IDs
+        # - multiplexed message with no muxer
+        # - message with more than one muxer
+        # - multiplexed signal with mux index out of range
+        # - message with signal extending beyond message length
+        messageIds = []
         for message in messageInfo:
             messageName = message["name"]
+            messageId = message["id"]
+            if messageId in messageIds:
+                raise Exception(f"Duplicate message ID {messageId} found for message {messageName}")
+            messageIds += [messageId]
             if message["muxer"] is None and message["maxMuxIdx"] > -1:
                 raise Exception(f"Message identified with muxed frames and no muxer: {messageName}")
             thisMessageSignalInfo = [s for s in signalInfo if s["message"] == messageName]
@@ -118,13 +128,29 @@ class DbcCodeGen:
                 raise Exception(f"Message with shorter length than required for signals: {messageName} with DLC {message['length']} and max bit idx {str(maxEndBitId-1)}")
 
 
-        # Check for more errors
+        # Check for errors
+        # - signal min value out of range
+        # - signal max value out of range
+        # - signal SNA value out of range
         for signal in signalInfo:
-            if "SNA" in signal:
-                signed = signal["signed"]
-                bitLength = signal["bitLength"]
-                snaValue = signal["SNA"]
-                # SNA value is represented as an unsigned int here
+            signed = signal["signed"]
+            bitLength = signal["bitLength"]
+            minValue = signal["min"]
+            maxValue = signal["max"]
+            snaValue = signal.get("SNA", None)
+            # Min and max values are represented with scale and offset applied
+            # Signed min is -2^(bitLength-1)
+            # Signed max is  2^(bitLength-1) - 1
+            minValid = -(2 ** (bitLength-1))     if signed else 0
+            maxValid =  (2 ** (bitLength-1)) - 1 if signed else (2 ** bitLength) - 1
+            minValid = (minValid * signal["scale"]) + signal["offset"]
+            maxValid = (maxValid * signal["scale"]) + signal["offset"]
+            if minValue < minValid:
+                raise Exception(f"Min value for signal {signal['name']} with value {minValue} violates min valid value of {minValid}")
+            if maxValue > maxValid:
+                raise Exception(f"Max value for signal {signal['name']} with value {maxValue} violates max valid value of {maxValid}")
+            if snaValue is not None:
+                # SNA value is represented as an unsigned int here with no conversion
                 # Signed min as unsigned is 2^(bitLength-1)
                 # Signed max as unsigned is 2^(bitLength-1) - 1
                 minValid = 0
@@ -155,6 +181,11 @@ class DbcCodeGen:
         # Filter for receive info
         signalsToReceive = [s for s in signalInfo if any([re.search(expr, s["name"]) for expr in self.rxExpressions])]
         signalsToReceive = [s for s in signalsToReceive if s["transmitter"] != self.node]
+        # Replace convType with QualifiedVal type
+        for idx, signal in enumerate(signalsToReceive):
+            convType = signalsToReceive[idx]["convType"]
+            if not convType.endswith("_q"):
+                signalsToReceive[idx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
         # Get the relevant (message, muxIdx) pairs based on the signals to receive
         messageMuxPairsToReceive = list(set([(s["message"], s["muxIdx"]) for s in signalsToReceive]))
         messageMuxesToReceive = {}

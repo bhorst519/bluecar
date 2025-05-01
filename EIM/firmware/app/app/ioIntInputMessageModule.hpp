@@ -33,6 +33,16 @@ class IoIntInputMessageModule final : public IoIntInputInterface
             return m_rx100HzRef.GetBrakeLightEn();
         }
 
+        virtual uint8_q GetEngineOnEn(void) const override
+        {
+            return m_rx100HzRef.GetEngineOnEn();
+        }
+
+        virtual uint8_q GetEngineStartEn(void) const override
+        {
+            return m_rx100HzRef.GetEngineStartEn();
+        }
+
         virtual uint8_q GetHeadlightEn(void) const override
         {
             return m_rx100HzRef.GetHeadlightEn();

@@ -42,6 +42,18 @@ void IoIntModule::ProcessIO(void)
         SetGpio(mainRelayEn, GPIO_MAIN_RELAY_EN);
     }
 
+    const uint8_q engineOnEn = m_inputData.GetEngineOnEn();
+    if (engineOnEn.Valid())
+    {
+        SetGpio(engineOnEn, GPIO_ENG_ON_EN);
+    }
+
+    const uint8_q engineStartEn = m_inputData.GetEngineStartEn();
+    if (engineStartEn.Valid())
+    {
+        SetGpio(engineStartEn, GPIO_ENG_START_EN);
+    }
+
     const uint8_q brakeLightEn = m_inputData.GetBrakeLightEn();
     if (brakeLightEn.Valid())
     {
