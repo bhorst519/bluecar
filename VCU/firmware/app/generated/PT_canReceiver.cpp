@@ -1,5 +1,5 @@
-#include "EIM_canReceiver.hpp"
-#include "EIM_messageInfo.hpp"
+#include "PT_canReceiver.hpp"
+#include "PT_messageInfo.hpp"
 #include "stdbool.h"
 #include "stdint.h"
 
@@ -13,9 +13,9 @@ namespace CanGen
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration
 //--------------------------------------------------------------------------------------------------
-uint32_t gMidFromIdx[CANRX_EIM_NUM_MESSAGES] = {
+uint32_t gMidFromIdx[CANRX_PT_NUM_MESSAGES] = {
 };
-uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t msgIdx)
+uint32_t CANRX_PT_GetMidFromIdx(const uint32_t msgIdx)
 {
     return gMidFromIdx[msgIdx];
 }
@@ -33,7 +33,7 @@ uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t msgIdx)
 //--------------------------------------------------------------------------------------------------
 extern "C" {
 
-bool CANRX_EIM_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
+bool CANRX_PT_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
 {
     (void)dlc;
     (void)pData;
