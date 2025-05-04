@@ -1,0 +1,127 @@
+VERSION ""
+
+
+NS_ :
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: TESTER EIM
+VAL_TABLE_ SNA_Signed_14 8192 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_2 3 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_8 255 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_12 4095 "SNA" ;
+VAL_TABLE_ SNA_Unsigned_16 65535 "SNA" ;
+
+
+BO_ 1792 EIM_CpuStats: 8 EIM
+ SG_ EIM_CpuStatsMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_CPU_Load m0 : 8|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1kHz_Load m0 : 18|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_100Hz_Load m0 : 28|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_10Hz_Load m0 : 38|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1Hz_Load m0 : 48|10@1+ (0.1,0) [0|102.3] "%" Vector__XXX
+ SG_ EIM_1kHz_AvgPeriod m1 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MinPeriod m1 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1kHz_MaxPeriod m1 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_AvgPeriod m2 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_MinPeriod m2 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_100Hz_MaxPeriod m2 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_AvgPeriod m3 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MinPeriod m3 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_10Hz_MaxPeriod m3 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_AvgPeriod m4 : 4|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_MaxPeriod m4 : 44|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+ SG_ EIM_1Hz_MinPeriod m4 : 24|20@1+ (0.001,0) [0|1048.575] "ms" Vector__XXX
+
+BO_ 1800 EIM_EngineStatus: 8 EIM
+ SG_ EIM_EngineStatusMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_ECM_Rpm m0 : 8|16@1+ (1,0) [0|65534] "RPM" Vector__XXX
+ SG_ EIM_ECM_VehicleSpeed m0 : 24|8@1+ (1,0) [0|254] "kph" Vector__XXX
+ SG_ EIM_ECM_BatteryVoltage m0 : 32|8@1+ (0.02,0) [0|5.08] "V" Vector__XXX
+ SG_ EIM_ECM_EctVoltage m0 : 40|8@1+ (0.02,0) [0|5.08] "V" Vector__XXX
+ SG_ EIM_ECM_EctTemp m0 : 48|8@1+ (1,-40) [-40|214] "C" Vector__XXX
+ SG_ EIM_ECM_IatVoltage m1 : 8|8@1+ (0.02,0) [0|5.08] "V" Vector__XXX
+ SG_ EIM_ECM_IatTemp m1 : 16|8@1+ (1,-40) [-40|214] "C" Vector__XXX
+ SG_ EIM_ECM_MapVoltage m1 : 24|8@1+ (0.02,0) [0|5.08] "V" Vector__XXX
+ SG_ EIM_ECM_MapPressure m1 : 32|8@1+ (1,0) [0|254] "kPa" Vector__XXX
+ SG_ EIM_ECM_TpsVoltage m1 : 40|8@1+ (0.02,0) [0|5.08] "V" Vector__XXX
+ SG_ EIM_ECM_TpsAngle m1 : 48|8@1+ (0.5,0) [0|127] "deg" Vector__XXX
+
+BO_ 1024 EIM_ServoStatus: 8 EIM
+ SG_ EIM_ServoStatusMux M : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ EIM_Servo_Id m0 : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ EIM_Servo_Position m0 : 16|14@1- (0.025,0) [-204.775|204.775] "deg" Vector__XXX
+ SG_ EIM_Servo_LossOfCommPosition m0 : 32|14@1- (0.025,0) [-204.775|204.775] "deg" Vector__XXX
+ SG_ EIM_Servo_LossOfCommTimeout m0 : 48|8@1+ (1,0) [0|254] "sec" Vector__XXX
+ SG_ EIM_Servo_Current m1 : 8|8@1+ (0.02,0) [0|5.08] "A" Vector__XXX
+ SG_ EIM_Servo_Temp m1 : 16|8@1+ (1,-50) [-50|204] "C" Vector__XXX
+ SG_ EIM_Servo_Voltage m1 : 24|8@1+ (0.2,0) [0|50.8] "V" Vector__XXX
+
+BO_ 519 TESTER_request: 4 TESTER
+ SG_ TESTER_Servo_Position : 0|14@1- (0.025,0) [-204.775|204.775] "deg" Vector__XXX
+
+
+
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 0;
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 0;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","not_used","not_used","not_used","not_used","Cyclic","not_used","IfActive","NoMsgSendType";
+BA_DEF_ BU_  "NmStationAddress" HEX 0 0;
+BA_DEF_  "DBName" STRING ;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenMsgSendType" "NoMsgSendType";
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "DBName" "";
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "DBName" "DEV";
+BA_ "NmStationAddress" BU_ TESTER 1;
+VAL_ 519 TESTER_Servo_Position 8192 "SNA" ;
+VAL_ 1024 EIM_Servo_Voltage 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Temp 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Position 8192 "SNA" ;
+VAL_ 1024 EIM_Servo_LossOfCommTimeout 255 "SNA" ;
+VAL_ 1024 EIM_Servo_LossOfCommPosition 8192 "SNA" ;
+VAL_ 1024 EIM_Servo_Current 255 "SNA" ;
+VAL_ 1800 EIM_ECM_VehicleSpeed 255 "SNA" ;
+VAL_ 1800 EIM_ECM_TpsVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_TpsAngle 255 "SNA" ;
+VAL_ 1800 EIM_ECM_Rpm 65535 "SNA" ;
+VAL_ 1800 EIM_ECM_MapVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_MapPressure 255 "SNA" ;
+VAL_ 1800 EIM_ECM_IatVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_IatTemp 255 "SNA" ;
+VAL_ 1800 EIM_ECM_EctVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_EctTemp 255 "SNA" ;
+VAL_ 1800 EIM_ECM_BatteryVoltage 255 "SNA" ;
+
