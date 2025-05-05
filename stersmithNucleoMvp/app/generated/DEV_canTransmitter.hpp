@@ -1,6 +1,7 @@
 #ifndef CAN_TRANSMITTER_HPP
 #define CAN_TRANSMITTER_HPP
 
+#include "DEV_canTransmitterHook.h"
 #include "qualifiedVal.hpp"
 #include "stdbool.h"
 #include "stdint.h"
@@ -253,6 +254,7 @@ void CANTX_DEV_SetS_EIM_Servo_Voltage(const float_q converted);
 // Message transmit init
 //--------------------------------------------------------------------------------------------------
 bool CANTX_DEV_Init(void);
+void CANTX_DEV_Run1ms(void);
 
 } // namespace CanGen
 

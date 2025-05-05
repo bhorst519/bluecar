@@ -62,7 +62,8 @@ def GetMessageInfo(regexMessageStart):
         "length": int(messageLength),
         "transmitter": messageTransmitter,
         "muxer": None,
-        "maxMuxIdx": -1
+        "maxMuxIdx": -1,
+        "cycleTime": 0,
     }
 
 
@@ -107,7 +108,7 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         # Integer type representing scaled/offset signal before packing/unpacking
         "convIntType": GetIntTypeFromBitLength(bitLength, signed),
         # Converted underlying type
-        "convType": GetTypeFromSignAndConv(bitLength, signedConvertedValue, scale, offset)
+        "convType": GetTypeFromSignAndConv(bitLength, signedConvertedValue, scale, offset),
     }
 
 
@@ -120,5 +121,15 @@ def GetSignalValTableInfo(regexSigValInfo):
     return {
         "signal": signalName,
         "value": int(value),
-        "description": description
+        "description": description,
+    }
+
+
+RE_SEARCH_SIGNAL_MSG_CYCLE_TIME_INFO = "(?<=^BA_ \"GenMsgCycleTime\" BO_) (\d+) (\d+)"
+def GetMessageCycleTimeInfo(regexCycleTimeInfo):
+    messageId = regexCycleTimeInfo.group(1)
+    cycleTime = regexCycleTimeInfo.group(2)
+    return {
+        "id": int(messageId),
+        "cycleTime": int(cycleTime),
     }
