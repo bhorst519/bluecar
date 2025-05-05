@@ -97,6 +97,12 @@ uint8_t CANRX_PT_GetSRaw_VCU_PcbaVitalsMux(void);
 uint32_q CANRX_PT_GetSFromFrame_VCU_PcbaVitalsMux(const uint8_t * const pData);
 uint32_q CANRX_PT_GetS_VCU_PcbaVitalsMux(void);
 
+//--------------------------------------------------------------------------------------------------
+// Message receive init and run
+//--------------------------------------------------------------------------------------------------
+bool CANRX_PT_Init(void);
+void CANRX_PT_Run1ms(void);
+
 } // namespace CanGen
 
 #endif // CAN_RECEIVER_HPP
