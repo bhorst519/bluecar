@@ -15,6 +15,7 @@
 #define CANTX_PT_EIM_CpuStats_M4_ARR_IDX (4U)
 #define CANTX_PT_EIM_CpuStats_M5_ARR_IDX (5U)
 #define CANTX_PT_EIM_CpuStats_ARR_LEN (6U)
+#define CANTX_PT_EIM_CpuStats_CYCLE_TIME (1000U)
 
 // EIM_EngineStatus
 #define CAN_PT_EIM_EngineStatus_MID (1800U)
@@ -23,6 +24,7 @@
 #define CANTX_PT_EIM_EngineStatus_M0_ARR_IDX (0U)
 #define CANTX_PT_EIM_EngineStatus_M1_ARR_IDX (1U)
 #define CANTX_PT_EIM_EngineStatus_ARR_LEN (2U)
+#define CANTX_PT_EIM_EngineStatus_CYCLE_TIME (1000U)
 
 // EIM_PcbaVitals
 #define CAN_PT_EIM_PcbaVitals_MID (1032U)
@@ -35,6 +37,7 @@
 #define CANTX_PT_EIM_PcbaVitals_M4_ARR_IDX (4U)
 #define CANTX_PT_EIM_PcbaVitals_M5_ARR_IDX (5U)
 #define CANTX_PT_EIM_PcbaVitals_ARR_LEN (6U)
+#define CANTX_PT_EIM_PcbaVitals_CYCLE_TIME (100U)
 
 // EIM_ServoStatus
 #define CAN_PT_EIM_ServoStatus_MID (1024U)
@@ -43,6 +46,7 @@
 #define CANTX_PT_EIM_ServoStatus_M0_ARR_IDX (0U)
 #define CANTX_PT_EIM_ServoStatus_M1_ARR_IDX (1U)
 #define CANTX_PT_EIM_ServoStatus_ARR_LEN (2U)
+#define CANTX_PT_EIM_ServoStatus_CYCLE_TIME (100U)
 
 //--------------------------------------------------------------------------------------------------
 // Receive message info macros

@@ -1,5 +1,6 @@
 #include "PT_canTransmitter.hpp"
 #include "PT_messageInfo.hpp"
+#include "canUtil.hpp"
 #include "stdbool.h"
 #include "stdint.h"
 
@@ -11,6 +12,23 @@ namespace CanGen
 //--------------------------------------------------------------------------------------------------
 static uint8_t gVCU_CpuStats_TX_ARR[CANTX_PT_VCU_CpuStats_ARR_LEN][CAN_PT_VCU_CpuStats_DLC];
 static uint8_t gVCU_PcbaVitals_TX_ARR[CANTX_PT_VCU_PcbaVitals_ARR_LEN][CAN_PT_VCU_PcbaVitals_DLC];
+
+//--------------------------------------------------------------------------------------------------
+// Transmit message cycle time storage
+//--------------------------------------------------------------------------------------------------
+using MuxTransmitter_S = CanUtil::MuxTransmitter_S;
+
+static MuxTransmitter_S gVCU_CpuStats_muxTransmitter = {
+    .m_periodMs = CANTX_PT_VCU_CpuStats_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_VCU_CpuStats_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
+
+static MuxTransmitter_S gVCU_PcbaVitals_muxTransmitter = {
+    .m_periodMs = CANTX_PT_VCU_PcbaVitals_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_VCU_PcbaVitals_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
@@ -910,7 +928,7 @@ void CANTX_PT_SetSFromFrame_VCU_PcbaVitalsMux(const uint32_t converted, uint8_t 
 }
 
 //--------------------------------------------------------------------------------------------------
-// Message transmit init
+// Message transmit init and run
 //--------------------------------------------------------------------------------------------------
 bool CANTX_PT_Init(void)
 {
@@ -958,6 +976,26 @@ bool CANTX_PT_Init(void)
     CANTX_PT_SetS_VCU_PCBA_DieTemp(int32_q{});
 
     return true;
+}
+
+void CANTX_PT_Run1ms(void)
+{
+    uint32_t muxIdx = 0U;
+
+    // VCU_CpuStats
+    if (gVCU_CpuStats_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_VCU_CpuStats(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_VCU_CpuStats_MID, CAN_PT_VCU_CpuStats_DLC, pCanData);
+    }
+
+    // VCU_PcbaVitals
+    if (gVCU_PcbaVitals_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_VCU_PcbaVitals(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_VCU_PcbaVitals_MID, CAN_PT_VCU_PcbaVitals_DLC, pCanData);
+    }
+
 }
 
 } // namespace CanGen

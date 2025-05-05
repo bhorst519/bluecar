@@ -3,6 +3,7 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "DEV_canReceiverHook.h"
+#include "DEV_canTransmitterHook.h"
 #include "halWrappersComponentSpecific.hpp"
 
 /***************************************************************************************************
@@ -110,10 +111,18 @@ void HalWrappers::Init(void)
 *                                 P U B L I C   F U N C T I O N S                                  *
 ***************************************************************************************************/
 //--------------------------------------------------------------------------------------------------
-// ISR callbacks
+// CAN transmit hook
 //--------------------------------------------------------------------------------------------------
 extern "C" {
 
+void CANTX_DEV_Transmit(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
+{
+    Eim::gHalWrappers.CanTransmit(CAN_1, mid, dlc, pData);
+}
+
+//--------------------------------------------------------------------------------------------------
+// ISR callbacks
+//--------------------------------------------------------------------------------------------------
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
     Eim::gHalWrappers.GpioToggle(GPIO_DEBUG_1);

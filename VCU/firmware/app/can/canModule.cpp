@@ -33,54 +33,11 @@ void CanModule::Init(void)
     }
     gHalWrappers.CanSetRxFilters(CAN_1);
     gHalWrappers.CanStart(CAN_1);
-
-    // Transmit manager initialization
-    m_muxTransmit_VCU_CpuStats.periodMs = 1000U;
-    m_muxTransmit_VCU_CpuStats.numMuxes = (CAN_PT_VCU_CpuStats_MAX_MUX_IDX + 1U);
-    m_muxTransmit_VCU_CpuStats.counter = 0U;
-
-    m_muxTransmit_VCU_PcbaVitals.periodMs = 10U;
-    m_muxTransmit_VCU_PcbaVitals.numMuxes = (CAN_PT_VCU_PcbaVitals_MAX_MUX_IDX + 1U);
-    m_muxTransmit_VCU_PcbaVitals.counter = 0U;
 }
 
 void CanModule::Run(void)
 {
-    uint32_t muxIdx = 0U;
-
-    if (ShouldTransmitMuxNow(m_muxTransmit_VCU_CpuStats, muxIdx))
-    {
-        uint8_t * const pCanData = CANTX_PT_GetTxStorage_VCU_CpuStats(muxIdx);
-        gHalWrappers.CanTransmit(CAN_1, CAN_PT_VCU_CpuStats_MID, CAN_PT_VCU_CpuStats_DLC, pCanData);
-    }
-
-    if (ShouldTransmitMuxNow(m_muxTransmit_VCU_PcbaVitals, muxIdx))
-    {
-        uint8_t * const pCanData = CANTX_PT_GetTxStorage_VCU_PcbaVitals(muxIdx);
-        gHalWrappers.CanTransmit(CAN_1, CAN_PT_VCU_PcbaVitals_MID, CAN_PT_VCU_PcbaVitals_DLC, pCanData);
-    }
-}
-
-bool CanModule::ShouldTransmitMuxNow(CanModule_Mux_Transmitter_S& mux, uint32_t& muxIdx) const
-{
-    bool transmitNow = false;
-    const uint32_t muxPeriod = mux.periodMs / mux.numMuxes;
-    const uint32_t maxCountFromTx = muxPeriod * mux.numMuxes;
-    const uint32_t muxIdxCandidate = mux.counter / muxPeriod;
-
-    if (   ((mux.counter % muxPeriod) == 0U)
-        && (mux.counter < maxCountFromTx) )
-    {
-        muxIdx = muxIdxCandidate;
-        transmitNow = true;
-    }
-
-    if (++mux.counter >= mux.periodMs)
-    {
-        mux.counter = 0U;
-    }
-
-    return transmitNow;
+    CANTX_PT_Run1ms();
 }
 
 } // namespace Vcu
