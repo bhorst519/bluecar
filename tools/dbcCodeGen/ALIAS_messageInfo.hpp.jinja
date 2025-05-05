@@ -13,6 +13,7 @@
 #define CANTX_{{ alias }}_{{ message["name"] }}_M{{ muxIdx }}_ARR_IDX ({{ loop.index0 }}U)
 {% endfor %}
 #define CANTX_{{ alias }}_{{ message["name"] }}_ARR_LEN ({{ message["transmitMuxIdxs"]|length|max(1) }}U)
+#define CANTX_{{ alias }}_{{ message["name"] }}_CYCLE_TIME ({{ message["cycleTime"] }}U)
 
 {% endfor %}
 //--------------------------------------------------------------------------------------------------

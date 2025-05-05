@@ -1,6 +1,7 @@
 #ifndef CAN_TRANSMITTER_HPP
 #define CAN_TRANSMITTER_HPP
 
+#include "{{ alias }}_canTransmitterHook.h"
 #include "qualifiedVal.hpp"
 #include "stdbool.h"
 #include "stdint.h"
@@ -49,6 +50,7 @@ void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} 
 // Message transmit init
 //--------------------------------------------------------------------------------------------------
 bool CANTX_{{ alias }}_Init(void);
+void CANTX_{{ alias }}_Run1ms(void);
 
 } // namespace CanGen
 
