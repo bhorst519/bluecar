@@ -25,6 +25,11 @@ uint16_t CANRX_DEV_GetSRaw_TESTER_Servo_Position(void);
 float_q CANRX_DEV_GetSFromFrame_TESTER_Servo_Position(const uint8_t * const pData);
 float_q CANRX_DEV_GetS_TESTER_Servo_Position(void);
 
+//--------------------------------------------------------------------------------------------------
+// Message receive run
+//--------------------------------------------------------------------------------------------------
+void CANRX_DEV_Run1ms(void);
+
 } // namespace CanGen
 
 #endif // CAN_RECEIVER_HPP
