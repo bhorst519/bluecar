@@ -3,6 +3,9 @@
 #include "stdbool.h"
 #include "stdint.h"
 
+// Used for atomic operations
+#define MEM_ORDER __ATOMIC_SEQ_CST
+
 namespace CanGen
 {
 
@@ -11,10 +14,12 @@ namespace CanGen
 //--------------------------------------------------------------------------------------------------
 static uint8_t gTESTER_request_RX_ARR[CANRX_PT_TESTER_request_ARR_LEN][CAN_PT_TESTER_request_DLC];
 static uint8_t * gTESTER_request_LatestRxPtr = &gTESTER_request_RX_ARR[0U][0U];
-static bool gTESTER_request_EverReceived[CANRX_PT_TESTER_request_ARR_LEN];
+static uint32_t gTESTER_request_RxCounter[CANRX_PT_TESTER_request_ARR_LEN];
+static uint32_t * gTESTER_request_LatestCounterPtr = &gTESTER_request_RxCounter[0U];
 static uint8_t gVCU_PcbaVitals_RX_ARR[CANRX_PT_VCU_PcbaVitals_ARR_LEN][CAN_PT_VCU_PcbaVitals_DLC];
 static uint8_t * gVCU_PcbaVitals_LatestRxPtr = &gVCU_PcbaVitals_RX_ARR[0U][0U];
-static bool gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_ARR_LEN];
+static uint32_t gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_ARR_LEN];
+static uint32_t * gVCU_PcbaVitals_LatestCounterPtr = &gVCU_PcbaVitals_RxCounter[0U];
 
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration
@@ -45,10 +50,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_BrakeLightEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_BrakeLightEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_BrakeLightEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -79,10 +85,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_HeadlightEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_HeadlightEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_HeadlightEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -113,10 +120,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_HighBeamEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_HighBeamEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_HighBeamEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -147,10 +155,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_HornEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_HornEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_HornEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -181,10 +190,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_MainRelayEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_MainRelayEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_MainRelayEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -216,10 +226,11 @@ uint16_t CANRX_PT_GetSRaw_TESTER_Servo_Position(void)
 }
 float_q CANRX_PT_GetSFromFrame_TESTER_Servo_Position(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     int16_t raw = (int16_t)CANRX_PT_GetSRawFromFrame_TESTER_Servo_Position(pData);
     float_q converted;
     if (   (raw == 8192) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -253,10 +264,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_TurnLeftEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_TurnLeftEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_TurnLeftEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -287,10 +299,11 @@ uint8_t CANRX_PT_GetSRaw_TESTER_TurnRightEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_TESTER_TurnRightEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gTESTER_request_RxCounter[0U];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_TESTER_TurnRightEnable(pData);
     uint32_q converted;
     if (   (raw == 3U) // SNA value
-        || (!gTESTER_request_EverReceived[0U]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_TESTER_request_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -322,10 +335,11 @@ uint16_t CANRX_PT_GetSRaw_VCU_PCBA_Aps1Pct(void)
 }
 float_q CANRX_PT_GetSFromFrame_VCU_PCBA_Aps1Pct(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX];
     uint16_t raw = (uint16_t)CANRX_PT_GetSRawFromFrame_VCU_PCBA_Aps1Pct(pData);
     float_q converted;
     if (   (raw == 1023U) // SNA value
-        || (!gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX]) )
+        || (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT) )
     {
         converted = SignalStatus_E::SNA;
     }
@@ -356,9 +370,10 @@ uint8_t CANRX_PT_GetSRaw_VCU_PCBA_BrakeSwitch(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_VCU_PCBA_BrakeSwitch(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_VCU_PCBA_BrakeSwitch(pData);
     uint32_q converted;
-    if (!gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX])
+    if (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT)
     {
         converted = SignalStatus_E::SNA;
     }
@@ -389,9 +404,10 @@ uint8_t CANRX_PT_GetSRaw_VCU_PCBA_EngEnable(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_VCU_PCBA_EngEnable(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_VCU_PCBA_EngEnable(pData);
     uint32_q converted;
-    if (!gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX])
+    if (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT)
     {
         converted = SignalStatus_E::SNA;
     }
@@ -422,9 +438,10 @@ uint8_t CANRX_PT_GetSRaw_VCU_PCBA_EngStart(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_VCU_PCBA_EngStart(const uint8_t * const pData)
 {
+    const uint32_t * const pCounter = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX];
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_VCU_PCBA_EngStart(pData);
     uint32_q converted;
-    if (!gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX])
+    if (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT)
     {
         converted = SignalStatus_E::SNA;
     }
@@ -456,9 +473,11 @@ uint8_t CANRX_PT_GetSRaw_VCU_PcbaVitalsMux(void)
 }
 uint32_q CANRX_PT_GetSFromFrame_VCU_PcbaVitalsMux(const uint8_t * const pData)
 {
+    // This signal belongs to a muxed message but is static. Get counter from latest-received frame
+    const uint32_t * const pCounter = gVCU_PcbaVitals_LatestCounterPtr;
     uint8_t raw = (uint8_t)CANRX_PT_GetSRawFromFrame_VCU_PcbaVitalsMux(pData);
     uint32_q converted;
-    if (!gVCU_PcbaVitals_EverReceived[0U])
+    if (__atomic_load_n(pCounter, MEM_ORDER) >= CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT)
     {
         converted = SignalStatus_E::SNA;
     }
@@ -484,7 +503,8 @@ static bool CANRX_ProcessM_TESTER_request(const uint8_t * const pData)
     bool success = true;
 
     gTESTER_request_LatestRxPtr = &gTESTER_request_RX_ARR[0U][0U];
-    gTESTER_request_EverReceived[0U] = true;
+    gTESTER_request_LatestCounterPtr = &gTESTER_request_RxCounter[0U];
+    __atomic_store_n(gTESTER_request_LatestCounterPtr, 0U, MEM_ORDER);
 
     if (success)
     {
@@ -507,13 +527,15 @@ static bool CANRX_ProcessM_VCU_PcbaVitals(const uint8_t * const pData)
         case 0U:
         {
             gVCU_PcbaVitals_LatestRxPtr = &gVCU_PcbaVitals_RX_ARR[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX][0U];
-            gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX] = true;
+            gVCU_PcbaVitals_LatestCounterPtr = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX];
+            __atomic_store_n(gVCU_PcbaVitals_LatestCounterPtr, 0U, MEM_ORDER);
             break;
         }
         case 1U:
         {
             gVCU_PcbaVitals_LatestRxPtr = &gVCU_PcbaVitals_RX_ARR[CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX][0U];
-            gVCU_PcbaVitals_EverReceived[CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX] = true;
+            gVCU_PcbaVitals_LatestCounterPtr = &gVCU_PcbaVitals_RxCounter[CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX];
+            __atomic_store_n(gVCU_PcbaVitals_LatestCounterPtr, 0U, MEM_ORDER);
             break;
         }
         default:
@@ -532,6 +554,56 @@ static bool CANRX_ProcessM_VCU_PcbaVitals(const uint8_t * const pData)
     }
 
     return success;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Message receive init and run
+//--------------------------------------------------------------------------------------------------
+bool CANRX_PT_Init(void)
+{
+    for (uint32_t i = 0U; i < CANRX_PT_TESTER_request_ARR_LEN; ++i)
+    {
+        gTESTER_request_RxCounter[i] = CANRX_PT_TESTER_request_CYCLE_TIMEOUT;
+    }
+
+    for (uint32_t i = 0U; i < CANRX_PT_VCU_PcbaVitals_ARR_LEN; ++i)
+    {
+        gVCU_PcbaVitals_RxCounter[i] = CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT;
+    }
+
+    return true;
+}
+
+void CANRX_PT_Run1ms(void)
+{
+    for (uint32_t i = 0U; i < CANRX_PT_TESTER_request_ARR_LEN; ++i)
+    {
+        uint32_t cycleTimeoutOverflow_TESTER_request = CANRX_PT_TESTER_request_CYCLE_TIMEOUT + 1U;
+        (void)__atomic_add_fetch(&gTESTER_request_RxCounter[i], 1U, MEM_ORDER);
+        (void)__atomic_compare_exchange_n(
+            &gTESTER_request_RxCounter[i],
+            &cycleTimeoutOverflow_TESTER_request,
+            CANRX_PT_TESTER_request_CYCLE_TIMEOUT,
+            false,
+            MEM_ORDER,
+            MEM_ORDER
+        );
+    }
+
+    for (uint32_t i = 0U; i < CANRX_PT_VCU_PcbaVitals_ARR_LEN; ++i)
+    {
+        uint32_t cycleTimeoutOverflow_VCU_PcbaVitals = CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT + 1U;
+        (void)__atomic_add_fetch(&gVCU_PcbaVitals_RxCounter[i], 1U, MEM_ORDER);
+        (void)__atomic_compare_exchange_n(
+            &gVCU_PcbaVitals_RxCounter[i],
+            &cycleTimeoutOverflow_VCU_PcbaVitals,
+            CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT,
+            false,
+            MEM_ORDER,
+            MEM_ORDER
+        );
+    }
+
 }
 
 } // namespace CanGen

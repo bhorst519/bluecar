@@ -58,6 +58,7 @@
 #define CAN_PT_TESTER_request_DLC (4U)
 #define CAN_PT_TESTER_request_MAX_MUX_IDX (0U)
 #define CANRX_PT_TESTER_request_ARR_LEN (1U)
+#define CANRX_PT_TESTER_request_CYCLE_TIMEOUT (100U * 3U)
 
 // VCU_PcbaVitals
 #define CAN_PT_VCU_PcbaVitals_MID (1033U)
@@ -66,5 +67,6 @@
 #define CANRX_PT_VCU_PcbaVitals_M0_ARR_IDX (0U)
 #define CANRX_PT_VCU_PcbaVitals_M1_ARR_IDX (1U)
 #define CANRX_PT_VCU_PcbaVitals_ARR_LEN (2U)
+#define CANRX_PT_VCU_PcbaVitals_CYCLE_TIMEOUT (10U * 3U)
 
 #endif // MESSAGE_INFO_HPP

@@ -24,7 +24,8 @@ using namespace CanGen;
 void CanModule::Init(void)
 {
     // Driver and HAL initialization
-    CANTX_PT_Init();
+    (void)CANTX_PT_Init();
+    (void)CANRX_PT_Init();
 
     for (uint32_t i = 0U; i < CANRX_PT_NUM_MESSAGES; ++i)
     {
@@ -37,6 +38,7 @@ void CanModule::Init(void)
 
 void CanModule::Run(void)
 {
+    CANRX_PT_Run1ms();
     CANTX_PT_Run1ms();
 }
 

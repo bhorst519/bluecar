@@ -44,5 +44,6 @@
 #define CAN_DEV_TESTER_request_DLC (4U)
 #define CAN_DEV_TESTER_request_MAX_MUX_IDX (0U)
 #define CANRX_DEV_TESTER_request_ARR_LEN (1U)
+#define CANRX_DEV_TESTER_request_CYCLE_TIMEOUT (100U * 3U)
 
 #endif // MESSAGE_INFO_HPP

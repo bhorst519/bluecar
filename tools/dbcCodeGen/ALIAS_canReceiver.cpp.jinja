@@ -4,6 +4,9 @@
 #include "stdbool.h"
 #include "stdint.h"
 
+// Used for atomic operations
+#define MEM_ORDER __ATOMIC_SEQ_CST
+
 namespace CanGen
 {
 
@@ -13,7 +16,8 @@ namespace CanGen
 {% for message in messagesToReceive %}
 static uint8_t g{{ message["name"] }}_RX_ARR[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN][CAN_{{ alias }}_{{ message["name"] }}_DLC];
 static uint8_t * g{{ message["name"] }}_LatestRxPtr = &g{{ message["name"] }}_RX_ARR[0U][0U];
-static bool g{{ message["name"] }}_EverReceived[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN];
+static uint32_t g{{ message["name"] }}_RxCounter[CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN];
+static uint32_t * g{{ message["name"] }}_LatestCounterPtr = &g{{ message["name"] }}_RxCounter[0U];
 {% endfor %}
 
 //--------------------------------------------------------------------------------------------------
@@ -47,6 +51,16 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 {%- endmacro %}
 {#
 #}
+{% macro CounterPointer(messageName, muxIdx, messageIsMuxed) -%}
+{% if muxIdx == None and messageIsMuxed %}
+// This signal belongs to a muxed message but is static. Get counter from latest-received frame
+const uint32_t * const pCounter = g{{ messageName }}_LatestCounterPtr;
+{%- else %}
+const uint32_t * const pCounter = &g{{ messageName }}_RxCounter[{{ RxArrIdx(messageName, muxIdx) }}];
+{%- endif %}
+{%- endmacro %}
+{#
+#}
 {% macro GetByteMaskAndShift(byte, mask, shift, shiftLeft) -%}
 {% set maskOp = "(" + byte + ")" %}
 {% if mask != 0xFF %}
@@ -68,6 +82,7 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 {% for signal in signalsToReceive %}
 {% set thisSignalMessageInfo = messagesToReceive|selectattr("name", "equalto", signal["message"])|list|first %}
 {% set messageIsMuxed = (thisSignalMessageInfo["muxer"] != None) %}
+{% set cycleTimeout = "CANRX_{}_{}_CYCLE_TIMEOUT".format(alias, signal["message"]) %}
 // {{ signal["name"] }}
 {{ signal["rawType"] }} CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
 {
@@ -102,16 +117,17 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 }
 {{ signal["convType"] }} CANRX_{{ alias }}_GetSFromFrame_{{ signal["name"] }}(const uint8_t * const pData)
 {
+    {{ CounterPointer(signal["message"], signal["muxIdx"], messageIsMuxed)|indent }}
     {{ signal["convIntType"] }} raw = ({{ signal["convIntType"] }})CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(pData);
     {{ signal["convType"] }} converted;
 {% set checkValidity = "SNA" in signal %}
 {% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
-{% set everReceived = "g{}_EverReceived[{}]".format(signal["message"], RxArrIdx(signal["message"], signal["muxIdx"])) %}
+{% set rxCounterCompare = "__atomic_load_n(pCounter, MEM_ORDER) >= {}".format(cycleTimeout) %}
 {% if checkValidity %}
     if (   (raw == {{ signal["SNA"]|string + convIntAppend }}) // SNA value
-        || (!{{ everReceived }}) )
+        || ({{ rxCounterCompare }}) )
 {% else %}
-    if (!{{ everReceived }})
+    if ({{ rxCounterCompare }})
 {% endif %}
     {
         converted = SignalStatus_E::SNA;
@@ -147,7 +163,8 @@ const uint8_t * const pData = &g{{ messageName }}_RX_ARR[{{ RxArrIdx(messageName
 {% macro MessageMuxReceiver(messageName, muxIdx) -%}
 {% set rxArrIdx = RxArrIdx(messageName, muxIdx) %}
 g{{ messageName }}_LatestRxPtr = &g{{ messageName }}_RX_ARR[{{ rxArrIdx }}][0U];
-g{{ messageName }}_EverReceived[{{ rxArrIdx }}] = true;
+g{{ messageName }}_LatestCounterPtr = &g{{ messageName }}_RxCounter[{{ rxArrIdx }}];
+__atomic_store_n(g{{ messageName }}_LatestCounterPtr, 0U, MEM_ORDER);
 {%- endmacro %}
 {#
 #}
@@ -190,6 +207,41 @@ static bool CANRX_ProcessM_{{ message["name"] }}(const uint8_t * const pData)
 }
 
 {% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message receive init and run
+//--------------------------------------------------------------------------------------------------
+bool CANRX_{{ alias }}_Init(void)
+{
+{% for message in messagesToReceive %}
+    for (uint32_t i = 0U; i < CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN; ++i)
+    {
+        g{{ message["name"] }}_RxCounter[i] = CANRX_{{ alias }}_{{ message["name"] }}_CYCLE_TIMEOUT;
+    }
+
+{% endfor %}
+    return true;
+}
+
+void CANRX_{{ alias }}_Run1ms(void)
+{
+{% for message in messagesToReceive %}
+    for (uint32_t i = 0U; i < CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN; ++i)
+    {
+        uint32_t cycleTimeoutOverflow_{{ message["name"] }} = CANRX_{{ alias }}_{{ message["name"] }}_CYCLE_TIMEOUT + 1U;
+        (void)__atomic_add_fetch(&g{{ message["name"] }}_RxCounter[i], 1U, MEM_ORDER);
+        (void)__atomic_compare_exchange_n(
+            &g{{ message["name"] }}_RxCounter[i],
+            &cycleTimeoutOverflow_{{  message["name"] }},
+            CANRX_{{ alias }}_{{  message["name"] }}_CYCLE_TIMEOUT,
+            false,
+            MEM_ORDER,
+            MEM_ORDER
+        );
+    }
+
+{% endfor %}
+}
+
 } // namespace CanGen
 
 //--------------------------------------------------------------------------------------------------

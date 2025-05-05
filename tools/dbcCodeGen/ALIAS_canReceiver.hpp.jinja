@@ -27,6 +27,12 @@ uint32_t CANRX_{{ alias }}_GetMidFromIdx(const uint32_t muxIdx);
 {{ signal["convType"] }} CANRX_{{ alias }}_GetS_{{ signal["name"] }}(void);
 
 {% endfor %}
+//--------------------------------------------------------------------------------------------------
+// Message receive init and run
+//--------------------------------------------------------------------------------------------------
+bool CANRX_{{ alias }}_Init(void);
+void CANRX_{{ alias }}_Run1ms(void);
+
 } // namespace CanGen
 
 #endif // CAN_RECEIVER_HPP
