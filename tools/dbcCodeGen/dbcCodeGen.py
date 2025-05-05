@@ -42,16 +42,19 @@ class DbcCodeGen:
         # Parse DBC file for message and signal info
         inMessage = None
         messageInfo = []
+        messageIds = []  # Order must align with that of messageInfo
         signalInfo = []
         signalNames = []  # Order must align with that of signalInfo
         for idx, line in enumerate(self.dbcFileHandle):
             regexMessageStart = re.search(RE_SEARCH_MESSAGE_START, line)
             regexSignalInfo = re.search(RE_SEARCH_SIGNAL_INFO, line)
             regexSignalValTableInfo = re.search(RE_SEARCH_SIGNAL_VAL_TABLE_INFO, line)
+            regexMessageCycleTimeInfo = re.search(RE_SEARCH_SIGNAL_MSG_CYCLE_TIME_INFO, line)
 
             if regexMessageStart is not None:
                 thisMessageInfo = GetMessageInfo(regexMessageStart)
                 messageInfo += [thisMessageInfo]
+                messageIds += [thisMessageInfo["id"]]
                 inMessage = [thisMessageInfo["name"], thisMessageInfo["transmitter"]]
             elif regexSignalInfo is not None:
                 if inMessage is not None:
@@ -87,6 +90,17 @@ class DbcCodeGen:
                     # Replace convType with QualifiedVal type
                     convType = signalInfo[signalIdx]["convType"]
                     signalInfo[signalIdx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
+
+            if regexMessageCycleTimeInfo is not None:
+                thisMessageInfo = GetMessageCycleTimeInfo(regexMessageCycleTimeInfo)
+                messageId = thisMessageInfo["id"]
+                if messageId not in messageIds:
+                    raise Exception(f"Cycle time listed for unidentified message ID {messageId}")
+                if thisMessageInfo["cycleTime"] > 0:
+                    # Only support non-zero entries
+                    messageIdx = messageIds.index(messageId)
+                    # Update message cycleTime
+                    messageInfo[messageIdx]["cycleTime"] = thisMessageInfo["cycleTime"]
 
 
         if self.genDebugFiles:

@@ -1,5 +1,6 @@
 #include "{{ alias }}_canTransmitter.hpp"
 #include "{{ alias }}_messageInfo.hpp"
+#include "canUtil.hpp"
 #include "stdbool.h"
 #include "stdint.h"
 
@@ -13,6 +14,19 @@ namespace CanGen
 static uint8_t g{{ message["name"] }}_TX_ARR[CANTX_{{ alias }}_{{ message["name"] }}_ARR_LEN][CAN_{{ alias }}_{{ message["name"] }}_DLC];
 {% endfor %}
 
+//--------------------------------------------------------------------------------------------------
+// Transmit message cycle time storage
+//--------------------------------------------------------------------------------------------------
+using MuxTransmitter_S = CanUtil::MuxTransmitter_S;
+
+{% for message in messagesToTransmit %}
+static MuxTransmitter_S g{{ message["name"] }}_muxTransmitter = {
+    .m_periodMs = CANTX_{{ alias }}_{{ message["name"] }}_CYCLE_TIME,
+    .m_numMuxes = (CAN_{{ alias }}_{{ message["name"] }}_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
+
+{% endfor %}
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
 //--------------------------------------------------------------------------------------------------
@@ -151,7 +165,7 @@ void CANTX_{{ alias }}_SetS_{{ signal["name"] }}(const {{ signal["convType"] }} 
 
 {% endfor %}
 //--------------------------------------------------------------------------------------------------
-// Message transmit init
+// Message transmit init and run
 //--------------------------------------------------------------------------------------------------
 bool CANTX_{{ alias }}_Init(void)
 {
@@ -177,6 +191,21 @@ bool CANTX_{{ alias }}_Init(void)
 
 {% endif %}
     return true;
+}
+
+void CANTX_{{ alias }}_Run1ms(void)
+{
+    uint32_t muxIdx = 0U;
+
+{% for message in messagesToTransmit %}
+    // {{ message["name"] }}
+    if (g{{ message["name"] }}_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_{{ alias }}_GetTxStorage_{{ message["name"] }}(muxIdx);
+        CANTX_{{ alias }}_Transmit(CAN_{{ alias }}_{{ message["name"] }}_MID, CAN_{{ alias }}_{{ message["name"] }}_DLC, pCanData);
+    }
+
+{% endfor %}
 }
 
 } // namespace CanGen

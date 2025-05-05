@@ -6,6 +6,7 @@ template_files = [
     "ALIAS_messageInfo.hpp.jinja",
     "ALIAS_canTransmitter.hpp.jinja",
     "ALIAS_canTransmitter.cpp.jinja",
+    "ALIAS_canTransmitterHook.h.jinja",
     "ALIAS_canReceiver.hpp.jinja",
     "ALIAS_canReceiver.cpp.jinja",
     "ALIAS_canReceiverHook.h.jinja",
