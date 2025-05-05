@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "EIM_canReceiverHook.h"
+#include "DEV_canReceiverHook.h"
 #include "halWrappersComponentSpecific.hpp"
 
 /***************************************************************************************************
@@ -124,7 +124,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
     if (hcan == gHalWrappersConfig.pCan[CAN_1])
     {
-        (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+        (void)CANRX_DEV_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     }
     else
     {
@@ -144,7 +144,7 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
     if (hcan == gHalWrappersConfig.pCan[CAN_1])
     {
-        (void)CANRX_EIM_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
+        (void)CANRX_DEV_Receive(rxHeader.StdId, rxHeader.DLC, &data[0U]);
     }
     else
     {

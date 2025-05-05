@@ -8,7 +8,7 @@ extern "C" {
 #include "stdbool.h"
 #include "stdint.h"
 
-bool CANRX_EIM_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData);
+bool CANRX_DEV_Receive(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData);
 
 #ifdef __cplusplus
 }
