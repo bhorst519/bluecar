@@ -1,0 +1,17 @@
+#ifndef CAN_TRANSMITTER_HOOK_H
+#define CAN_TRANSMITTER_HOOK_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stdbool.h"
+#include "stdint.h"
+
+void CANTX_DEV_Transmit(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CAN_TRANSMITTER_HOOK_H

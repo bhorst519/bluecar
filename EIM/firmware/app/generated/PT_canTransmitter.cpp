@@ -1,5 +1,6 @@
 #include "PT_canTransmitter.hpp"
 #include "PT_messageInfo.hpp"
+#include "canUtil.hpp"
 #include "stdbool.h"
 #include "stdint.h"
 
@@ -13,6 +14,35 @@ static uint8_t gEIM_CpuStats_TX_ARR[CANTX_PT_EIM_CpuStats_ARR_LEN][CAN_PT_EIM_Cp
 static uint8_t gEIM_EngineStatus_TX_ARR[CANTX_PT_EIM_EngineStatus_ARR_LEN][CAN_PT_EIM_EngineStatus_DLC];
 static uint8_t gEIM_PcbaVitals_TX_ARR[CANTX_PT_EIM_PcbaVitals_ARR_LEN][CAN_PT_EIM_PcbaVitals_DLC];
 static uint8_t gEIM_ServoStatus_TX_ARR[CANTX_PT_EIM_ServoStatus_ARR_LEN][CAN_PT_EIM_ServoStatus_DLC];
+
+//--------------------------------------------------------------------------------------------------
+// Transmit message cycle time storage
+//--------------------------------------------------------------------------------------------------
+using MuxTransmitter_S = CanUtil::MuxTransmitter_S;
+
+static MuxTransmitter_S gEIM_CpuStats_muxTransmitter = {
+    .m_periodMs = CANTX_PT_EIM_CpuStats_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_EIM_CpuStats_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
+
+static MuxTransmitter_S gEIM_EngineStatus_muxTransmitter = {
+    .m_periodMs = CANTX_PT_EIM_EngineStatus_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_EIM_EngineStatus_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
+
+static MuxTransmitter_S gEIM_PcbaVitals_muxTransmitter = {
+    .m_periodMs = CANTX_PT_EIM_PcbaVitals_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_EIM_PcbaVitals_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
+
+static MuxTransmitter_S gEIM_ServoStatus_muxTransmitter = {
+    .m_periodMs = CANTX_PT_EIM_ServoStatus_CYCLE_TIME,
+    .m_numMuxes = (CAN_PT_EIM_ServoStatus_MAX_MUX_IDX + 1U),
+    .m_counter = 0U,
+};
 
 //--------------------------------------------------------------------------------------------------
 // Transmit message storage getters
@@ -2136,7 +2166,7 @@ void CANTX_PT_SetS_EIM_Servo_Voltage(const float_q converted)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Message transmit init
+// Message transmit init and run
 //--------------------------------------------------------------------------------------------------
 bool CANTX_PT_Init(void)
 {
@@ -2248,6 +2278,40 @@ bool CANTX_PT_Init(void)
     CANTX_PT_SetS_EIM_Servo_Voltage(float_q{});
 
     return true;
+}
+
+void CANTX_PT_Run1ms(void)
+{
+    uint32_t muxIdx = 0U;
+
+    // EIM_CpuStats
+    if (gEIM_CpuStats_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_EIM_CpuStats(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_EIM_CpuStats_MID, CAN_PT_EIM_CpuStats_DLC, pCanData);
+    }
+
+    // EIM_EngineStatus
+    if (gEIM_EngineStatus_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_EIM_EngineStatus(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_EIM_EngineStatus_MID, CAN_PT_EIM_EngineStatus_DLC, pCanData);
+    }
+
+    // EIM_PcbaVitals
+    if (gEIM_PcbaVitals_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_EIM_PcbaVitals(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_EIM_PcbaVitals_MID, CAN_PT_EIM_PcbaVitals_DLC, pCanData);
+    }
+
+    // EIM_ServoStatus
+    if (gEIM_ServoStatus_muxTransmitter.ShouldTransmitMuxNow(muxIdx))
+    {
+        uint8_t * const pCanData = CANTX_PT_GetTxStorage_EIM_ServoStatus(muxIdx);
+        CANTX_PT_Transmit(CAN_PT_EIM_ServoStatus_MID, CAN_PT_EIM_ServoStatus_DLC, pCanData);
+    }
+
 }
 
 } // namespace CanGen

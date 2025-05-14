@@ -1,7 +1,7 @@
 VERSION ""
 
 
-NS_ :
+NS_ : 
 	NS_DESC_
 	CM_
 	BA_DEF_
@@ -106,22 +106,26 @@ BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
 BA_ "DBName" "DEV";
 BA_ "NmStationAddress" BU_ TESTER 1;
-VAL_ 519 TESTER_Servo_Position 8192 "SNA" ;
-VAL_ 1024 EIM_Servo_Voltage 255 "SNA" ;
-VAL_ 1024 EIM_Servo_Temp 255 "SNA" ;
-VAL_ 1024 EIM_Servo_Position 8192 "SNA" ;
-VAL_ 1024 EIM_Servo_LossOfCommTimeout 255 "SNA" ;
-VAL_ 1024 EIM_Servo_LossOfCommPosition 8192 "SNA" ;
-VAL_ 1024 EIM_Servo_Current 255 "SNA" ;
-VAL_ 1800 EIM_ECM_VehicleSpeed 255 "SNA" ;
-VAL_ 1800 EIM_ECM_TpsVoltage 255 "SNA" ;
-VAL_ 1800 EIM_ECM_TpsAngle 255 "SNA" ;
+BA_ "GenMsgCycleTime" BO_ 1792 1000;
+BA_ "GenMsgCycleTime" BO_ 1800 1000;
+BA_ "GenMsgCycleTime" BO_ 1024 100;
+BA_ "GenMsgCycleTime" BO_ 519 100;
 VAL_ 1800 EIM_ECM_Rpm 65535 "SNA" ;
-VAL_ 1800 EIM_ECM_MapVoltage 255 "SNA" ;
-VAL_ 1800 EIM_ECM_MapPressure 255 "SNA" ;
-VAL_ 1800 EIM_ECM_IatVoltage 255 "SNA" ;
-VAL_ 1800 EIM_ECM_IatTemp 255 "SNA" ;
+VAL_ 1800 EIM_ECM_VehicleSpeed 255 "SNA" ;
+VAL_ 1800 EIM_ECM_BatteryVoltage 255 "SNA" ;
 VAL_ 1800 EIM_ECM_EctVoltage 255 "SNA" ;
 VAL_ 1800 EIM_ECM_EctTemp 255 "SNA" ;
-VAL_ 1800 EIM_ECM_BatteryVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_IatVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_IatTemp 255 "SNA" ;
+VAL_ 1800 EIM_ECM_MapVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_MapPressure 255 "SNA" ;
+VAL_ 1800 EIM_ECM_TpsVoltage 255 "SNA" ;
+VAL_ 1800 EIM_ECM_TpsAngle 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Position 8192 "SNA" ;
+VAL_ 1024 EIM_Servo_LossOfCommPosition 8192 "SNA" ;
+VAL_ 1024 EIM_Servo_LossOfCommTimeout 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Current 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Temp 255 "SNA" ;
+VAL_ 1024 EIM_Servo_Voltage 255 "SNA" ;
+VAL_ 519 TESTER_Servo_Position 8192 "SNA" ;
 

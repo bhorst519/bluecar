@@ -3,6 +3,7 @@
 ***************************************************************************************************/
 #include "cmsis_os.h"
 #include "PT_canReceiverHook.h"
+#include "PT_canTransmitterHook.h"
 #include "halWrappersComponentSpecific.hpp"
 #include "profiler.h"
 
@@ -53,10 +54,18 @@ void HalWrappers::Init(void)
 *                                 P U B L I C   F U N C T I O N S                                  *
 ***************************************************************************************************/
 //--------------------------------------------------------------------------------------------------
-// ISR callbacks
+// CAN transmit hook
 //--------------------------------------------------------------------------------------------------
 extern "C" {
 
+void CANTX_PT_Transmit(const uint16_t mid, const uint8_t dlc, const uint8_t * const pData)
+{
+    Vcu::gHalWrappers.CanTransmit(CAN_1, mid, dlc, pData);
+}
+
+//--------------------------------------------------------------------------------------------------
+// ISR callbacks
+//--------------------------------------------------------------------------------------------------
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
     CAN_RxHeaderTypeDef rxHeader;
