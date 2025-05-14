@@ -2,7 +2,7 @@
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
 #include "cmsis_os.h"
-#include "EIM_canReceiver.hpp"
+#include "DEV_canReceiver.hpp"
 #include "rxModule.hpp"
 
 /***************************************************************************************************
@@ -20,7 +20,7 @@ void RxNoneModule::Receive(void)
 
 void Rx10HzModule::Receive(void)
 {
-    m_outputData.servoPositionRequest = CANRX_EIM_GetS_TESTER_Servo_Position();
+    m_outputData.servoPositionRequest = CANRX_DEV_GetS_TESTER_Servo_Position();
 }
 
 } // namespace Eim

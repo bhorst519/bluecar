@@ -183,7 +183,7 @@ BA_DEF_DEF_  "GenMsgSendType" "NoMsgSendType";
 BA_DEF_DEF_  "NmStationAddress" 0;
 BA_DEF_DEF_  "DBName" "";
 BA_DEF_DEF_  "BusType" "CAN";
-BA_ "DBName" "EIM";
+BA_ "DBName" "PT";
 BA_ "NmStationAddress" BU_ TESTER 1;
 VAL_ 1032 EIM_PCBA_TurnRCurrent 65535 "SNA" ;
 VAL_ 1032 EIM_PCBA_TurnLCurrent 65535 "SNA" ;

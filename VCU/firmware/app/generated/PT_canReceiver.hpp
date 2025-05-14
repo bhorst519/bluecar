@@ -1,7 +1,7 @@
 #ifndef CAN_RECEIVER_HPP
 #define CAN_RECEIVER_HPP
 
-#include "EIM_canReceiverHook.h"
+#include "PT_canReceiverHook.h"
 #include "qualifiedVal.hpp"
 #include "stdbool.h"
 #include "stdint.h"
@@ -14,7 +14,7 @@ using namespace ::QualifiedVal;
 //--------------------------------------------------------------------------------------------------
 // Receive message ID getters for iteration
 //--------------------------------------------------------------------------------------------------
-uint32_t CANRX_EIM_GetMidFromIdx(const uint32_t muxIdx);
+uint32_t CANRX_PT_GetMidFromIdx(const uint32_t muxIdx);
 
 //--------------------------------------------------------------------------------------------------
 // Signal receive unpack functions
