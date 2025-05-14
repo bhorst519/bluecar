@@ -1,6 +1,7 @@
 /***************************************************************************************************
 *                                         I N C L U D E S                                          *
 ***************************************************************************************************/
+#include "mathUtil.hpp"
 #include "throttleModule.hpp"
 
 /***************************************************************************************************
@@ -17,8 +18,9 @@ void ThrottleModule::Init(void)
 void ThrottleModule::Run(void)
 {
     const float_q apsFrac = m_inputData.GetApsFrac();
+    const float apsFracSat = MathUtil::Saturate(apsFrac.Val(), 0.0F, 1.0F);
     m_outputData.throttlePosRequestDegrees = apsFrac.Status();
-    m_outputData.throttlePosRequestDegrees = m_inputData.InterpThrottlePosDegrees(apsFrac);
+    m_outputData.throttlePosRequestDegrees = m_inputData.InterpThrottlePosDegrees(apsFracSat);
 }
 
 } // namespace Eim
