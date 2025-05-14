@@ -13,6 +13,8 @@
 namespace Vcu
 {
 
+static constexpr float APS_FULL_THROTTLE_FRAC   { 0.5F };
+
 static constexpr float APS_1_NO_THROTTLE_V      { 0.657F };
 static constexpr float APS_1_FULL_THROTTLE_V    { 2.753F };
 
@@ -21,11 +23,11 @@ static constexpr float APS_2_FULL_THROTTLE_V    { 1.396F };
 
 // m = (y2 - y1) / (x2 - x1)
 // b = y - mx
-static constexpr float APS_1_M = (1.0F - 0.0F) / (APS_1_FULL_THROTTLE_V - APS_1_NO_THROTTLE_V);
-static constexpr float APS_1_B = -APS_1_M * APS_1_NO_THROTTLE_V;
+static constexpr float APS_1_M = (APS_FULL_THROTTLE_FRAC - 0.0F) / (APS_1_FULL_THROTTLE_V - APS_1_NO_THROTTLE_V);
+static constexpr float APS_1_B = 0.0F - (APS_1_M * APS_1_NO_THROTTLE_V);
 
-static constexpr float APS_2_M = (1.0F - 0.0F) / (APS_2_FULL_THROTTLE_V - APS_2_NO_THROTTLE_V);
-static constexpr float APS_2_B = -APS_2_M * APS_2_NO_THROTTLE_V;
+static constexpr float APS_2_M = (APS_FULL_THROTTLE_FRAC - 0.0F) / (APS_2_FULL_THROTTLE_V - APS_2_NO_THROTTLE_V);
+static constexpr float APS_2_B = 0.0F - (APS_2_M * APS_2_NO_THROTTLE_V);
 
 /**************************************************************************************************
 *                              C L A S S   D E C L A R A T I O N S                                *
