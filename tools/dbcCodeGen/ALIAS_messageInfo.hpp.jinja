@@ -30,6 +30,7 @@
 #define CANRX_{{ alias }}_{{ message["name"] }}_M{{ muxIdx }}_ARR_IDX ({{ loop.index0 }}U)
 {% endfor %}
 #define CANRX_{{ alias }}_{{ message["name"] }}_ARR_LEN ({{ message["receiveMuxIdxs"]|length|max(1) }}U)
+#define CANRX_{{ alias }}_{{ message["name"] }}_CYCLE_TIMEOUT ({{ message["cycleTime"] }}U * 3U)
 
 {% endfor %}
 #endif // MESSAGE_INFO_HPP
