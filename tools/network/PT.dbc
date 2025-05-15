@@ -1,7 +1,7 @@
 VERSION ""
 
 
-NS_ : 
+NS_ :
 	NS_DESC_
 	CM_
 	BA_DEF_
@@ -191,7 +191,6 @@ BA_ "GenMsgCycleTime" BO_ 1024 100;
 BA_ "GenMsgCycleTime" BO_ 1032 100;
 BA_ "GenMsgCycleTime" BO_ 1793 1000;
 BA_ "GenMsgCycleTime" BO_ 1033 10;
-BA_ "GenMsgCycleTime" BO_ 519 100;
 VAL_ 1800 EIM_ECM_Rpm 65535 "SNA" ;
 VAL_ 1800 EIM_ECM_VehicleSpeed 255 "SNA" ;
 VAL_ 1800 EIM_ECM_BatteryVoltage 255 "SNA" ;
