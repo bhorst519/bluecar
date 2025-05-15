@@ -1,4 +1,4 @@
-import argparse, os, sys
+import argparse, os, subprocess, sys
 
 repoRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -40,6 +40,7 @@ def get_args():
 args = get_args()
 build_summary = ""
 
+globalRes = 0
 for target in args.targets:
     for build in args.build_config:
         target_source_dir = firmware_dirs[target]
@@ -49,15 +50,18 @@ for target in args.targets:
         build_str = f"target: {target} - {build}"
         if res == 0:
             print(f"{bcolors.OKMAGENTA}Configuring build for {build_str}{bcolors.ENDC}")
-            res = os.system(f"cmake -DCMAKE_BUILD_TYPE={build} -S {target_source_dir} -B {target_build_dir} -G Ninja")
+            cp = subprocess.run(f"cmake -DCMAKE_BUILD_TYPE={build} -S {target_source_dir} -B {target_build_dir} -G Ninja", shell=True)
+            res = cp.returncode
         if res == 0:
             print(f"{bcolors.OKMAGENTA}Starting build for {build_str}{bcolors.ENDC}")
-            os.system(f"cmake --build {target_build_dir}")
+            cp = subprocess.run(f"cmake --build {target_build_dir}", shell=True)
+            res = cp.returncode
 
         if res == 0:
-            print(f"{bcolors.OKMAGENTA}Build executed for {build_str}{bcolors.ENDC}")
             build_summary += f"{bcolors.OKMAGENTA}EXECUTED... {build_str}{bcolors.ENDC}\n"
         else:
+            globalRes += 1
             build_summary += f"{bcolors.OKRED}ERROR... {build_str}{bcolors.ENDC}\n"
 
 print("\nBuild summary:\n" + build_summary[:-1])
+sys.exit(globalRes)
