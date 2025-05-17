@@ -120,7 +120,7 @@ const uint32_t * const pCounter = &g{{ messageName }}_RxCounter[{{ RxArrIdx(mess
     {{ CounterPointer(signal["message"], signal["muxIdx"], messageIsMuxed)|indent }}
     {{ signal["convIntType"] }} raw = ({{ signal["convIntType"] }})CANRX_{{ alias }}_GetSRawFromFrame_{{ signal["name"] }}(pData);
     {{ signal["convType"] }} converted;
-{% set checkValidity = "SNA" in signal %}
+{% set checkValidity = signal["SNA"] != None %}
 {% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
 {% set rxCounterCompare = "__atomic_load_n(pCounter, MEM_ORDER) >= {}".format(cycleTimeout) %}
 {% if checkValidity %}

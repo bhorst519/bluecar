@@ -103,6 +103,7 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         "offset": float(offset) if anyFloat else offset,
         "min": float(min) if anyFloat else min,
         "max": float(max) if anyFloat else max,
+        "SNA": None,
         # Unsigned integer type to pack into/unpack from raw bytes
         "rawType": GetRawTypeFromBitLength(bitLength),
         # Integer type representing scaled/offset signal before packing/unpacking
