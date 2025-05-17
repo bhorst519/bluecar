@@ -177,7 +177,7 @@ class DbcCodeGen:
             bitLength = signal["bitLength"]
             minValue = signal["min"]
             maxValue = signal["max"]
-            snaValue = signal.get("SNA", None)
+            snaValue = signal["SNA"]
             # Min and max values are represented with scale and offset applied
             # Signed min is -2^(bitLength-1)
             # Signed max is  2^(bitLength-1) - 1
