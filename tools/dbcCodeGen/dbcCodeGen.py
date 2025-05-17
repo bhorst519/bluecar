@@ -105,20 +105,43 @@ class DbcCodeGen:
         return messageInfo, signalInfo
 
 
+    # Return a dicttionary of
+    # - key: message name
+    # - value: list of mux indices
+    def CollectMessageMuxes(self, signalInfo):
+        # Get the relevant (message, muxIdx) pairs based on the signals
+        messageMuxPairs = list(set([(s["message"], s["muxIdx"]) for s in signalInfo]))
+        messageMuxes = {}
+        for (messageName, messageMuxIdx) in messageMuxPairs:
+            if messageName in messageMuxes:
+                messageMuxes[messageName] += [messageMuxIdx]
+            else:
+                messageMuxes[messageName] = [messageMuxIdx]
+        return messageMuxes
+
+
     def CheckErrors(self, messageInfo, signalInfo):
         # Check for errors
+        # - duplicate message names
         # - duplicate message IDs
         # - multiplexed message with no muxer
         # - message with more than one muxer
         # - multiplexed signal with mux index out of range
         # - message with signal extending beyond message length
         # - message with zero or negative cycle time
+        # - message with muxes that can't fit within cycle time
+        messageMuxes = self.CollectMessageMuxes(signalInfo)
+        messageNames = []
         messageIds = []
         for message in messageInfo:
             messageName = message["name"]
             messageId = message["id"]
+            messageCycleTime = message["cycleTime"]
+            if messageName in messageNames:
+                raise Exception(f"Duplicate message name {messageName}")
             if messageId in messageIds:
                 raise Exception(f"Duplicate message ID {messageId} found for message {messageName}")
+            messageNames += [messageName]
             messageIds += [messageId]
             if message["muxer"] is None and message["maxMuxIdx"] > -1:
                 raise Exception(f"Message identified with muxed frames and no muxer: {messageName}")
@@ -137,8 +160,13 @@ class DbcCodeGen:
                 maxEndBitId = max(maxEndBitId, signal["startBit"] + signal["bitLength"])
             if (maxEndBitId > (message["length"] * 8)):
                 raise Exception(f"Message with shorter length than required for signals: {messageName} with DLC {message['length']} and max bit idx {str(maxEndBitId-1)}")
-            if (message["cycleTime"] <= 0):
-                raise Exception(f"Message with zero or negative cycle time: {messageName} with cycle time {message['cycleTime']}")
+            if (messageCycleTime <= 0):
+                raise Exception(f"Message with zero or negative cycle time: {messageName} with cycle time {messageCycleTime}")
+            thisMessageMuxes = messageMuxes[messageName]
+            thisMessageMuxes.remove(None)
+            thisMessageNumMuxes = max(len(thisMessageMuxes), 1)
+            if (messageCycleTime < thisMessageNumMuxes):
+                raise Exception(f"Message with too many frames/muxes for cycle time: {messageName} with cycle time {messageCycleTime}")
 
         # Check for errors
         # - signal min value out of range
@@ -186,14 +214,7 @@ class DbcCodeGen:
         # Filter for transmit info
         signalsToTransmit = [s for s in signalInfo if s["transmitter"] == self.node]
         messagesToTransmit = [m for m in messageInfo if m["transmitter"] == self.node]
-        # Get the relevant (message, muxIdx) pairs based on the signals to transmit
-        messageMuxPairsToTransmit = list(set([(s["message"], s["muxIdx"]) for s in signalsToTransmit]))
-        messageMuxesToTransmit = {}
-        for (messageName, messageMuxIdx) in messageMuxPairsToTransmit:
-            if messageName in messageMuxesToTransmit:
-                messageMuxesToTransmit[messageName] += [messageMuxIdx]
-            else:
-                messageMuxesToTransmit[messageName] = [messageMuxIdx]
+        messageMuxesToTransmit = self.CollectMessageMuxes(signalsToTransmit)
         # Amend transmit message info with the specific muxes that contain relevant signals
         for idx, message in enumerate(messagesToTransmit):
             transmitMuxIdxs = messageMuxesToTransmit[message["name"]]
@@ -204,20 +225,13 @@ class DbcCodeGen:
         # Filter for receive info
         signalsToReceive = [s for s in signalInfo if any([re.search(expr, s["name"]) for expr in self.rxExpressions])]
         signalsToReceive = [s for s in signalsToReceive if s["transmitter"] != self.node]
+        messageMuxesToReceive = self.CollectMessageMuxes(signalsToReceive)
+        messagesToReceive = [m for m in messageInfo if m["name"] in messageMuxesToReceive]
         # Replace convType with QualifiedVal type
         for idx, signal in enumerate(signalsToReceive):
             convType = signalsToReceive[idx]["convType"]
             if not convType.endswith("_q"):
                 signalsToReceive[idx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
-        # Get the relevant (message, muxIdx) pairs based on the signals to receive
-        messageMuxPairsToReceive = list(set([(s["message"], s["muxIdx"]) for s in signalsToReceive]))
-        messageMuxesToReceive = {}
-        for (messageName, messageMuxIdx) in messageMuxPairsToReceive:
-            if messageName in messageMuxesToReceive:
-                messageMuxesToReceive[messageName] += [messageMuxIdx]
-            else:
-                messageMuxesToReceive[messageName] = [messageMuxIdx]
-        messagesToReceive = [m for m in messageInfo if m["name"] in messageMuxesToReceive]
         # Amend recieve message info with the specific muxes that contain relevant signals
         for idx, message in enumerate(messagesToReceive):
             receiveMuxIdxs = messageMuxesToReceive[message["name"]]
