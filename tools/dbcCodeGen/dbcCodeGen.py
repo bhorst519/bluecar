@@ -24,22 +24,22 @@ class DbcCodeGen:
             raise Exception(f"RX file {rxFilePath} is not a list of regex expressions")
 
         if genDebugFiles:
-            signalInfoFile = os.path.join(generatedCodeDirPath, f"{alias}_signals.txt")
             messageInfoFile = os.path.join(generatedCodeDirPath, f"{alias}_messages.txt")
-            self.signalInfoFileHandle = open(signalInfoFile, "w")
+            signalInfoFile = os.path.join(generatedCodeDirPath, f"{alias}_signals.txt")
             self.messageInfoFileHandle = open(messageInfoFile, "w")
+            self.signalInfoFileHandle = open(signalInfoFile, "w")
 
 
     def Finish(self):
         self.dbcFileHandle.close()
 
         if self.genDebugFiles:
-            self.signalInfoFileHandle.close()
             self.messageInfoFileHandle.close()
+            self.signalInfoFileHandle.close()
 
 
-    def Run(self):
-        # Parse DBC file for message and signal info
+    # Parse DBC file for message and signal info
+    def ExtractDbcInfo(self):
         inMessage = None
         messageInfo = []
         messageIds = []  # Order must align with that of messageInfo
@@ -102,14 +102,10 @@ class DbcCodeGen:
                     # Update message cycleTime
                     messageInfo[messageIdx]["cycleTime"] = thisMessageInfo["cycleTime"]
 
-
-        if self.genDebugFiles:
-            for signal in signalInfo:
-                self.signalInfoFileHandle.write(str(signal) + "\n")
-            for message in messageInfo:
-                self.messageInfoFileHandle.write(str(message) + "\n")
+        return messageInfo, signalInfo
 
 
+    def CheckErrors(self, messageInfo, signalInfo):
         # Check for errors
         # - duplicate message IDs
         # - multiplexed message with no muxer
@@ -144,7 +140,6 @@ class DbcCodeGen:
             if (message["cycleTime"] <= 0):
                 raise Exception(f"Message with zero or negative cycle time: {messageName} with cycle time {message['cycleTime']}")
 
-
         # Check for errors
         # - signal min value out of range
         # - signal max value out of range
@@ -176,6 +171,18 @@ class DbcCodeGen:
                     raise Exception(f"SNA value for signal {signal['name']} with value {snaValue} violates signal width of {bitLength}")
 
 
+    def Run(self):
+        # Get message and signal info from DBC
+        messageInfo, signalInfo = self.ExtractDbcInfo()
+
+        # Generate debug info (if applicable) and check for errors
+        if self.genDebugFiles:
+            for message in messageInfo:
+                self.messageInfoFileHandle.write(str(message) + "\n")
+            for signal in signalInfo:
+                self.signalInfoFileHandle.write(str(signal) + "\n")
+        self.CheckErrors(messageInfo, signalInfo)
+
         # Filter for transmit info
         signalsToTransmit = [s for s in signalInfo if s["transmitter"] == self.node]
         messagesToTransmit = [m for m in messageInfo if m["transmitter"] == self.node]
@@ -193,7 +200,6 @@ class DbcCodeGen:
             transmitMuxIdxs.remove(None)
             transmitMuxIdxs.sort()
             messagesToTransmit[idx]["transmitMuxIdxs"] = transmitMuxIdxs
-
 
         # Filter for receive info
         signalsToReceive = [s for s in signalInfo if any([re.search(expr, s["name"]) for expr in self.rxExpressions])]
@@ -218,7 +224,6 @@ class DbcCodeGen:
             receiveMuxIdxs.remove(None)
             receiveMuxIdxs.sort()
             messagesToReceive[idx]["receiveMuxIdxs"] = receiveMuxIdxs
-
 
         configDict = {
             "alias": self.alias,
