@@ -108,7 +108,8 @@ struct Kline_Comm_TableResponse_S
     uint8_t numBytes;
     uint8_t table;
     uint8_t address;
-    uint16_t rpm;
+    uint8_t rpm_high;
+    uint8_t rpm_low;
     uint8_t tpsVoltage;
     uint8_t tpsAngle;
     uint8_t ectVoltage;

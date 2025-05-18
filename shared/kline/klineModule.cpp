@@ -289,7 +289,7 @@ bool KlineModule::SendRequest(const Kline_Request_E request)
 //--------------------------------------------------------------------------------------------------
 void KlineModule::ProcessData(const Kline_Comm_TableResponse_S * const pTableResponse)
 {
-    m_outputData.rpm = pTableResponse->rpm;
+    m_outputData.rpm = U16(pTableResponse->rpm_high, pTableResponse->rpm_low);
     m_outputData.tpsVoltage = (float)pTableResponse->tpsVoltage * (5.0F / 256.0F);
     m_outputData.tpsAngle = (float)pTableResponse->tpsAngle / 2.0F;
     m_outputData.ectVoltage = (float)pTableResponse->ectVoltage * (5.0F / 256.0F);
