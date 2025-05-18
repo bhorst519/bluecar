@@ -129,7 +129,7 @@ void CANTX_{{ alias }}_SetSRaw_{{ signal["name"] }}(const {{ signal["rawType"] }
 void CANTX_{{ alias }}_SetSFromFrame_{{ signal["name"] }}(const {{ signal["convType"] }} converted, uint8_t * const pData)
 {
     {{ signal["convIntType"] }} rawVal;
-{% set checkValidity = "SNA" in signal %}
+{% set checkValidity = (signal["SNA"] != None) %}
 {% set convIntAppend = "U" if signal["convIntType"].startswith("u") else "" %}
 {% if checkValidity %}
     if (!converted.Valid())
@@ -182,7 +182,7 @@ bool CANTX_{{ alias }}_Init(void)
 {% endif %}
 
 {% endfor %}
-{% set snaSignals = signalsToTransmit|selectattr("SNA", "defined")|list %}
+{% set snaSignals = signalsToTransmit|selectattr("SNA", "ne", None)|list %}
 {% if snaSignals|length > 0 %}
     // Signals SNA on init
 {% for signal in snaSignals %}
