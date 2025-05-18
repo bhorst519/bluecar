@@ -56,6 +56,7 @@ set(TARGET_DIR_CANGEN               ${CMAKE_SOURCE_DIR}/app/generated)
 set(TARGET_SOURCES_CANGEN
     ${TARGET_DIR_CANGEN}/${CANGEN_BUS}_canReceiver.cpp
     ${TARGET_DIR_CANGEN}/${CANGEN_BUS}_canTransmitter.cpp
+    ${DBC_FILE}.json
 )
 add_custom_command(
     OUTPUT ${TARGET_DIR_CANGEN} ${TARGET_SOURCES_CANGEN}
