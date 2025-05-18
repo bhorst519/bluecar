@@ -17,6 +17,9 @@ class DbcCodeGen:
         if not os.path.exists(generatedCodeDirPath):
             os.mkdir(generatedCodeDirPath)
 
+        dbcJsonFile = dbcFilePath + ".json"
+        self.dbcJsonFileHandle = open(dbcJsonFile, "w")
+
         if rxFilePath is not None:
             with open(rxFilePath, "r") as rxFileHandle:
                 self.rxExpressions = json.load(rxFileHandle)
@@ -32,6 +35,7 @@ class DbcCodeGen:
 
     def Finish(self):
         self.dbcFileHandle.close()
+        self.dbcJsonFileHandle.close()
 
         if self.genDebugFiles:
             self.messageInfoFileHandle.close()
@@ -199,9 +203,77 @@ class DbcCodeGen:
                     raise Exception(f"SNA value for signal {signal['name']} with value {snaValue} violates signal width of {bitLength}")
 
 
+    def CreateJsonFile(self, messageInfo, signalInfo):
+        content = {}
+        content["product"] = "BlueCar"
+        content["version"] = "3.2.0"
+        content["busMetadata"] = {
+            "id": 1,
+            "name": self.alias,
+            "protocol": "CAN",
+            "baudrate": 500000,
+            "canFrameFormat": "base",
+        }
+        content["networkProperties"] = {
+            "legacyLogSignal": True,
+            "defaultMessagePacking": {
+                "maximumSize": "Receivers",
+                "strategy": "AvoidWordBoundariesLegacy"
+            },
+            "useSharedValueTables": False,
+            "nodeProperties": {
+                "alertsSinkEcu": "logger",
+                "loggingNodeName": "logger"
+            },
+            "alertsSinkBus": "other"
+        }
+        messageDict = {}
+        for message in messageInfo:
+            signals = [s for s in signalInfo if s["message"] == message["name"]]
+            signalDict = {}
+            for signal in signals:
+                signalDict[signal["name"]] = {}
+                if signal["SNA"] is not None:
+                    signalDict[signal["name"]]["value_description"] = {"SNA": signal["SNA"]}
+                    signalDict[signal["name"]]["value_table_name"] = signal["name"]
+                if signal["muxIdx"] is not None:
+                    signalDict[signal["name"]]["mux_id"] = signal["muxIdx"]
+                if signal["isMuxer"]:
+                    signalDict[signal["name"]]["is_muxer"] = True
+                signalDict[signal["name"]].update({
+                    "continuous": True,
+                    "min": signal["min"],
+                    "max": signal["max"],
+                    "scale": signal["scale"],
+                    "offset": signal["offset"],
+                    "start_position": signal["startBit"],
+                    "width": signal["bitLength"],
+                    "units": signal["units"],
+                    "signedness": "SIGNED" if signal["signed"] else "UNSIGNED",
+                    "endianness": "LITTLE",
+                    "receivers": []
+                })
+            messageDict[message["name"]] = {
+                "send_type": "Cyclic",
+                "message_id": message["id"],
+                "cycle_time": message["cycleTime"],
+                "senders": [
+                    message["transmitter"]
+                ],
+                "origin_id": message["id"],
+                "originNode": message["transmitter"],
+                "role": "Normal",
+                "length_bytes": message["length"],
+                "signals": signalDict
+            }
+        content["messages"] = messageDict
+        self.dbcJsonFileHandle.write(json.dumps(content, indent=4))
+
+
     def Run(self):
         # Get message and signal info from DBC
         messageInfo, signalInfo = self.ExtractDbcInfo()
+        self.CreateJsonFile(messageInfo, signalInfo)
 
         # Generate debug info (if applicable) and check for errors
         if self.genDebugFiles:
@@ -249,7 +321,6 @@ class DbcCodeGen:
         Render(targetDir=self.generatedCodeDirPath, alias=self.alias, configDict=configDict)
 
         self.Finish()
-
 
 #---------------------------------------------------------------------------------------------------
 # Parse and run
