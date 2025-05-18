@@ -87,10 +87,10 @@ class DbcCodeGen:
                 signalName = thisSignalInfo["signal"]
                 if signalName not in signalNames:
                     raise Exception(f"Value table listed for unidentified signal {signalName}")
-                if thisSignalInfo["description"].lower() == "sna":
-                    # Only support SNA value table entry
-                    signalIdx = signalNames.index(signalName)
-                    signalInfo[signalIdx]["SNA"] = thisSignalInfo["value"]
+                signalIdx = signalNames.index(signalName)
+                signalInfo[signalIdx]["valueTable"] = thisSignalInfo["valueTable"]
+                if "SNA" in thisSignalInfo["valueTable"]:
+                    signalInfo[signalIdx]["SNA"] = thisSignalInfo["valueTable"]["SNA"]
                     # Replace convType with QualifiedVal type
                     convType = signalInfo[signalIdx]["convType"]
                     signalInfo[signalIdx]["convType"] = RemoveSuffix(convType, "_t") + "_q"
@@ -233,8 +233,8 @@ class DbcCodeGen:
             signalDict = {}
             for signal in signals:
                 signalDict[signal["name"]] = {}
-                if signal["SNA"] is not None:
-                    signalDict[signal["name"]]["value_description"] = {"SNA": signal["SNA"]}
+                if "valueTable" in signal:
+                    signalDict[signal["name"]]["value_description"] = signal["valueTable"]
                     signalDict[signal["name"]]["value_table_name"] = signal["name"]
                 if signal["muxIdx"] is not None:
                     signalDict[signal["name"]]["mux_id"] = signal["muxIdx"]
