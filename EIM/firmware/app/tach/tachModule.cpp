@@ -99,7 +99,7 @@ void TachModule::Run(void)
 
         m_outputData.freq = freqFilt;
         m_outputData.freq = SignalStatus_E::VALID;
-        m_outputData.rpm = (freqFilt * 60.0F);
+        m_outputData.rpm = (freqFilt * (60.0F * 0.5F)); // Factor of 0.5
         m_outputData.rpm = SignalStatus_E::VALID;
     }
     else

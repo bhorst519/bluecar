@@ -67,7 +67,7 @@ def GetMessageInfo(regexMessageStart):
     }
 
 
-RE_SEARCH_SIGNAL_INFO = "(?<=^ SG_) (\S+) ((\S+) )*: (\d+)\|(\d+)@([01])([+-]) \(([-\d\.e]+),([-\d\.e]+)\) \[([-\d\.e]+)\|([-\d\.e]+)\]"
+RE_SEARCH_SIGNAL_INFO = "(?<=^ SG_) (\S+) ((\S+) )*: (\d+)\|(\d+)@([01])([+-]) \(([-\d\.e]+),([-\d\.e]+)\) \[([-\d\.e]+)\|([-\d\.e]+)\] \"(.*)\""
 def GetSignalInfo(regexSignalInfo, messageName, transmitter):
     signalName = regexSignalInfo.group(1)
     signalMux = regexSignalInfo.group(3)
@@ -79,6 +79,7 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
     signalOffset = regexSignalInfo.group(9)
     signalMin = regexSignalInfo.group(10)
     signalMax = regexSignalInfo.group(11)
+    units = regexSignalInfo.group(12)
     isMuxer = signalMux == "M"
     muxedSignal = signalMux is not None and not isMuxer
     bitLength = int(signalBitLength)
@@ -104,6 +105,7 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
         "min": float(min) if anyFloat else min,
         "max": float(max) if anyFloat else max,
         "SNA": None,
+        "units": units,
         # Unsigned integer type to pack into/unpack from raw bytes
         "rawType": GetRawTypeFromBitLength(bitLength),
         # Integer type representing scaled/offset signal before packing/unpacking
