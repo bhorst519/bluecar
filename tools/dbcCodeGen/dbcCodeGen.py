@@ -322,17 +322,11 @@ class DbcCodeGen:
 
         self.Finish()
 
+
 #---------------------------------------------------------------------------------------------------
 # Parse and run
 #---------------------------------------------------------------------------------------------------
 def get_args():
-
-    def key_arg(key):
-        try:
-            return eval("dict(%s)" % key)
-        except:
-            raise argparse.ArgumentError("%s is not a valid key" % key)
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--dbcFile", dest="dbcFile", help="Input DBC file")
     parser.add_argument("--rxFile", dest="rxFile", help="Generated code target directory", default=None)
@@ -347,5 +341,5 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     print(f"Generating CAN code for alias: {args.alias}, node: {args.node}")
-    sampleCodeGen = DbcCodeGen(args.dbcFile, args.rxFile, args.targetDir, args.alias, args.node, args.genDebugFiles)
-    sampleCodeGen.Run()
+    dbcCodeGen = DbcCodeGen(args.dbcFile, args.rxFile, args.targetDir, args.alias, args.node, args.genDebugFiles)
+    dbcCodeGen.Run()
