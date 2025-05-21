@@ -1,0 +1,48 @@
+#ifndef PEDAL_MAP_GENERATED_HPP
+#define PEDAL_MAP_GENERATED_HPP
+
+/***************************************************************************************************
+*                                         I N C L U D E S                                          *
+***************************************************************************************************/
+#include "util.h"
+
+/***************************************************************************************************
+*                                          D E F I N E S                                           *
+***************************************************************************************************/
+namespace PedalMap
+{
+
+// Taylor series for power function
+// Exponent p = {{ p|float }}
+// Order N = {{ N|int }}
+// Point of approximation a = {{ a|float }}
+
+static constexpr float PEDAL_MAP_POINT_A { {{ a|float }}F };
+static constexpr size_t PEDAL_MAP_ODER_N { {{ N|int }}U };
+static constexpr float PEDAL_MAP_COEFFS[PEDAL_MAP_ODER_N + 1U] = {
+{% for i in range(N+1) %}
+    {{ coeffs[i]|float }}F,
+{% endfor %}
+};
+
+/***************************************************************************************************
+*                          P U B L I C   I N L I N E   F U N C T I O N S                           *
+***************************************************************************************************/
+float GetPedalPositionMapped(const float pedalPosition)
+{
+    const float xa = (pedalPosition - PEDAL_MAP_POINT_A);
+    float xaLoop = 1.0F;
+
+    float pedalPositionMapped = PEDAL_MAP_COEFFS[0U];
+    for (size_t i = 0; i < PEDAL_MAP_ODER_N; ++i)
+    {
+        xaLoop = xaLoop * xa;
+        pedalPositionMapped += PEDAL_MAP_COEFFS[i + 1U] * xaLoop;
+    }
+
+    return pedalPositionMapped;
+}
+
+} // namespace PedalMap
+
+#endif // PEDAL_MAP_GENERATED_HPP
