@@ -2,6 +2,10 @@ name: Build
 run-name: Build - ${{github.event.pull_request.head.ref}}
 on:
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
     branches:
       - main
 jobs:

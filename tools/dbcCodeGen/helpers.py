@@ -115,16 +115,31 @@ def GetSignalInfo(regexSignalInfo, messageName, transmitter):
     }
 
 
-RE_SEARCH_SIGNAL_VAL_TABLE_INFO = "(?<=^VAL_) (\d+) (\S+) (\d+) \"(\S+)\""
+RE_SEARCH_SIGNAL_VAL_TABLE_INFO = "(?<=^VAL_) (\d+) (\S+)(.*) ;"
+RE_SEARCH_SIGNAL_VAL_ENTRY      = "(?<=^ )(\d+) \"(\S+)\"(.*)"
 def GetSignalValTableInfo(regexSigValInfo):
     signalName = regexSigValInfo.group(2)
     # messageId = regexSigValInfo.group(1)
-    value = regexSigValInfo.group(3)
-    description = regexSigValInfo.group(4)
+    entries = regexSigValInfo.group(3)
+
+    # Recursive function to extract all value table entries
+    def ExtractVal(valStr, valDict):
+        regexValEntry = re.search(RE_SEARCH_SIGNAL_VAL_ENTRY, valStr)
+        if regexValEntry is not None:
+            value = regexValEntry.group(1)
+            description = regexValEntry.group(2)
+            next = regexValEntry.group(3)
+            if description in valDict:
+                raise Exception(f"Duplicate value {description} in value table for signal {signalName}")
+            valDict.update({description.upper(): int(value)})
+            if next:
+                ExtractVal(next, valDict)
+    valDict = {}
+    ExtractVal(entries, valDict)
+
     return {
         "signal": signalName,
-        "value": int(value),
-        "description": description,
+        "valueTable": valDict,
     }
 
 
